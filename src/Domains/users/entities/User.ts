@@ -1,4 +1,4 @@
-interface Payload {
+export interface IUser {
   username: string;
   fullName: string;
   password: string;
@@ -6,14 +6,14 @@ interface Payload {
   bio?: string;
 }
 
-class User {
+class User implements IUser {
   username: string;
   fullName: string;
   password: string;
   profilePhoto?: string;
   bio?: string;
 
-  constructor(payload: Payload) {
+  constructor(payload: IUser) {
     this.username = payload.username;
     this.fullName = payload.fullName;
     this.password = payload.password;
