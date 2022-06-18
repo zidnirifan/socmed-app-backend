@@ -1,6 +1,28 @@
-import User from '../User';
+import User, { IUser } from '../User';
 
 describe('a User entities', () => {
+  it('should throw error when payload not contain needed property', () => {
+    const payload = {
+      username: 'jhondoe',
+    };
+
+    expect(() => new User(payload as IUser)).toThrowError(
+      'USER.NOT_CONTAIN_NEEDED_PROPERTY'
+    );
+  });
+
+  it('should throw error when payload not meet data type spesification', () => {
+    const payload = {
+      username: 121334,
+      fullName: true,
+      password: {},
+    };
+
+    expect(() => new User(payload as unknown as IUser)).toThrowError(
+      'USER.NOT_MEET_DATA_TYPE_SPESIFICATION'
+    );
+  });
+
   it('should throw error when username less than 5 character', () => {
     const payload = {
       username: 'jhon',
