@@ -8,6 +8,7 @@ import UserRepository from '../Domains/users/UserRepository';
 import UserRepositoryMongo from './repository/UserRepositoryMongo';
 import PasswordHash from '../Applications/security/PasswordHash';
 import BcryptPasswordHash from './security/BcryptPasswordHash';
+import UserValidator from './validator/user/UserValidator';
 
 // use case
 import AddUser from '../Applications/use_case/AddUser';
@@ -33,6 +34,10 @@ container.register([
       ],
     },
   },
+  {
+    key: UserValidator.name,
+    Class: UserValidator,
+  },
 ]);
 
 container.register([
@@ -49,6 +54,10 @@ container.register([
         {
           name: 'passwordHash',
           internal: PasswordHash.name,
+        },
+        {
+          name: 'validator',
+          internal: UserValidator.name,
         },
       ],
     },
