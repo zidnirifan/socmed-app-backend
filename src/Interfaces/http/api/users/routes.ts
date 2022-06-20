@@ -1,10 +1,17 @@
 import { IRouter } from 'express';
-import { IUsersHandler } from './handler';
+import { IContainer } from '../../../../Infrastructures/container';
+import BaseRouter from '../BaseRouter';
+import UsersHandler, { IUsersHandler } from './handler';
 
-const routes = (router: IRouter, handler: IUsersHandler) => {
-  router.post('/', handler.postUserHandler);
+class UsersRoutes extends BaseRouter<IUsersHandler> {
+  constructor(router: IRouter, container: IContainer) {
+    const handler = new UsersHandler(container);
+    super(router, container, handler);
+  }
 
-  return router;
-};
+  routes(): void {
+    this.router.post('/', this.handler.postUserHandler);
+  }
+}
 
-export default routes;
+export default UsersRoutes;
