@@ -1,9 +1,11 @@
-import Joi, { ObjectSchema } from 'joi';
+import { ObjectSchema } from 'joi';
 import { IUser } from '../../../Domains/users/entities/User';
 import Validator from '../Validator';
 
 class UserValidator extends Validator<IUser> {
   protected schema(): ObjectSchema<IUser> {
+    const { Joi } = this;
+
     return Joi.object({
       username: Joi.string()
         .min(5)

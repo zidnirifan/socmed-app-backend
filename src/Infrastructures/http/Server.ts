@@ -1,18 +1,27 @@
-import express, { Request, Response, NextFunction, Application } from 'express';
+import express, {
+  Request,
+  Response,
+  NextFunction,
+  Application,
+  Router,
+  IRouter,
+} from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import compression from 'compression';
 import cors from 'cors';
-import userPlugin from '../../Interfaces/http/api/users';
+import UsersRoutes from '../../Interfaces/http/api/users/routes';
 import ClientError from '../../Commons/exceptions/ClientError';
 import { IContainer } from '../container';
 
 class Server {
   app: Application;
+  private router: IRouter;
   private container: IContainer;
 
   constructor(container: IContainer) {
     this.app = express();
+    this.router = Router();
     this.container = container;
 
     this.plugins();
@@ -28,7 +37,9 @@ class Server {
   }
 
   private routes(): void {
-    this.app.use('/users', userPlugin(this.container));
+    const usersRoutes = new UsersRoutes(this.router, this.container).router;
+
+    this.app.use('/users', usersRoutes);
   }
 
   private errorHandler() {

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import AddUserUseCase from '../../../../Applications/use_case/AddUser';
-import { IContainer } from '../../../../Infrastructures/container';
+import BaseHandler from '../BaseHandler';
 
 export interface IUsersHandler {
   postUserHandler(
@@ -10,15 +10,7 @@ export interface IUsersHandler {
   ): Promise<Response | void>;
 }
 
-class UsersHandler implements IUsersHandler {
-  private container: IContainer;
-
-  constructor(container: IContainer) {
-    this.container = container;
-
-    this.postUserHandler = this.postUserHandler.bind(this);
-  }
-
+class UsersHandler extends BaseHandler implements IUsersHandler {
   async postUserHandler(
     req: Request,
     res: Response,
