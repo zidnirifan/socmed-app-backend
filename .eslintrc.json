@@ -22,6 +22,9 @@
     "prettier/prettier": "error",
     "no-console": "off",
     "import/extensions": "off",
-    "lines-between-class-members": "off"
+    "no-underscore-dangle": "off",
+    "lines-between-class-members": "off",
+    "no-unused-vars": ["error", { "vars": "all", "args": "none" }],
+    "class-methods-use-this": "off"
   }
 }
