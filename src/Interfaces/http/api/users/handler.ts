@@ -2,15 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import AddUserUseCase from '../../../../Applications/use_case/AddUser';
 import BaseHandler from '../BaseHandler';
 
-export interface IUsersHandler {
-  postUserHandler(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<Response | void>;
-}
-
-class UsersHandler extends BaseHandler implements IUsersHandler {
+class UsersHandler extends BaseHandler {
   async postUserHandler(
     req: Request,
     res: Response,

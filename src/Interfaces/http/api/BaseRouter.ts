@@ -1,15 +1,13 @@
 import { IRouter } from 'express';
 import { IContainer } from '../../../Infrastructures/container';
 
-abstract class BaseRouter<Handler> {
+abstract class BaseRouter {
   router: IRouter;
   protected container: IContainer;
-  protected handler: Handler;
 
-  constructor(router: IRouter, container: IContainer, handler: Handler) {
+  constructor(router: IRouter, container: IContainer) {
     this.router = router;
     this.container = container;
-    this.handler = handler;
 
     this.routes();
   }
