@@ -109,7 +109,7 @@ describe('UserRepositoryMongo', () => {
 
       const userRepositoryMongo = new UserRepositoryMongo(UserModel);
 
-      const resultPassword = await userRepositoryMongo.getPasswordbByUsername(
+      const resultPassword = await userRepositoryMongo.getPasswordByUsername(
         username
       );
 

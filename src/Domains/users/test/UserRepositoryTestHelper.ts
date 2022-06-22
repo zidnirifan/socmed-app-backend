@@ -16,7 +16,7 @@ class MockUserRepository extends UserRepository {
     throw new Error('Method not implemented.');
   }
 
-  getPasswordbByUsername(username: string): Promise<string> {
+  getPasswordByUsername(username: string): Promise<string> {
     throw new Error('Method not implemented.');
   }
 }

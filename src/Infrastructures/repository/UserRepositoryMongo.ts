@@ -33,7 +33,7 @@ class UserRepositoryMongo extends UserRepository {
     }
   }
 
-  async getPasswordbByUsername(username: string): Promise<string> {
+  async getPasswordByUsername(username: string): Promise<string> {
     const { password } = await this.Model.findOne({ username }, 'password');
     return password;
   }

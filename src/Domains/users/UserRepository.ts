@@ -3,6 +3,8 @@ import { IUser } from './entities/User';
 export interface IUserRepository {
   addUser(payload: IUser): Promise<string>;
   verifyAvailableUsername(username: string): Promise<void>;
+  isUsernameExist(username: string): Promise<void>;
+  getPasswordByUsername(username: string): Promise<string>;
 }
 
 abstract class UserRepository implements IUserRepository {
@@ -12,7 +14,7 @@ abstract class UserRepository implements IUserRepository {
 
   abstract isUsernameExist(username: string): Promise<void>;
 
-  abstract getPasswordbByUsername(username: string): Promise<string>;
+  abstract getPasswordByUsername(username: string): Promise<string>;
 }
 
 export default UserRepository;
