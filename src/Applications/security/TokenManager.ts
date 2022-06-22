@@ -3,12 +3,12 @@ export interface PayloadToken {
   username: string;
 }
 
-export interface ITokenMangaer {
+export interface ITokenManager {
   createAccessToken(payload: PayloadToken): string;
   createRefreshToken(payload: PayloadToken): string;
 }
 
-abstract class TokenManager implements ITokenMangaer {
+abstract class TokenManager implements ITokenManager {
   abstract createAccessToken(payload: PayloadToken): string;
 
   abstract createRefreshToken(payload: PayloadToken): string;
