@@ -5,6 +5,7 @@ export interface IUserRepository {
   verifyAvailableUsername(username: string): Promise<void>;
   isUsernameExist(username: string): Promise<void>;
   getPasswordByUsername(username: string): Promise<string>;
+  getIdByUsername(username: string): Promise<string>;
 }
 
 abstract class UserRepository implements IUserRepository {
@@ -15,6 +16,8 @@ abstract class UserRepository implements IUserRepository {
   abstract isUsernameExist(username: string): Promise<void>;
 
   abstract getPasswordByUsername(username: string): Promise<string>;
+
+  abstract getIdByUsername(username: string): Promise<string>;
 }
 
 export default UserRepository;

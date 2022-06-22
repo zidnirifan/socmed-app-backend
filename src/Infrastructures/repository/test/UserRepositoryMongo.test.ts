@@ -117,4 +117,27 @@ describe('UserRepositoryMongo', () => {
       expect(resultPassword).toEqual(password);
     });
   });
+
+  describe('getIdByUsername function', () => {
+    it('should return id user correctly', async () => {
+      const username = 'username';
+
+      const user = new UserModel({
+        username,
+        fullName: 'Jhon Doe',
+        password: 'password',
+      });
+
+      await user.save();
+
+      const userRepositoryMongo = new UserRepositoryMongo(UserModel);
+
+      const id = await userRepositoryMongo.getIdByUsername(username);
+
+      const { _id: expectedId } = await UserModel.findOne({ username });
+
+      expect(typeof id).toEqual('string');
+      expect(id).toEqual(expectedId.toString());
+    });
+  });
 });
