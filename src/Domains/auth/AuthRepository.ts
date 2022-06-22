@@ -1,4 +1,4 @@
-interface IAuthRepository {
+export interface IAuthRepository {
   addRefreshToken(token: string): Promise<void>;
 }
 
