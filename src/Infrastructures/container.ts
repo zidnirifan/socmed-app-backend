@@ -9,6 +9,13 @@ import UserRepositoryMongo from './repository/UserRepositoryMongo';
 import PasswordHash from '../Applications/security/PasswordHash';
 import BcryptPasswordHash from './security/BcryptPasswordHash';
 import UserValidator from './validator/user/UserValidator';
+import UserLoginValidator from './validator/auth/UserLoginValidator';
+import AuthRepositoryMongo from './repository/AuthRepositoryMongo';
+import AuthModel from './model/Auth';
+import AuthRepository from '../Domains/auth/AuthRepository';
+import TokenManager from '../Applications/security/TokenManager';
+import JwtTokenManager from './security/JwtTokenManager';
+import LoginUser from '../Applications/use_case/LoginUser';
 
 // use case
 import AddUser from '../Applications/use_case/AddUser';
@@ -38,6 +45,25 @@ container.register([
     key: UserValidator.name,
     Class: UserValidator,
   },
+  {
+    key: UserLoginValidator.name,
+    Class: UserLoginValidator,
+  },
+  {
+    key: AuthRepository.name,
+    Class: AuthRepositoryMongo,
+    parameter: {
+      dependencies: [
+        {
+          concrete: AuthModel,
+        },
+      ],
+    },
+  },
+  {
+    key: TokenManager.name,
+    Class: JwtTokenManager,
+  },
 ]);
 
 container.register([
@@ -58,6 +84,35 @@ container.register([
         {
           name: 'validator',
           internal: UserValidator.name,
+        },
+      ],
+    },
+  },
+  {
+    key: LoginUser.name,
+    Class: LoginUser,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'validator',
+          internal: UserLoginValidator.name,
+        },
+        {
+          name: 'userRepository',
+          internal: UserRepository.name,
+        },
+        {
+          name: 'tokenManager',
+          internal: TokenManager.name,
+        },
+        {
+          name: 'authRepository',
+          internal: AuthRepository.name,
+        },
+        {
+          name: 'passwordHash',
+          internal: PasswordHash.name,
         },
       ],
     },
