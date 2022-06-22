@@ -11,6 +11,14 @@ class MockUserRepository extends UserRepository {
   addUser(payload: IUser): Promise<string> {
     throw new Error('Method not implemented.');
   }
+
+  isUsernameExist(username: string): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  getPasswordbByUsername(username: string): Promise<string> {
+    throw new Error('Method not implemented.');
+  }
 }
 
 export default MockUserRepository;
