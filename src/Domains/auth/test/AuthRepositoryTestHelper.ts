@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import AuthRepository from '../AuthRepository';
 
 class MockAuthRepository extends AuthRepository {

@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import TokenManager, { PayloadToken } from '../TokenManager';
 
 class MockTokenManager extends TokenManager {
