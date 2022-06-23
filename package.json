@@ -8,8 +8,8 @@
     "ts": "rm -rf build/ && tsc -w",
     "start": "node ./build/index.js",
     "start-dev": "nodemon ./src/index.ts",
-    "test": "jest --setupFiles dotenv/config",
-    "test:watch": "jest --watchAll --coverage --setupFiles dotenv/config",
+    "test": "jest --setupFiles dotenv/config --runInBand",
+    "test:watch": "jest --watchAll --coverage --setupFiles dotenv/config --runInBand",
     "lint": "eslint ./src --ext .ts",
     "prettier-format": "prettier --config .prettierrc.json 'src/**/*.ts' --write"
   },
