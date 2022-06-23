@@ -30,7 +30,7 @@ describe('UserRepositoryMongo', () => {
 
       await user.save();
 
-      const userRepositoryMongo = new UserRepositoryMongo(UserModel);
+      const userRepositoryMongo = new UserRepositoryMongo();
 
       await expect(
         async () => await userRepositoryMongo.verifyAvailableUsername(username)
@@ -38,7 +38,7 @@ describe('UserRepositoryMongo', () => {
     });
 
     it('should not throw InvariantError when username available', async () => {
-      const userRepositoryMongo = new UserRepositoryMongo(UserModel);
+      const userRepositoryMongo = new UserRepositoryMongo();
 
       await expect(
         userRepositoryMongo.verifyAvailableUsername('jhondoe')
@@ -54,7 +54,7 @@ describe('UserRepositoryMongo', () => {
         password: 'password',
       });
 
-      const userRepositoryMongo = new UserRepositoryMongo(UserModel);
+      const userRepositoryMongo = new UserRepositoryMongo();
 
       const userId = await userRepositoryMongo.addUser(user);
 
@@ -68,7 +68,7 @@ describe('UserRepositoryMongo', () => {
 
   describe('isUsernameExist function', () => {
     it('should throw NotFoundError when username not found', async () => {
-      const userRepositoryMongo = new UserRepositoryMongo(UserModel);
+      const userRepositoryMongo = new UserRepositoryMongo();
 
       await expect(
         async () => await userRepositoryMongo.isUsernameExist('jhondoe')
@@ -86,7 +86,7 @@ describe('UserRepositoryMongo', () => {
 
       await user.save();
 
-      const userRepositoryMongo = new UserRepositoryMongo(UserModel);
+      const userRepositoryMongo = new UserRepositoryMongo();
 
       await expect(
         userRepositoryMongo.isUsernameExist(username)
@@ -107,7 +107,7 @@ describe('UserRepositoryMongo', () => {
 
       await user.save();
 
-      const userRepositoryMongo = new UserRepositoryMongo(UserModel);
+      const userRepositoryMongo = new UserRepositoryMongo();
 
       const resultPassword = await userRepositoryMongo.getPasswordByUsername(
         username
@@ -130,7 +130,7 @@ describe('UserRepositoryMongo', () => {
 
       await user.save();
 
-      const userRepositoryMongo = new UserRepositoryMongo(UserModel);
+      const userRepositoryMongo = new UserRepositoryMongo();
 
       const id = await userRepositoryMongo.getIdByUsername(username);
 

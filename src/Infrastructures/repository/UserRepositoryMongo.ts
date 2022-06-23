@@ -1,15 +1,15 @@
 import { IUser } from '../../Domains/users/entities/User';
 import UserRepository from '../../Domains/users/UserRepository';
 import InvariantError from '../../Commons/exceptions/InvariantError';
-import { IUserModel } from '../model/User';
+import UserModel from '../model/User';
 import NotFoundError from '../../Commons/exceptions/NotFoundError';
 
 class UserRepositoryMongo extends UserRepository {
-  private Model: IUserModel;
+  private Model;
 
-  constructor(userModel: IUserModel) {
+  constructor() {
     super();
-    this.Model = userModel;
+    this.Model = UserModel;
   }
 
   async verifyAvailableUsername(username: string): Promise<void> {

@@ -7,7 +7,7 @@ describe('BcryptPasswordHash', () => {
     it('should encrypt password correctly', async () => {
       const password = 'password';
       const spyHash = jest.spyOn(bcrypt, 'hash');
-      const bcryptPasswordHash = new BcryptPasswordHash(bcrypt);
+      const bcryptPasswordHash = new BcryptPasswordHash();
 
       const encryptedPassword = await bcryptPasswordHash.hash(password);
       expect(encryptedPassword).not.toEqual(password);
@@ -17,7 +17,7 @@ describe('BcryptPasswordHash', () => {
 
   describe('comparePassword function', () => {
     it('should throw AuthenticationError when password not match', async () => {
-      const bcryptPasswordHash = new BcryptPasswordHash(bcrypt);
+      const bcryptPasswordHash = new BcryptPasswordHash();
 
       await expect(
         bcryptPasswordHash.comparePassword('password', 'encryptedPassword')
@@ -29,7 +29,7 @@ describe('BcryptPasswordHash', () => {
 
       const encryptedPassword = await bcrypt.hash(password, 10);
 
-      const bcryptPasswordHash = new BcryptPasswordHash(bcrypt);
+      const bcryptPasswordHash = new BcryptPasswordHash();
 
       await expect(
         bcryptPasswordHash.comparePassword(password, encryptedPassword)
