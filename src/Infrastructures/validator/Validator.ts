@@ -3,7 +3,12 @@ import ValidatorAbstract from '../../Applications/validator/Validator';
 import InvariantError from '../../Commons/exceptions/InvariantError';
 
 abstract class Validator<Payload> extends ValidatorAbstract<Payload> {
-  protected Joi = Joi;
+  protected Joi;
+
+  constructor() {
+    super();
+    this.Joi = Joi;
+  }
 
   validate(payload: Payload): void {
     const validationResult = this.schema().validate(payload);

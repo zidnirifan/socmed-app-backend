@@ -1,12 +1,12 @@
 import AuthRepository from '../../Domains/auth/AuthRepository';
-import { IAuthModel } from '../model/Auth';
+import AuthModel from '../model/Auth';
 
 class AuthRepositoryMongo extends AuthRepository {
-  private Model: IAuthModel;
+  private Model;
 
-  constructor(authModel: IAuthModel) {
+  constructor() {
     super();
-    this.Model = authModel;
+    this.Model = AuthModel;
   }
 
   async addRefreshToken(token: string): Promise<void> {

@@ -19,7 +19,7 @@ describe('AuthRepositoryMongo', () => {
     it('should save refresh token to database', async () => {
       const refreshToken = 'refresh_token';
 
-      const authRepositoryMongo = new AuthRepositoryMongo(AuthModel);
+      const authRepositoryMongo = new AuthRepositoryMongo();
       await authRepositoryMongo.addRefreshToken(refreshToken);
 
       const { refreshToken: tokenSaved } = await AuthModel.findOne({

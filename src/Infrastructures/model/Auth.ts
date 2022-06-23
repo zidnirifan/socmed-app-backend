@@ -9,6 +9,4 @@ const authSchema = new Schema({
 
 const AuthModel = model('Auth', authSchema);
 
-export type IAuthModel = typeof AuthModel;
-
 export default AuthModel;

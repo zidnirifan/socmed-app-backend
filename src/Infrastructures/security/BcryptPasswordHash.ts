@@ -1,15 +1,15 @@
-import bcryptHash from 'bcrypt';
+import bcrypt from 'bcrypt';
 import PasswordHash from '../../Applications/security/PasswordHash';
 import AuthenticationError from '../../Commons/exceptions/AuthenticationError';
 
 class BcryptPasswordHash extends PasswordHash {
-  private bcrypt: typeof bcryptHash;
+  private bcrypt;
   private saltRound: number;
 
-  constructor(bcrypt: typeof bcryptHash, saltRound = 10) {
+  constructor() {
     super();
     this.bcrypt = bcrypt;
-    this.saltRound = saltRound;
+    this.saltRound = 10;
   }
 
   hash(password: string): Promise<string> {

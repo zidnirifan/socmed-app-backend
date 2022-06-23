@@ -1,9 +1,6 @@
 import { createContainer } from 'instances-container';
 
-import bcrypt from 'bcrypt';
-
 // service
-import UserModel from './model/User';
 import UserRepository from '../Domains/users/UserRepository';
 import UserRepositoryMongo from './repository/UserRepositoryMongo';
 import PasswordHash from '../Applications/security/PasswordHash';
@@ -11,7 +8,6 @@ import BcryptPasswordHash from './security/BcryptPasswordHash';
 import UserValidator from './validator/user/UserValidator';
 import UserLoginValidator from './validator/auth/UserLoginValidator';
 import AuthRepositoryMongo from './repository/AuthRepositoryMongo';
-import AuthModel from './model/Auth';
 import AuthRepository from '../Domains/auth/AuthRepository';
 import TokenManager from '../Applications/security/TokenManager';
 import JwtTokenManager from './security/JwtTokenManager';
@@ -26,20 +22,10 @@ container.register([
   {
     key: UserRepository.name,
     Class: UserRepositoryMongo,
-    parameter: {
-      dependencies: [{ concrete: UserModel }],
-    },
   },
   {
     key: PasswordHash.name,
     Class: BcryptPasswordHash,
-    parameter: {
-      dependencies: [
-        {
-          concrete: bcrypt,
-        },
-      ],
-    },
   },
   {
     key: UserValidator.name,
@@ -52,13 +38,6 @@ container.register([
   {
     key: AuthRepository.name,
     Class: AuthRepositoryMongo,
-    parameter: {
-      dependencies: [
-        {
-          concrete: AuthModel,
-        },
-      ],
-    },
   },
   {
     key: TokenManager.name,
