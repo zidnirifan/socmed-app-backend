@@ -11,6 +11,7 @@
     "test": "jest --setupFiles dotenv/config --runInBand",
     "test:watch": "jest --watchAll --coverage --setupFiles dotenv/config --runInBand",
     "lint": "eslint ./src --ext .ts",
+    "lint-fix": "eslint ./src --ext .ts --fix",
     "prettier-format": "prettier --config .prettierrc.json 'src/**/*.ts' --write"
   },
   "author": "zidni",
