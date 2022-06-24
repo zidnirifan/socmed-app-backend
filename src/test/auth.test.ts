@@ -106,4 +106,68 @@ describe('/auth endpoint', () => {
       expect(body.message).toBeDefined();
     });
   });
+
+  describe('when PUT /auth', () => {
+    it('should response 200 and access token', async () => {
+      const payloadAuth = {
+        username: 'jhondoe',
+        password: 'password',
+      };
+
+      const tokens = await supertest(app).post('/auth').send(payloadAuth);
+
+      const { refreshToken } = tokens.body.data;
+
+      const { statusCode, body } = await supertest(app)
+        .put('/auth')
+        .send({ refreshToken });
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.message).toBeDefined();
+      expect(body.data).toHaveProperty('accessToken');
+    });
+
+    it('should response 400 when body request not contain needed property', async () => {
+      const { statusCode, body } = await supertest(app).put('/auth').send({});
+
+      expect(statusCode).toEqual(400);
+      expect(body.status).toEqual('fail');
+      expect(body.message).toBeDefined();
+    });
+
+    it('should response 400 when body request not meet data type spesification', async () => {
+      const { statusCode, body } = await supertest(app)
+        .put('/auth')
+        .send({ refreshToken: 123 });
+
+      expect(statusCode).toEqual(400);
+      expect(body.status).toEqual('fail');
+      expect(body.message).toBeDefined();
+    });
+
+    it('should response 404 when refresh token not found', async () => {
+      const { statusCode, body } = await supertest(app)
+        .put('/auth')
+        .send({ refreshToken: 'refresh_token' });
+
+      expect(statusCode).toEqual(404);
+      expect(body.status).toEqual('fail');
+      expect(body.message).toBeDefined();
+    });
+
+    it('should response 400 when refresh token is invalid', async () => {
+      const refreshToken = 'refresh_token';
+      const token = new AuthModel({ refreshToken });
+      await token.save();
+
+      const { statusCode, body } = await supertest(app)
+        .put('/auth')
+        .send({ refreshToken });
+
+      expect(statusCode).toEqual(400);
+      expect(body.status).toEqual('fail');
+      expect(body.message).toBeDefined();
+    });
+  });
 });
