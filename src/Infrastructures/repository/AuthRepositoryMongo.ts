@@ -1,3 +1,4 @@
+import NotFoundError from '../../Commons/exceptions/NotFoundError';
 import AuthRepository from '../../Domains/auth/AuthRepository';
 import AuthModel from '../model/Auth';
 
@@ -9,9 +10,16 @@ class AuthRepositoryMongo extends AuthRepository {
     this.Model = AuthModel;
   }
 
-  async addRefreshToken(token: string): Promise<void> {
-    const auth = new this.Model({ refreshToken: token });
+  async addRefreshToken(refreshToken: string): Promise<void> {
+    const auth = new this.Model({ refreshToken });
     await auth.save();
+  }
+
+  async isTokenExist(refreshToken: string): Promise<void> {
+    const token = await this.Model.findOne({ refreshToken });
+    if (!token) {
+      throw new NotFoundError('refresh token not found');
+    }
   }
 }
 
