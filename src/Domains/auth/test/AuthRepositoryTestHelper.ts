@@ -10,6 +10,10 @@ class MockAuthRepository extends AuthRepository {
   addRefreshToken(refreshToken: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
+
+  deleteToken(refreshToken: string): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
 }
 
 export default MockAuthRepository;
