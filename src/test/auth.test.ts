@@ -170,4 +170,35 @@ describe('/auth endpoint', () => {
       expect(body.message).toBeDefined();
     });
   });
+
+  describe('when DELETE /auth', () => {
+    it('should response 200', async () => {
+      const payloadAuth = {
+        username: 'jhondoe',
+        password: 'password',
+      };
+
+      const tokens = await supertest(app).post('/auth').send(payloadAuth);
+
+      const { refreshToken } = tokens.body.data;
+
+      const { statusCode, body } = await supertest(app)
+        .delete('/auth')
+        .send({ refreshToken });
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.message).toBeDefined();
+    });
+
+    it('should response 404 when refresh token not found', async () => {
+      const { statusCode, body } = await supertest(app)
+        .delete('/auth')
+        .send({ refreshToken: 'refresh_token' });
+
+      expect(statusCode).toEqual(404);
+      expect(body.status).toEqual('fail');
+      expect(body.message).toBeDefined();
+    });
+  });
 });
