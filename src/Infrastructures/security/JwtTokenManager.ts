@@ -3,6 +3,7 @@ import TokenManager, {
   PayloadToken,
 } from '../../Applications/security/TokenManager';
 import config from '../../Commons/config';
+import InvariantError from '../../Commons/exceptions/InvariantError';
 
 class JwtTokenManager extends TokenManager {
   private accessTokenKey: string;
@@ -24,6 +25,19 @@ class JwtTokenManager extends TokenManager {
 
   createRefreshToken(payload: PayloadToken): string {
     return jwt.sign(payload, this.refreshTokeKey);
+  }
+
+  verifyRefreshToken(refreshToken: string): void {
+    try {
+      jwt.verify(refreshToken, this.refreshTokeKey);
+    } catch (error) {
+      throw new InvariantError('invalid refresh token');
+    }
+  }
+
+  decodeToken(token: string): PayloadToken {
+    const decoded = jwt.decode(token);
+    return decoded as PayloadToken;
   }
 }
 

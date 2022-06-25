@@ -10,6 +10,14 @@ class MockTokenManager extends TokenManager {
   createRefreshToken(payload: PayloadToken): string {
     throw new Error('Method not implemented.');
   }
+
+  verifyRefreshToken(refreshToken: string): void {
+    throw new Error('Method not implemented.');
+  }
+
+  decodeToken(token: string): PayloadToken {
+    throw new Error('Method not implemented.');
+  }
 }
 
 export default MockTokenManager;

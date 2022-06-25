@@ -15,6 +15,8 @@ import LoginUser from '../Applications/use_case/LoginUser';
 
 // use case
 import AddUser from '../Applications/use_case/AddUser';
+import RefreshAuth from '../Applications/use_case/RefreshAuth';
+import RefreshAuthValidator from './validator/auth/RefreshAuthValidator';
 
 const container = createContainer();
 
@@ -42,6 +44,10 @@ container.register([
   {
     key: TokenManager.name,
     Class: JwtTokenManager,
+  },
+  {
+    key: RefreshAuthValidator.name,
+    Class: RefreshAuthValidator,
   },
 ]);
 
@@ -92,6 +98,27 @@ container.register([
         {
           name: 'passwordHash',
           internal: PasswordHash.name,
+        },
+      ],
+    },
+  },
+  {
+    key: RefreshAuth.name,
+    Class: RefreshAuth,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'validator',
+          internal: RefreshAuthValidator.name,
+        },
+        {
+          name: 'tokenManager',
+          internal: TokenManager.name,
+        },
+        {
+          name: 'authRepository',
+          internal: AuthRepository.name,
         },
       ],
     },

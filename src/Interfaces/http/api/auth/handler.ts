@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import LoginUser from '../../../../Applications/use_case/LoginUser';
+import RefreshAuth from '../../../../Applications/use_case/RefreshAuth';
 import BaseHandler from '../BaseHandler';
 
 class AuthHandler extends BaseHandler {
@@ -16,6 +17,25 @@ class AuthHandler extends BaseHandler {
         status: 'success',
         message: 'login success',
         data: tokens,
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  async putAuth(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      const refreshAuthUseCase = this.container.getInstance(RefreshAuth.name);
+      const accessToken = await refreshAuthUseCase.execute(req.body);
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'refresh access token success',
+        data: { accessToken },
       });
     } catch (error) {
       return next(error);

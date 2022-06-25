@@ -6,12 +6,18 @@ export interface PayloadToken {
 export interface ITokenManager {
   createAccessToken(payload: PayloadToken): string;
   createRefreshToken(payload: PayloadToken): string;
+  verifyRefreshToken(refreshToken: string): void;
+  decodeToken(token: string): PayloadToken;
 }
 
 abstract class TokenManager implements ITokenManager {
   abstract createAccessToken(payload: PayloadToken): string;
 
   abstract createRefreshToken(payload: PayloadToken): string;
+
+  abstract verifyRefreshToken(refreshToken: string): void;
+
+  abstract decodeToken(token: string): PayloadToken;
 }
 
 export default TokenManager;

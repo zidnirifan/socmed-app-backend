@@ -1,3 +1,4 @@
+import InvariantError from '../../../Commons/exceptions/InvariantError';
 import JwtTokenManager from '../JwtTokenManager';
 
 describe('JwtTokenManager', () => {
@@ -28,6 +29,51 @@ describe('JwtTokenManager', () => {
       const refreshToken = jwtTokenManager.createRefreshToken(payload);
 
       expect(typeof refreshToken).toEqual('string');
+    });
+  });
+
+  describe('verifyRefreshToken function', () => {
+    it('should throw InvariantError when refresh token invalid', () => {
+      const jwtTokenManager = new JwtTokenManager();
+
+      const refreshToken = 'invalid_refresh_token';
+
+      expect(() =>
+        jwtTokenManager.verifyRefreshToken(refreshToken)
+      ).toThrowError(InvariantError);
+    });
+
+    it('should not throw InvariantError when refresh token is valid', () => {
+      const payload = {
+        id: 'user-123',
+        username: 'jhondoe',
+      };
+
+      const jwtTokenManager = new JwtTokenManager();
+
+      const refreshToken = jwtTokenManager.createRefreshToken(payload);
+
+      expect(() =>
+        jwtTokenManager.verifyRefreshToken(refreshToken)
+      ).not.toThrowError(InvariantError);
+    });
+  });
+
+  describe('decodeToken function', () => {
+    it('should return decoded object correctly', () => {
+      const payload = {
+        id: 'user-123',
+        username: 'jhondoe',
+      };
+
+      const jwtTokenManager = new JwtTokenManager();
+
+      const refreshToken = jwtTokenManager.createRefreshToken(payload);
+
+      const decoded = jwtTokenManager.decodeToken(refreshToken);
+
+      expect(decoded.id).toEqual(payload.id);
+      expect(decoded.username).toEqual(payload.username);
     });
   });
 });

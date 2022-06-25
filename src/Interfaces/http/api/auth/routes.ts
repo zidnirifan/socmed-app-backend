@@ -6,6 +6,7 @@ class AuthRoutes extends BaseRouter {
     const handler = new AuthHandler(this.container);
 
     this.router.post('/', handler.postAuth);
+    this.router.put('/', handler.putAuth);
   }
 }
 
