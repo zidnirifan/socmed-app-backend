@@ -7,6 +7,7 @@ class AuthRoutes extends BaseRouter {
 
     this.router.post('/', handler.postAuth);
     this.router.put('/', handler.putAuth);
+    this.router.delete('/', handler.deleteAuth);
   }
 }
 

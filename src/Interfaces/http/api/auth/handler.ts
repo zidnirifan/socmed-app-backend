@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import LoginUser from '../../../../Applications/use_case/LoginUser';
+import LogoutUser from '../../../../Applications/use_case/LogoutUser';
 import RefreshAuth from '../../../../Applications/use_case/RefreshAuth';
 import BaseHandler from '../BaseHandler';
 
@@ -36,6 +37,24 @@ class AuthHandler extends BaseHandler {
         status: 'success',
         message: 'refresh access token success',
         data: { accessToken },
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  async deleteAuth(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      const logoutUser = this.container.getInstance(LogoutUser.name);
+      await logoutUser.execute(req.body);
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'logout success',
       });
     } catch (error) {
       return next(error);

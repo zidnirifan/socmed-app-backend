@@ -17,6 +17,8 @@ import LoginUser from '../Applications/use_case/LoginUser';
 import AddUser from '../Applications/use_case/AddUser';
 import RefreshAuth from '../Applications/use_case/RefreshAuth';
 import RefreshAuthValidator from './validator/auth/RefreshAuthValidator';
+import LogoutUserValidator from './validator/auth/LogoutUserValidator';
+import LogoutUser from '../Applications/use_case/LogoutUser';
 
 const container = createContainer();
 
@@ -48,6 +50,10 @@ container.register([
   {
     key: RefreshAuthValidator.name,
     Class: RefreshAuthValidator,
+  },
+  {
+    key: LogoutUserValidator.name,
+    Class: LogoutUserValidator,
   },
 ]);
 
@@ -115,6 +121,23 @@ container.register([
         {
           name: 'tokenManager',
           internal: TokenManager.name,
+        },
+        {
+          name: 'authRepository',
+          internal: AuthRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: LogoutUser.name,
+    Class: LogoutUser,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'validator',
+          internal: LogoutUserValidator.name,
         },
         {
           name: 'authRepository',

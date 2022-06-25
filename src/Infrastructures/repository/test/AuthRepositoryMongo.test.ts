@@ -55,4 +55,21 @@ describe('AuthRepositoryMongo', () => {
       ).resolves.not.toThrowError(NotFoundError);
     });
   });
+
+  describe('deleteToken', () => {
+    it('should delete refresh token correctly', async () => {
+      const refreshToken = 'refresh_token';
+      const auth = new AuthModel({ refreshToken });
+      await auth.save();
+
+      const authRepositoryMongo = new AuthRepositoryMongo();
+      await authRepositoryMongo.deleteToken(refreshToken);
+
+      const tokenSaved = await AuthModel.findOne({
+        refreshToken,
+      });
+
+      expect(tokenSaved).toBeNull();
+    });
+  });
 });

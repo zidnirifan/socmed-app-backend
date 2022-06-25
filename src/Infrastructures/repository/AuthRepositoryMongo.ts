@@ -21,6 +21,10 @@ class AuthRepositoryMongo extends AuthRepository {
       throw new NotFoundError('refresh token not found');
     }
   }
+
+  async deleteToken(refreshToken: string): Promise<void> {
+    await this.Model.deleteOne({ refreshToken });
+  }
 }
 
 export default AuthRepositoryMongo;
