@@ -50,10 +50,7 @@ describe('EditProfilePhoto use case', () => {
       payload.path,
       400
     );
-    expect(mockStorage.writeFileFromBuffer).toBeCalledWith(
-      buffer,
-      payload.fileName
-    );
+    expect(mockStorage.writeFileFromBuffer).toBeCalled();
     expect(mockUserRepository.editProfilePhotoById).toBeCalledWith(
       payload.userId,
       profilePhotoUrl

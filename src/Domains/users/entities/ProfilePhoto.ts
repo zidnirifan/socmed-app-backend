@@ -16,7 +16,7 @@ class ProfilePhoto implements IProfilePhoto {
   constructor(payload: IProfilePhoto) {
     this.userId = payload.userId;
     this.path = payload.path;
-    this.fileName = payload.fileName;
+    this.fileName = +new Date() + payload.fileName;
     this.fileType = payload.fileType;
   }
 }

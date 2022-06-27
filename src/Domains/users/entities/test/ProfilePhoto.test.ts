@@ -12,7 +12,7 @@ describe('a ProfilePhoto entities', () => {
     const { path, fileName, userId, fileType } = new ProfilePhoto(payload);
 
     expect(path).toEqual(payload.path);
-    expect(fileName).toEqual(payload.fileName);
+    expect(fileName).not.toEqual(payload.fileName);
     expect(userId).toEqual(payload.userId);
     expect(fileType).toEqual(payload.fileType);
   });
