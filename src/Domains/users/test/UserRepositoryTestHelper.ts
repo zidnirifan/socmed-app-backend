@@ -23,6 +23,10 @@ class MockUserRepository extends UserRepository {
   getIdByUsername(username: string): Promise<string> {
     throw new Error('Method not implemented.');
   }
+
+  editProfilePhotoById(id: string, profilePhoto: string): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
 }
 
 export default MockUserRepository;

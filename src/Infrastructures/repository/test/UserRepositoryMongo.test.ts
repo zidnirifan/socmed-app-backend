@@ -140,4 +140,25 @@ describe('UserRepositoryMongo', () => {
       expect(id).toEqual(expectedId.toString());
     });
   });
+
+  describe('editProfilePhotoById', () => {
+    it('should update profilePhoto correctly', async () => {
+      const user = new UserModel({
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+      });
+
+      const { _id } = await user.save();
+
+      const profilePhoto = 'http://image/profile.img';
+
+      const userRepositoryMongo = new UserRepositoryMongo();
+
+      await userRepositoryMongo.editProfilePhotoById(_id, profilePhoto);
+
+      const result = await UserModel.findOne({ _id });
+      expect(profilePhoto).toEqual(result.profilePhoto);
+    });
+  });
 });

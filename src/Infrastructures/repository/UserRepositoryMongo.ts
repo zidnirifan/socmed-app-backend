@@ -42,6 +42,10 @@ class UserRepositoryMongo extends UserRepository {
     const { _id } = await this.Model.findOne({ username }, '_id');
     return _id.toString();
   }
+
+  async editProfilePhotoById(id: string, profilePhoto: string): Promise<void> {
+    await this.Model.updateOne({ _id: id }, { profilePhoto });
+  }
 }
 
 export default UserRepositoryMongo;
