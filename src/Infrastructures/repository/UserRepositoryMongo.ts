@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { IUser } from '../../Domains/users/entities/User';
 import UserRepository from '../../Domains/users/UserRepository';
 import InvariantError from '../../Commons/exceptions/InvariantError';
@@ -30,6 +31,18 @@ class UserRepositoryMongo extends UserRepository {
     const result = await this.Model.findOne({ username });
     if (!result) {
       throw new NotFoundError('username not found');
+    }
+  }
+
+  async isUserExistById(id: string): Promise<void> {
+    const isValid = Types.ObjectId.isValid(id);
+    if (!isValid) {
+      throw new NotFoundError('user not found');
+    }
+
+    const result = await this.Model.findById(id);
+    if (!result) {
+      throw new NotFoundError('user not found');
     }
   }
 

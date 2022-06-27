@@ -94,6 +94,41 @@ describe('UserRepositoryMongo', () => {
     });
   });
 
+  describe('isUserExistById function', () => {
+    it('should throw NotFoundError when id is invalid', async () => {
+      const userRepositoryMongo = new UserRepositoryMongo();
+
+      await expect(
+        async () => await userRepositoryMongo.isUserExistById('user-123')
+      ).rejects.toThrowError(NotFoundError);
+    });
+
+    it('should throw NotFoundError when user not found', async () => {
+      const userRepositoryMongo = new UserRepositoryMongo();
+
+      await expect(
+        async () =>
+          await userRepositoryMongo.isUserExistById('62b55fb7f96df4d764f67233')
+      ).rejects.toThrowError(NotFoundError);
+    });
+
+    it('should not throw NotFoundError when user exist', async () => {
+      const user = new UserModel({
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+      });
+
+      const { _id } = await user.save();
+
+      const userRepositoryMongo = new UserRepositoryMongo();
+
+      await expect(
+        userRepositoryMongo.isUserExistById(_id)
+      ).resolves.not.toThrowError(NotFoundError);
+    });
+  });
+
   describe('getPasswordByUsername function', () => {
     it('should return password user correctly', async () => {
       const username = 'jhondoe';
