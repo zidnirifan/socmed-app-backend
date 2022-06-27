@@ -1,4 +1,4 @@
-type TFileType = 'image/jepg' | 'image/png' | 'image/webp';
+type TFileType = 'image/jpeg' | 'image/png' | 'image/webp';
 
 export interface IProfilePhoto {
   userId: string;

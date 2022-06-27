@@ -6,7 +6,7 @@ describe('a ProfilePhoto entities', () => {
       userId: 'user-123',
       path: '/img/photo.png',
       fileName: 'photo.png',
-      fileType: 'image/jepg' as const,
+      fileType: 'image/jpeg' as const,
     };
 
     const { path, fileName, userId, fileType } = new ProfilePhoto(payload);
