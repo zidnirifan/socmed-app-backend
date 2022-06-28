@@ -61,7 +61,7 @@ describe('JwtTokenManager', () => {
     });
   });
 
-  describe('verifyRefreshToken function', () => {
+  describe('verifyAccessToken function', () => {
     it('should throw InvariantError when access token invalid', () => {
       const jwtTokenManager = new JwtTokenManager();
 
