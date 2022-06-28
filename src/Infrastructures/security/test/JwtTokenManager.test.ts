@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken';
+import config from '../../../Commons/config';
 import InvariantError from '../../../Commons/exceptions/InvariantError';
 import JwtTokenManager from '../JwtTokenManager';
 
@@ -55,6 +57,50 @@ describe('JwtTokenManager', () => {
 
       expect(() =>
         jwtTokenManager.verifyRefreshToken(refreshToken)
+      ).not.toThrowError(InvariantError);
+    });
+  });
+
+  describe('verifyAccessToken function', () => {
+    it('should throw InvariantError when access token invalid', () => {
+      const jwtTokenManager = new JwtTokenManager();
+
+      const accessToken = 'invalid_access_token';
+
+      expect(() => jwtTokenManager.verifyAccessToken(accessToken)).toThrowError(
+        InvariantError
+      );
+    });
+
+    it('should throw InvariantError when access token expired', async () => {
+      const payload = {
+        id: 'user-123',
+        username: 'jhondoe',
+      };
+
+      const jwtTokenManager = new JwtTokenManager();
+
+      const accessToken = jwt.sign(payload, config.accessTokenKey as string, {
+        expiresIn: 0,
+      });
+
+      expect(() => jwtTokenManager.verifyAccessToken(accessToken)).toThrowError(
+        InvariantError
+      );
+    });
+
+    it('should not throw InvariantError when access token is valid', () => {
+      const payload = {
+        id: 'user-123',
+        username: 'jhondoe',
+      };
+
+      const jwtTokenManager = new JwtTokenManager();
+
+      const accessToken = jwtTokenManager.createAccessToken(payload);
+
+      expect(() =>
+        jwtTokenManager.verifyAccessToken(accessToken)
       ).not.toThrowError(InvariantError);
     });
   });

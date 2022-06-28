@@ -14,7 +14,7 @@ class JwtTokenManager extends TokenManager {
     super();
     this.accessTokenKey = config.accessTokenKey as string;
     this.refreshTokeKey = config.refreshTokenKey as string;
-    this.tokenExpiration = config.tokenExpiration as unknown as number;
+    this.tokenExpiration = config.tokenExpiration;
   }
 
   createAccessToken(payload: PayloadToken): string {
@@ -32,6 +32,17 @@ class JwtTokenManager extends TokenManager {
       jwt.verify(refreshToken, this.refreshTokeKey);
     } catch (error) {
       throw new InvariantError('invalid refresh token');
+    }
+  }
+
+  verifyAccessToken(accessToken: string): void {
+    try {
+      jwt.verify(accessToken, this.accessTokenKey);
+    } catch (error) {
+      if (error instanceof Error && error.message === 'jwt expired') {
+        throw new InvariantError('token expired');
+      }
+      throw new InvariantError('invalid access token');
     }
   }
 

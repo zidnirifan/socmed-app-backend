@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { IUser } from '../../Domains/users/entities/User';
 import UserRepository from '../../Domains/users/UserRepository';
 import InvariantError from '../../Commons/exceptions/InvariantError';
@@ -33,6 +34,18 @@ class UserRepositoryMongo extends UserRepository {
     }
   }
 
+  async isUserExistById(id: string): Promise<void> {
+    const isValid = Types.ObjectId.isValid(id);
+    if (!isValid) {
+      throw new NotFoundError('user not found');
+    }
+
+    const result = await this.Model.findById(id);
+    if (!result) {
+      throw new NotFoundError('user not found');
+    }
+  }
+
   async getPasswordByUsername(username: string): Promise<string> {
     const { password } = await this.Model.findOne({ username }, 'password');
     return password;
@@ -41,6 +54,10 @@ class UserRepositoryMongo extends UserRepository {
   async getIdByUsername(username: string): Promise<string> {
     const { _id } = await this.Model.findOne({ username }, '_id');
     return _id.toString();
+  }
+
+  async editProfilePhotoById(id: string, profilePhoto: string): Promise<void> {
+    await this.Model.updateOne({ _id: id }, { profilePhoto });
   }
 }
 

@@ -11,14 +11,20 @@ import AuthRepositoryMongo from './repository/AuthRepositoryMongo';
 import AuthRepository from '../Domains/auth/AuthRepository';
 import TokenManager from '../Applications/security/TokenManager';
 import JwtTokenManager from './security/JwtTokenManager';
-import LoginUser from '../Applications/use_case/LoginUser';
+import ProfilePhotoValidator from './validator/user/ProfilePhotoValidator';
+import ImageResizer from '../Applications/storage/ImageResizer';
+import ImageResizerSharp from './storage/ImageResizer';
+import Storage from '../Applications/storage/Storage';
+import LocalStorage from './storage/LocalStorage';
+import RefreshAuthValidator from './validator/auth/RefreshAuthValidator';
+import LogoutUserValidator from './validator/auth/LogoutUserValidator';
 
 // use case
 import AddUser from '../Applications/use_case/AddUser';
+import LoginUser from '../Applications/use_case/LoginUser';
 import RefreshAuth from '../Applications/use_case/RefreshAuth';
-import RefreshAuthValidator from './validator/auth/RefreshAuthValidator';
-import LogoutUserValidator from './validator/auth/LogoutUserValidator';
 import LogoutUser from '../Applications/use_case/LogoutUser';
+import EditProfilePhoto from '../Applications/use_case/EditProfilePhoto';
 
 const container = createContainer();
 
@@ -54,6 +60,18 @@ container.register([
   {
     key: LogoutUserValidator.name,
     Class: LogoutUserValidator,
+  },
+  {
+    key: ProfilePhotoValidator.name,
+    Class: ProfilePhotoValidator,
+  },
+  {
+    key: ImageResizer.name,
+    Class: ImageResizerSharp,
+  },
+  {
+    key: Storage.name,
+    Class: LocalStorage,
   },
 ]);
 
@@ -142,6 +160,31 @@ container.register([
         {
           name: 'authRepository',
           internal: AuthRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: EditProfilePhoto.name,
+    Class: EditProfilePhoto,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'validator',
+          internal: ProfilePhotoValidator.name,
+        },
+        {
+          name: 'imageResizer',
+          internal: ImageResizer.name,
+        },
+        {
+          name: 'storage',
+          internal: Storage.name,
+        },
+        {
+          name: 'userRepository',
+          internal: UserRepository.name,
         },
       ],
     },

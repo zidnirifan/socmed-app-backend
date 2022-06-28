@@ -6,7 +6,7 @@ const config = {
   serverPort: process.env.SERVER_PORT,
   accessTokenKey: process.env.ACCESS_TOKEN_KEY,
   refreshTokenKey: process.env.REFRESH_TOKEN_KEY,
-  tokenExpiration: process.env.TOKEN_EXPIRATION,
+  tokenExpiration: parseInt(process.env.TOKEN_EXPIRATION as string, 10),
 };
 
 export default config;

@@ -4,8 +4,10 @@ export interface IUserRepository {
   addUser(payload: IUser): Promise<string>;
   verifyAvailableUsername(username: string): Promise<void>;
   isUsernameExist(username: string): Promise<void>;
+  isUserExistById(id: string): Promise<void>;
   getPasswordByUsername(username: string): Promise<string>;
   getIdByUsername(username: string): Promise<string>;
+  editProfilePhotoById(id: string, profilePhoto: string): Promise<void>;
 }
 
 abstract class UserRepository implements IUserRepository {
@@ -15,9 +17,16 @@ abstract class UserRepository implements IUserRepository {
 
   abstract isUsernameExist(username: string): Promise<void>;
 
+  abstract isUserExistById(id: string): Promise<void>;
+
   abstract getPasswordByUsername(username: string): Promise<string>;
 
   abstract getIdByUsername(username: string): Promise<string>;
+
+  abstract editProfilePhotoById(
+    id: string,
+    profilePhoto: string
+  ): Promise<void>;
 }
 
 export default UserRepository;

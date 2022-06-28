@@ -3,6 +3,8 @@ import db from '../Infrastructures/database/mongo/db';
 import UserModel from '../Infrastructures/model/User';
 import Server from '../Infrastructures/http/Server';
 import container from '../Infrastructures/container';
+import testHelper from './testHelper';
+import path from 'path';
 
 const { app } = new Server(container);
 
@@ -153,6 +155,59 @@ describe('/users endpoint', () => {
         .send(bodyRequest);
 
       expect(statusCode).toEqual(400);
+      expect(body.status).toEqual('fail');
+      expect(body.message).toBeDefined();
+    });
+  });
+
+  describe('when PUT /users/photo', () => {
+    it('should response 200 and valid profilePhoto url', async () => {
+      const photoPath = path.resolve(__dirname, './images/gedang.jpg');
+
+      const token = await testHelper.getToken();
+
+      const { statusCode, body } = await supertest(app)
+        .put('/users/photo')
+        .set('Authorization', `Bearer ${token}`)
+        .attach('photo', photoPath);
+
+      const photoUrl = body.data.profilePhoto.replace(
+        'http://localhost:3000',
+        ''
+      );
+      const { statusCode: statusCodeImg } = await supertest(app).get(photoUrl);
+
+      expect(statusCode).toEqual(200);
+      expect(statusCodeImg).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.message).toBeDefined();
+      expect(body.data).toHaveProperty('profilePhoto');
+    });
+
+    it('should response 400 when photo not attached', async () => {
+      const token = await testHelper.getToken();
+
+      const { statusCode, body } = await supertest(app)
+        .put('/users/photo')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(400);
+      expect(body.status).toEqual('fail');
+      expect(body.message).toBeDefined();
+    });
+
+    it('should response 404 when user not found', async () => {
+      const photoPath = path.resolve(__dirname, './images/gedang.jpg');
+      const token = await testHelper.getToken();
+
+      await UserModel.deleteOne({ username: 'jhondoe' });
+
+      const { statusCode, body } = await supertest(app)
+        .put('/users/photo')
+        .set('Authorization', `Bearer ${token}`)
+        .attach('photo', photoPath);
+
+      expect(statusCode).toEqual(404);
       expect(body.status).toEqual('fail');
       expect(body.message).toBeDefined();
     });
