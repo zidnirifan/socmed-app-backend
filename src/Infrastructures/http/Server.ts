@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import compression from 'compression';
 import cors from 'cors';
+import path from 'path';
 import UsersRoutes from '../../Interfaces/http/api/users/routes';
 import ClientError from '../../Commons/exceptions/ClientError';
 import { IContainer } from '../container';
@@ -26,6 +27,7 @@ class Server {
     this.app.use(morgan('dev'));
     this.app.use(compression());
     this.app.use(cors());
+    this.app.use(express.static(path.join(__dirname, '../../../public')));
   }
 
   private routes(): void {
