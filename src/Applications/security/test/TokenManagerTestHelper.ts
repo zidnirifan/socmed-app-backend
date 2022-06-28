@@ -15,6 +15,10 @@ class MockTokenManager extends TokenManager {
     throw new Error('Method not implemented.');
   }
 
+  verifyAccessToken(accessToken: string): void {
+    throw new Error('Method not implemented.');
+  }
+
   decodeToken(token: string): PayloadToken {
     throw new Error('Method not implemented.');
   }
