@@ -25,6 +25,10 @@ import LoginUser from '../Applications/use_case/LoginUser';
 import RefreshAuth from '../Applications/use_case/RefreshAuth';
 import LogoutUser from '../Applications/use_case/LogoutUser';
 import EditProfilePhoto from '../Applications/use_case/EditProfilePhoto';
+import PostValidator from './validator/post/PostValidator';
+import PostRepository from '../Domains/posts/PostRepository';
+import PostRepositoryMongo from './repository/PostRepositoryMongo';
+import AddPost from '../Applications/use_case/AddPost';
 
 const container = createContainer();
 
@@ -72,6 +76,14 @@ container.register([
   {
     key: Storage.name,
     Class: LocalStorage,
+  },
+  {
+    key: PostValidator.name,
+    Class: PostValidator,
+  },
+  {
+    key: PostRepository.name,
+    Class: PostRepositoryMongo,
   },
 ]);
 
@@ -185,6 +197,31 @@ container.register([
         {
           name: 'userRepository',
           internal: UserRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: AddPost.name,
+    Class: AddPost,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'validator',
+          internal: PostValidator.name,
+        },
+        {
+          name: 'imageResizer',
+          internal: ImageResizer.name,
+        },
+        {
+          name: 'storage',
+          internal: Storage.name,
+        },
+        {
+          name: 'postRepository',
+          internal: PostRepository.name,
         },
       ],
     },
