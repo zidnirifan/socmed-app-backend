@@ -6,7 +6,7 @@ interface Media {
   fileType: TFileType;
 }
 
-interface IPost {
+export interface IPost {
   caption: string;
   media: Media[];
   userId: string;
