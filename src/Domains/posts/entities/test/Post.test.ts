@@ -15,9 +15,11 @@ describe('Post entity', () => {
     };
 
     const { caption, userId, media } = new Post(payload);
+    console.log(media);
 
     expect(caption).toEqual(payload.caption);
     expect(userId).toEqual(payload.userId);
     expect(media).toStrictEqual(payload.media);
+    expect(media[0]).not.toEqual(payload.media[0].fileName);
   });
 });

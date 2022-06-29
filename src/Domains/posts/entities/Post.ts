@@ -20,6 +20,9 @@ class Post {
   constructor(payload: IPost) {
     this.caption = payload.caption;
     this.media = payload.media;
+    this.media.forEach((e) => {
+      e.fileName = +new Date() + e.fileName;
+    });
     this.userId = payload.userId;
   }
 }
