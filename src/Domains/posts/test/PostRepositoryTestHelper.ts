@@ -1,7 +1,7 @@
 import PostRepository, { PostPayload } from '../PostRepository';
 
 class MockPostRepository extends PostRepository {
-  addPost(payload: PostPayload): string {
+  addPost(payload: PostPayload): Promise<string> {
     throw new Error('Method not implemented.');
   }
 }

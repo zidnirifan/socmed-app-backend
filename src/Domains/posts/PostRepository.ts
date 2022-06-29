@@ -5,11 +5,11 @@ export interface PostPayload {
 }
 
 export interface IPostRepository {
-  addPost(payload: PostPayload): string;
+  addPost(payload: PostPayload): Promise<string>;
 }
 
 abstract class PostRepository implements IPostRepository {
-  abstract addPost(payload: PostPayload): string;
+  abstract addPost(payload: PostPayload): Promise<string>;
 }
 
 export default PostRepository;
