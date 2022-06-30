@@ -18,6 +18,9 @@ import Storage from '../Applications/storage/Storage';
 import LocalStorage from './storage/LocalStorage';
 import RefreshAuthValidator from './validator/auth/RefreshAuthValidator';
 import LogoutUserValidator from './validator/auth/LogoutUserValidator';
+import PostValidator from './validator/post/PostValidator';
+import PostRepository from '../Domains/posts/PostRepository';
+import PostRepositoryMongo from './repository/PostRepositoryMongo';
 
 // use case
 import AddUser from '../Applications/use_case/AddUser';
@@ -25,10 +28,8 @@ import LoginUser from '../Applications/use_case/LoginUser';
 import RefreshAuth from '../Applications/use_case/RefreshAuth';
 import LogoutUser from '../Applications/use_case/LogoutUser';
 import EditProfilePhoto from '../Applications/use_case/EditProfilePhoto';
-import PostValidator from './validator/post/PostValidator';
-import PostRepository from '../Domains/posts/PostRepository';
-import PostRepositoryMongo from './repository/PostRepositoryMongo';
 import AddPost from '../Applications/use_case/AddPost';
+import GetPost from '../Applications/use_case/GetPost';
 
 const container = createContainer();
 
@@ -219,6 +220,19 @@ container.register([
           name: 'storage',
           internal: Storage.name,
         },
+        {
+          name: 'postRepository',
+          internal: PostRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: GetPost.name,
+    Class: GetPost,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
         {
           name: 'postRepository',
           internal: PostRepository.name,
