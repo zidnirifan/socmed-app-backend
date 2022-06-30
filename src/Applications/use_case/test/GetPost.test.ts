@@ -9,7 +9,7 @@ describe('GetPost use case', () => {
 
     const expectedPost = {
       id,
-      username: 'jhondoe',
+      user: { username: 'jhondoe', profilePhoto: 'photo.png' },
       media: ['http://img.com/img.jpg'],
       caption: 'hello ges',
       createdAt: new Date(),

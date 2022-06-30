@@ -33,14 +33,19 @@ class PostRepositoryMongo extends PostRepository {
   }
 
   async getPostById(id: string): Promise<IPostGet> {
-    const { _id, caption, media, createdAt, userId } =
-      await this.Model.findById(id)
-        .select('_id caption media createdAt')
-        .populate('userId', 'username -_id');
+    const {
+      _id,
+      caption,
+      media,
+      createdAt,
+      userId: user,
+    } = await this.Model.findById(id)
+      .select('_id caption media createdAt')
+      .populate('userId', 'username profilePhoto -_id');
 
     return {
       id: _id.toString(),
-      username: userId.username,
+      user,
       caption,
       media,
       createdAt,

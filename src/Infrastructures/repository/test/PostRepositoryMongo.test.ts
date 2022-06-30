@@ -95,10 +95,12 @@ describe('PostRepositoryMongo', () => {
       await postRepositoryMongo.isPostExist(id);
 
       expect(postGet).toHaveProperty('id');
-      expect(postGet).toHaveProperty('username');
+      expect(postGet).toHaveProperty('user');
       expect(postGet).toHaveProperty('media');
       expect(postGet).toHaveProperty('caption');
       expect(postGet).toHaveProperty('createdAt');
+      expect(postGet.user).toHaveProperty('username');
+      expect(postGet.user).toHaveProperty('profilePhoto');
     });
   });
 });

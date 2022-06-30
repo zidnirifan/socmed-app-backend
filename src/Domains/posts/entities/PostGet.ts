@@ -1,6 +1,11 @@
+interface User {
+  username: string;
+  profilePhoto: string;
+}
+
 export interface IPostGet {
   id: string;
-  username: string;
+  user: User;
   caption: string;
   media: string[];
   createdAt: Date;
@@ -8,14 +13,14 @@ export interface IPostGet {
 
 class PostGet implements IPostGet {
   id: string;
-  username: string;
+  user: User;
   caption: string;
   media: string[];
   createdAt: Date;
 
   constructor(payload: IPostGet) {
     this.id = payload.id;
-    this.username = payload.username;
+    this.user = payload.user;
     this.caption = payload.caption;
     this.media = payload.media;
     this.createdAt = payload.createdAt;
