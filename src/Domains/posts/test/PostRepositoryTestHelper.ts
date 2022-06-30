@@ -13,6 +13,9 @@ class MockPostRepository extends PostRepository {
   getPostById(id: string): Promise<IPostGet> {
     throw new Error('Method not implemented.');
   }
+  getHomePosts(): Promise<IPostGet[]> {
+    throw new Error('Method not implemented.');
+  }
 }
 
 export default MockPostRepository;

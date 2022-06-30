@@ -78,6 +78,7 @@ describe('PostRepositoryMongo', () => {
         username: 'jhondoe',
         fullName: 'Jhon Doe',
         password: 'password',
+        profilePhoto: 'profile.png',
       });
 
       const { _id: userId } = await user.save();
@@ -92,7 +93,6 @@ describe('PostRepositoryMongo', () => {
       const id = await postRepositoryMongo.addPost(post);
 
       const postGet = await postRepositoryMongo.getPostById(id);
-      await postRepositoryMongo.isPostExist(id);
 
       expect(postGet).toHaveProperty('id');
       expect(postGet).toHaveProperty('user');
@@ -101,6 +101,38 @@ describe('PostRepositoryMongo', () => {
       expect(postGet).toHaveProperty('createdAt');
       expect(postGet.user).toHaveProperty('username');
       expect(postGet.user).toHaveProperty('profilePhoto');
+    });
+  });
+
+  describe('getHomePosts function', () => {
+    it('should return post correctly', async () => {
+      const user = new UserModel({
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+        profilePhoto: 'profile.png',
+      });
+
+      const { _id: userId } = await user.save();
+
+      const post = {
+        userId,
+        caption: 'hello ges',
+        media: ['http://images.com/img.png'],
+      };
+
+      const postRepositoryMongo = new PostRepositoryMongo();
+      await postRepositoryMongo.addPost(post);
+
+      const posts = await postRepositoryMongo.getHomePosts();
+
+      expect(posts[0]).toHaveProperty('id');
+      expect(posts[0]).toHaveProperty('user');
+      expect(posts[0]).toHaveProperty('media');
+      expect(posts[0]).toHaveProperty('caption');
+      expect(posts[0]).toHaveProperty('createdAt');
+      expect(posts[0].user).toHaveProperty('username');
+      expect(posts[0].user).toHaveProperty('profilePhoto');
     });
   });
 });

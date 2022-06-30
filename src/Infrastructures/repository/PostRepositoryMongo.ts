@@ -51,6 +51,20 @@ class PostRepositoryMongo extends PostRepository {
       createdAt,
     };
   }
+
+  async getHomePosts(): Promise<IPostGet[]> {
+    const posts = await this.Model.find()
+      .select('_id caption media createdAt')
+      .populate('userId', 'username profilePhoto -_id');
+
+    return posts.map(({ _id, caption, media, createdAt, userId: user }) => ({
+      id: _id.toString(),
+      user,
+      caption,
+      media,
+      createdAt,
+    }));
+  }
 }
 
 export default PostRepositoryMongo;
