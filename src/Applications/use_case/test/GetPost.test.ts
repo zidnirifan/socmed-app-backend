@@ -3,7 +3,7 @@ import MockPostRepository from '../../../Domains/posts/test/PostRepositoryTestHe
 import PostGet from '../../../Domains/posts/entities/PostGet';
 
 describe('GetPost use case', () => {
-  it('should orchestrating add post action correctly', async () => {
+  it('should orchestrating get post action correctly', async () => {
     // Arrange
     const id = 'post-123';
 
