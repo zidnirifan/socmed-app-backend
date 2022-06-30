@@ -105,7 +105,7 @@ describe('PostRepositoryMongo', () => {
   });
 
   describe('getHomePosts function', () => {
-    it('should return post correctly', async () => {
+    it('should return array of posts correctly', async () => {
       const user = new UserModel({
         username: 'jhondoe',
         fullName: 'Jhon Doe',
