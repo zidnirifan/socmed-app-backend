@@ -33,7 +33,7 @@ describe('GetPost use case', () => {
 
     // Assert
     expect(post).toBeInstanceOf(PostGet);
-    expect(post).toStrictEqual(expectedPost);
+    expect(post).toEqual(expectedPost);
     expect(mockPostRepository.isPostExist).toBeCalledWith(id);
     expect(mockPostRepository.getPostById).toBeCalledWith(id);
   });
