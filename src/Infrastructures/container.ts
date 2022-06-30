@@ -30,6 +30,7 @@ import LogoutUser from '../Applications/use_case/LogoutUser';
 import EditProfilePhoto from '../Applications/use_case/EditProfilePhoto';
 import AddPost from '../Applications/use_case/AddPost';
 import GetPost from '../Applications/use_case/GetPost';
+import GetHomePost from '../Applications/use_case/GetHomePosts';
 
 const container = createContainer();
 
@@ -230,6 +231,19 @@ container.register([
   {
     key: GetPost.name,
     Class: GetPost,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'postRepository',
+          internal: PostRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: GetHomePost.name,
+    Class: GetHomePost,
     parameter: {
       injectType: 'destructuring',
       dependencies: [
