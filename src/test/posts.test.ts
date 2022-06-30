@@ -1,6 +1,7 @@
 import supertest from 'supertest';
 import db from '../Infrastructures/database/mongo/db';
 import PostModel from '../Infrastructures/model/Post';
+import UserModel from '../Infrastructures/model/User';
 import Server from '../Infrastructures/http/Server';
 import container from '../Infrastructures/container';
 import testHelper from './testHelper';
@@ -15,6 +16,7 @@ describe('/posts endpoint', () => {
 
   afterEach(async () => {
     await PostModel.deleteMany();
+    await UserModel.deleteMany();
   });
 
   afterAll(() => {
@@ -65,6 +67,70 @@ describe('/posts endpoint', () => {
       expect(statusCode).toEqual(400);
       expect(body.status).toEqual('fail');
       expect(body.message).toBeDefined();
+    });
+  });
+
+  describe('when GET /posts/id/:id', () => {
+    it('should response 200 and post object', async () => {
+      const { postId, token } = await testHelper.postPost();
+
+      const { statusCode, body } = await supertest(app)
+        .get(`/posts/id/${postId}`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.data.post).toHaveProperty('id');
+      expect(body.data.post).toHaveProperty('user');
+      expect(body.data.post).toHaveProperty('caption');
+      expect(body.data.post).toHaveProperty('media');
+      expect(body.data.post).toHaveProperty('createdAt');
+      expect(body.data.post.user).toHaveProperty('username');
+      expect(body.data.post.user).toHaveProperty('profilePhoto');
+    });
+
+    it('should response 404 when post not found', async () => {
+      const token = await testHelper.getToken();
+
+      const { statusCode, body } = await supertest(app)
+        .get('/posts/id/invalid_id')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(404);
+      expect(body.status).toEqual('fail');
+      expect(body.message).toBeDefined();
+    });
+  });
+
+  describe('when GET /posts/home', () => {
+    it('should response 200 and array of posts object', async () => {
+      const { token } = await testHelper.postPost();
+
+      const { statusCode, body } = await supertest(app)
+        .get('/posts/home')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.data.posts[0]).toHaveProperty('id');
+      expect(body.data.posts[0]).toHaveProperty('user');
+      expect(body.data.posts[0]).toHaveProperty('caption');
+      expect(body.data.posts[0]).toHaveProperty('media');
+      expect(body.data.posts[0]).toHaveProperty('createdAt');
+      expect(body.data.posts[0].user).toHaveProperty('username');
+      expect(body.data.posts[0].user).toHaveProperty('profilePhoto');
+    });
+
+    it('should response 200 and blank array if posts not exists', async () => {
+      const token = await testHelper.getToken();
+
+      const { statusCode, body } = await supertest(app)
+        .get('/posts/home')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.data.posts.length).toEqual(0);
     });
   });
 });

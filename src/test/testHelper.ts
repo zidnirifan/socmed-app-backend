@@ -1,5 +1,6 @@
 /* istanbul ignore file */
 import supertest from 'supertest';
+import path from 'path';
 import Server from '../Infrastructures/http/Server';
 import container from '../Infrastructures/container';
 
@@ -20,6 +21,19 @@ const testHelper = {
       .send({ username: user.username, password: user.password });
 
     return body.data.accessToken;
+  },
+  postPost: async () => {
+    const mediaPath = path.resolve(__dirname, './images/gedang.jpg');
+    const caption = 'helo ges';
+    const token = await testHelper.getToken();
+
+    const { body } = await supertest(app)
+      .post('/posts')
+      .set('Authorization', `Bearer ${token}`)
+      .field('caption', caption)
+      .attach('media', mediaPath);
+
+    return { postId: body.data.postId, token };
   },
 };
 
