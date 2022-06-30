@@ -4,7 +4,7 @@ const postSchema = new Schema(
   {
     userId: {
       type: Types.ObjectId,
-      ref: 'user',
+      ref: 'User',
       required: true,
     },
     caption: {
