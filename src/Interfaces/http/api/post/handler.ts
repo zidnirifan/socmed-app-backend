@@ -1,5 +1,6 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, Response, Request } from 'express';
 import AddPost from '../../../../Applications/use_case/AddPost';
+import GetPost from '../../../../Applications/use_case/GetPost';
 import { RequestAuth } from '../../middleware/auth';
 import BaseHandler from '../BaseHandler';
 
@@ -32,6 +33,24 @@ class PostsHandler extends BaseHandler {
         status: 'success',
         message: 'post successfully uploaded',
         data: { postId },
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  async getPostById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      const getPost = this.container.getInstance(GetPost.name);
+      const post = await getPost.execute(req.params.id);
+
+      return res.status(200).json({
+        status: 'success',
+        data: { post },
       });
     } catch (error) {
       return next(error);

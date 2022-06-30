@@ -14,6 +14,7 @@ class PostsRoutes extends BaseRouter {
       multer({ dest: os.tmpdir() }).array('media'),
       handler.postPost
     );
+    this.router.get('/:id', auth, handler.getPostById);
   }
 }
 
