@@ -1,5 +1,6 @@
 import { NextFunction, Response, Request } from 'express';
 import AddPost from '../../../../Applications/use_case/AddPost';
+import GetHomePost from '../../../../Applications/use_case/GetHomePosts';
 import GetPost from '../../../../Applications/use_case/GetPost';
 import { RequestAuth } from '../../middleware/auth';
 import BaseHandler from '../BaseHandler';
@@ -55,6 +56,16 @@ class PostsHandler extends BaseHandler {
     } catch (error) {
       return next(error);
     }
+  }
+
+  async getHomePosts(req: Request, res: Response): Promise<Response> {
+    const getPost = this.container.getInstance(GetHomePost.name);
+    const posts = await getPost.execute(req.params.id);
+
+    return res.status(200).json({
+      status: 'success',
+      data: { posts },
+    });
   }
 }
 

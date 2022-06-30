@@ -70,12 +70,12 @@ describe('/posts endpoint', () => {
     });
   });
 
-  describe('when GET /posts/:id', () => {
+  describe('when GET /posts/id/:id', () => {
     it('should response 200 and post object', async () => {
       const { postId, token } = await testHelper.postPost();
 
       const { statusCode, body } = await supertest(app)
-        .get(`/posts/${postId}`)
+        .get(`/posts/id/${postId}`)
         .set('Authorization', `Bearer ${token}`);
 
       expect(statusCode).toEqual(200);
@@ -93,12 +93,44 @@ describe('/posts endpoint', () => {
       const token = await testHelper.getToken();
 
       const { statusCode, body } = await supertest(app)
-        .get('/posts/invalid_id')
+        .get('/posts/id/invalid_id')
         .set('Authorization', `Bearer ${token}`);
 
       expect(statusCode).toEqual(404);
       expect(body.status).toEqual('fail');
       expect(body.message).toBeDefined();
+    });
+  });
+
+  describe('when GET /posts/home', () => {
+    it('should response 200 and array of posts object', async () => {
+      const { token } = await testHelper.postPost();
+
+      const { statusCode, body } = await supertest(app)
+        .get('/posts/home')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.data.posts[0]).toHaveProperty('id');
+      expect(body.data.posts[0]).toHaveProperty('user');
+      expect(body.data.posts[0]).toHaveProperty('caption');
+      expect(body.data.posts[0]).toHaveProperty('media');
+      expect(body.data.posts[0]).toHaveProperty('createdAt');
+      expect(body.data.posts[0].user).toHaveProperty('username');
+      expect(body.data.posts[0].user).toHaveProperty('profilePhoto');
+    });
+
+    it('should response 200 and blank array if posts not exists', async () => {
+      const token = await testHelper.getToken();
+
+      const { statusCode, body } = await supertest(app)
+        .get('/posts/home')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.data.posts.length).toEqual(0);
     });
   });
 });
