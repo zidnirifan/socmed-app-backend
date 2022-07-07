@@ -6,11 +6,17 @@ export interface PostPayload {
   media: string[];
 }
 
+export interface PostMediaGet {
+  id: string;
+  media: string;
+}
+
 export interface IPostRepository {
   addPost(payload: PostPayload): Promise<string>;
   isPostExist(id: string): Promise<void>;
   getPostById(id: string): Promise<PayloadPostGet>;
   getHomePosts(): Promise<PayloadPostGet[]>;
+  getPostMediaByUserId(id: string): Promise<PostMediaGet[]>;
 }
 
 abstract class PostRepository implements IPostRepository {
@@ -18,6 +24,7 @@ abstract class PostRepository implements IPostRepository {
   abstract isPostExist(id: string): Promise<void>;
   abstract getPostById(id: string): Promise<PayloadPostGet>;
   abstract getHomePosts(): Promise<PayloadPostGet[]>;
+  abstract getPostMediaByUserId(userId: string): Promise<PostMediaGet[]>;
 }
 
 export default PostRepository;
