@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { createContainer } from 'instances-container';
 
 // service
@@ -32,6 +34,7 @@ import EditProfilePhoto from '../Applications/use_case/EditProfilePhoto';
 import AddPost from '../Applications/use_case/AddPost';
 import GetPost from '../Applications/use_case/GetPost';
 import GetHomePost from '../Applications/use_case/GetHomePosts';
+import GetUserProfile from '../Applications/use_case/GetUserProfile';
 
 const container = createContainer();
 
@@ -248,6 +251,23 @@ container.register([
     parameter: {
       injectType: 'destructuring',
       dependencies: [
+        {
+          name: 'postRepository',
+          internal: PostRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: GetUserProfile.name,
+    Class: GetUserProfile,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'userRepository',
+          internal: UserRepository.name,
+        },
         {
           name: 'postRepository',
           internal: PostRepository.name,
