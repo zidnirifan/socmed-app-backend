@@ -3,7 +3,7 @@ interface User {
   profilePhoto: string;
 }
 
-export interface IPostGet {
+export interface PayloadPostGet {
   id: string;
   user: User;
   caption: string;
@@ -11,19 +11,69 @@ export interface IPostGet {
   createdAt: Date;
 }
 
+export interface IPostGet {
+  id: string;
+  user: User;
+  caption: string;
+  media: string[];
+  createdAt: string;
+}
+
 class PostGet implements IPostGet {
   id: string;
   user: User;
   caption: string;
   media: string[];
-  createdAt: Date;
+  createdAt: string;
 
-  constructor(payload: IPostGet) {
+  constructor(payload: PayloadPostGet) {
     this.id = payload.id;
     this.user = payload.user;
     this.caption = payload.caption;
     this.media = payload.media;
-    this.createdAt = payload.createdAt;
+    this.createdAt = this.timeSince(payload.createdAt);
+  }
+
+  private timeSince(date: Date) {
+    const secondInMs = 1000;
+
+    const seconds = Math.floor(
+      (new Date().valueOf() - date.valueOf()) / secondInMs
+    );
+
+    const minutesInSeconds = 60;
+    const hourInSeconds = 60 * minutesInSeconds;
+    const dayInSeconds = 24 * hourInSeconds;
+    const weekInSeconds = 7 * dayInSeconds;
+    const monthInSeconds = 30 * dayInSeconds;
+    const yearInSeconds = 365 * dayInSeconds;
+
+    const isSingle = (amount: number) => (amount === 1 ? '' : 's');
+
+    const timeToText = (amount: number, text: string) => {
+      const flooredAmount = Math.floor(amount);
+      return `${flooredAmount} ${text}${isSingle(flooredAmount)} ago`;
+    };
+
+    let interval = seconds / yearInSeconds;
+    if (interval >= 1) return timeToText(interval, 'year');
+
+    interval = seconds / monthInSeconds;
+    if (interval >= 1) return timeToText(interval, 'month');
+
+    interval = seconds / weekInSeconds;
+    if (interval >= 1) return timeToText(interval, 'week');
+
+    interval = seconds / dayInSeconds;
+    if (interval >= 1) return timeToText(interval, 'day');
+
+    interval = seconds / hourInSeconds;
+    if (interval >= 1) return timeToText(interval, 'hour');
+
+    interval = seconds / minutesInSeconds;
+    if (interval >= 1) return timeToText(interval, 'minute');
+
+    return timeToText(seconds, 'second');
   }
 }
 

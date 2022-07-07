@@ -7,7 +7,7 @@ describe('GetHomePosts use case', () => {
     // Arrange
     const id = 'post-123';
 
-    const expectedPost = {
+    const postFromRepo = {
       id,
       user: { username: 'jhondoe', profilePhoto: 'photo.png' },
       media: ['http://img.com/img.jpg'],
@@ -15,11 +15,13 @@ describe('GetHomePosts use case', () => {
       createdAt: new Date(),
     };
 
+    const expectedPost = new PostGet(postFromRepo);
+
     const mockPostRepository = new MockPostRepository();
 
     // Mocking
     mockPostRepository.getHomePosts = jest.fn(() =>
-      Promise.resolve([expectedPost])
+      Promise.resolve([postFromRepo])
     );
 
     // Create use case instancea
