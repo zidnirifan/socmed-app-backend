@@ -22,7 +22,11 @@ class LocalStorage extends Storage {
     }
   }
 
-  writeFileFromBuffer(buffer: Uint8ClampedArray, fileName: string): string {
+  async writeFileFromBuffer(
+    buffer: Uint8Array,
+    fileName: string,
+    fileType: string
+  ): Promise<string> {
     const filePath = `${this.folderPath}/${fileName}`;
 
     fs.writeFile(filePath, buffer, (err) => {

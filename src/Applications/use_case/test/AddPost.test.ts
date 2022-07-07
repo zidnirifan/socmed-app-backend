@@ -19,7 +19,7 @@ describe('AddPost use case', () => {
       ],
     };
 
-    const buffer = new Uint8ClampedArray([1, 2]);
+    const buffer = new Uint8Array([1, 2]);
     const mediaUrl = 'http://image.com/img.jpg';
     const postId = 'post-123';
 
@@ -33,7 +33,7 @@ describe('AddPost use case', () => {
     mockImageResizer.resizeImageToBuffer = jest.fn(() =>
       Promise.resolve(buffer)
     );
-    mockStorage.writeFileFromBuffer = jest.fn(() => mediaUrl);
+    mockStorage.writeFileFromBuffer = jest.fn(() => Promise.resolve(mediaUrl));
     mockPostRepository.addPost = jest.fn(() => Promise.resolve(postId));
 
     // Create use case instance

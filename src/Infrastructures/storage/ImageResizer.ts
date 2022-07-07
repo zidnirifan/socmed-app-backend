@@ -12,11 +12,11 @@ class ImageResizer extends ImageResizerAbstract {
   async resizeImageToBuffer(
     srcPath: string,
     size: number
-  ): Promise<Uint8ClampedArray> {
+  ): Promise<Uint8Array> {
     const { data } = await this.sharp(srcPath)
       .resize(size)
       .toBuffer({ resolveWithObject: true });
-    return new Uint8ClampedArray(data.buffer);
+    return new Uint8Array(data.buffer);
   }
 }
 

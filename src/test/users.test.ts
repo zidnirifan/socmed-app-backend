@@ -171,14 +171,7 @@ describe('/users endpoint', () => {
         .set('Authorization', `Bearer ${token}`)
         .attach('photo', photoPath);
 
-      const photoUrl = body.data.profilePhoto.replace(
-        'http://localhost:3000',
-        ''
-      );
-      const { statusCode: statusCodeImg } = await supertest(app).get(photoUrl);
-
       expect(statusCode).toEqual(200);
-      expect(statusCodeImg).toEqual(200);
       expect(body.status).toEqual('success');
       expect(body.message).toBeDefined();
       expect(body.data).toHaveProperty('profilePhoto');
