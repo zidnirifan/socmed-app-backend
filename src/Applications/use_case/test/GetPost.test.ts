@@ -7,7 +7,7 @@ describe('GetPost use case', () => {
     // Arrange
     const id = 'post-123';
 
-    const expectedPost = {
+    const postFromRepo = {
       id,
       user: { username: 'jhondoe', profilePhoto: 'photo.png' },
       media: ['http://img.com/img.jpg'],
@@ -15,12 +15,14 @@ describe('GetPost use case', () => {
       createdAt: new Date(),
     };
 
+    const expectedPost = new PostGet(postFromRepo);
+
     const mockPostRepository = new MockPostRepository();
 
     // Mocking
     mockPostRepository.isPostExist = jest.fn(() => Promise.resolve());
     mockPostRepository.getPostById = jest.fn(() =>
-      Promise.resolve(expectedPost)
+      Promise.resolve(postFromRepo)
     );
 
     // Create use case instancea

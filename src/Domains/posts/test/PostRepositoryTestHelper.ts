@@ -1,6 +1,6 @@
 /* istanbul ignore file */
 
-import { IPostGet } from '../entities/PostGet';
+import { PayloadPostGet } from '../entities/PostGet';
 import PostRepository, { PostPayload } from '../PostRepository';
 
 class MockPostRepository extends PostRepository {
@@ -10,10 +10,10 @@ class MockPostRepository extends PostRepository {
   isPostExist(id: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  getPostById(id: string): Promise<IPostGet> {
+  getPostById(id: string): Promise<PayloadPostGet> {
     throw new Error('Method not implemented.');
   }
-  getHomePosts(): Promise<IPostGet[]> {
+  getHomePosts(): Promise<PayloadPostGet[]> {
     throw new Error('Method not implemented.');
   }
 }

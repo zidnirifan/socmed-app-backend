@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 import NotFoundError from '../../Commons/exceptions/NotFoundError';
-import { IPostGet } from '../../Domains/posts/entities/PostGet';
+import { PayloadPostGet } from '../../Domains/posts/entities/PostGet';
 import PostRepository, {
   PostPayload,
 } from '../../Domains/posts/PostRepository';
@@ -32,7 +32,7 @@ class PostRepositoryMongo extends PostRepository {
     }
   }
 
-  async getPostById(id: string): Promise<IPostGet> {
+  async getPostById(id: string): Promise<PayloadPostGet> {
     const {
       _id,
       caption,
@@ -52,7 +52,7 @@ class PostRepositoryMongo extends PostRepository {
     };
   }
 
-  async getHomePosts(): Promise<IPostGet[]> {
+  async getHomePosts(): Promise<PayloadPostGet[]> {
     const posts = await this.Model.find()
       .select('_id caption media createdAt')
       .populate('userId', 'username profilePhoto -_id');

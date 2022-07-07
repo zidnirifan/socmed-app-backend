@@ -1,4 +1,4 @@
-import { IPostGet } from './entities/PostGet';
+import { PayloadPostGet } from './entities/PostGet';
 
 export interface PostPayload {
   userId: string;
@@ -9,15 +9,15 @@ export interface PostPayload {
 export interface IPostRepository {
   addPost(payload: PostPayload): Promise<string>;
   isPostExist(id: string): Promise<void>;
-  getPostById(id: string): Promise<IPostGet>;
-  getHomePosts(): Promise<IPostGet[]>;
+  getPostById(id: string): Promise<PayloadPostGet>;
+  getHomePosts(): Promise<PayloadPostGet[]>;
 }
 
 abstract class PostRepository implements IPostRepository {
   abstract addPost(payload: PostPayload): Promise<string>;
   abstract isPostExist(id: string): Promise<void>;
-  abstract getPostById(id: string): Promise<IPostGet>;
-  abstract getHomePosts(): Promise<IPostGet[]>;
+  abstract getPostById(id: string): Promise<PayloadPostGet>;
+  abstract getHomePosts(): Promise<PayloadPostGet[]>;
 }
 
 export default PostRepository;
