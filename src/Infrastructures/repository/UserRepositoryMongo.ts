@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 import { IUser } from '../../Domains/users/entities/User';
-import UserRepository from '../../Domains/users/UserRepository';
+import UserRepository, { UserGet } from '../../Domains/users/UserRepository';
 import InvariantError from '../../Commons/exceptions/InvariantError';
 import UserModel from '../model/User';
 import NotFoundError from '../../Commons/exceptions/NotFoundError';
@@ -58,6 +58,22 @@ class UserRepositoryMongo extends UserRepository {
 
   async editProfilePhotoById(id: string, profilePhoto: string): Promise<void> {
     await this.Model.updateOne({ _id: id }, { profilePhoto });
+  }
+
+  async getUserById(id: string): Promise<UserGet> {
+    const { _id, username, fullName, profilePhoto, bio } =
+      await this.Model.findOne(
+        { _id: id },
+        'username fullName profilePhoto bio'
+      );
+
+    return {
+      id: _id.toString(),
+      username,
+      fullName,
+      profilePhoto,
+      bio,
+    };
   }
 }
 
