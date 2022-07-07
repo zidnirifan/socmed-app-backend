@@ -3,6 +3,7 @@ import AddUserUseCase from '../../../../Applications/use_case/AddUser';
 import EditProfilePhoto from '../../../../Applications/use_case/EditProfilePhoto';
 import BaseHandler from '../BaseHandler';
 import { RequestAuth } from '../../middleware/auth';
+import GetUserProfile from '../../../../Applications/use_case/GetUserProfile';
 
 class UsersHandler extends BaseHandler {
   async postUserHandler(
@@ -59,6 +60,25 @@ class UsersHandler extends BaseHandler {
         message: 'profile photo changed successfully',
         data: {
           profilePhoto,
+        },
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  async getUserProfile(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      const getUserProfile = this.container.getInstance(GetUserProfile.name);
+      const userProfile = await getUserProfile.execute(req.params.id);
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          userProfile,
         },
       });
     } catch (error) {

@@ -2,6 +2,7 @@ import { Types } from 'mongoose';
 import NotFoundError from '../../Commons/exceptions/NotFoundError';
 import { PayloadPostGet } from '../../Domains/posts/entities/PostGet';
 import PostRepository, {
+  PostMediaGet,
   PostPayload,
 } from '../../Domains/posts/PostRepository';
 import PostModel from '../model/Post';
@@ -63,6 +64,15 @@ class PostRepositoryMongo extends PostRepository {
       caption,
       media,
       createdAt,
+    }));
+  }
+
+  async getPostMediaByUserId(userId: string): Promise<PostMediaGet[]> {
+    const posts = await this.Model.find({ userId }, '_id media');
+
+    return posts.map(({ _id, media }) => ({
+      id: _id.toString(),
+      media: media[0],
     }));
   }
 }

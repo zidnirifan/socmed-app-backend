@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 import { IUser } from '../entities/User';
-import UserRepository from '../UserRepository';
+import UserRepository, { UserGet } from '../UserRepository';
 
 class MockUserRepository extends UserRepository {
   verifyAvailableUsername(username: string): Promise<void> {
@@ -29,6 +29,10 @@ class MockUserRepository extends UserRepository {
   }
 
   editProfilePhotoById(id: string, profilePhoto: string): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  getUserById(id: string): Promise<UserGet> {
     throw new Error('Method not implemented.');
   }
 }

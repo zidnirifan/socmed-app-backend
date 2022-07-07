@@ -135,4 +135,32 @@ describe('PostRepositoryMongo', () => {
       expect(posts[0].user).toHaveProperty('profilePhoto');
     });
   });
+
+  describe('getPostMediaByUserId function', () => {
+    it('should return array of post media correctly', async () => {
+      const user = new UserModel({
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+      });
+
+      const { _id: userId } = await user.save();
+
+      const post = {
+        userId,
+        caption: 'hello ges',
+        media: ['http://images.com/img.png'],
+      };
+
+      const postRepositoryMongo = new PostRepositoryMongo();
+
+      const postInstanse = new PostModel(post);
+      const { _id: postId } = await postInstanse.save();
+
+      const posts = await postRepositoryMongo.getPostMediaByUserId(userId);
+
+      expect(posts[0].id).toEqual(postId.toString());
+      expect(posts[0].media).toEqual(post.media[0]);
+    });
+  });
 });

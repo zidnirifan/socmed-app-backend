@@ -196,4 +196,28 @@ describe('UserRepositoryMongo', () => {
       expect(profilePhoto).toEqual(result.profilePhoto);
     });
   });
+
+  describe('getUserById', () => {
+    it('should return user correctly', async () => {
+      const user = new UserModel({
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+        profilePhoto: 'img.jpg',
+        bio: 'i am an engineer',
+      });
+
+      const { _id } = await user.save();
+
+      const userRepositoryMongo = new UserRepositoryMongo();
+
+      const resultUser = await userRepositoryMongo.getUserById(_id);
+
+      expect(resultUser.id).toEqual(_id.toString());
+      expect(resultUser.username).toEqual(user.username);
+      expect(resultUser.fullName).toEqual(user.fullName);
+      expect(resultUser.profilePhoto).toEqual(user.profilePhoto);
+      expect(resultUser.bio).toEqual(user.bio);
+    });
+  });
 });

@@ -27,7 +27,7 @@ describe('/posts endpoint', () => {
     it('should response 201 and id ppost', async () => {
       const mediaPath = path.resolve(__dirname, './images/gedang.jpg');
       const caption = 'helo ges';
-      const token = await testHelper.getToken();
+      const { token } = await testHelper.getToken();
 
       const { statusCode, body } = await supertest(app)
         .post('/posts')
@@ -43,7 +43,7 @@ describe('/posts endpoint', () => {
 
     it('should response 400 when body request not meet data spesification', async () => {
       const mediaPath = path.resolve(__dirname, './images/gedang.jpg');
-      const token = await testHelper.getToken();
+      const { token } = await testHelper.getToken();
 
       const { statusCode, body } = await supertest(app)
         .post('/posts')
@@ -56,7 +56,7 @@ describe('/posts endpoint', () => {
     });
 
     it('should response 400 when not attach a media', async () => {
-      const token = await testHelper.getToken();
+      const { token } = await testHelper.getToken();
       const caption = 'helo ges';
 
       const { statusCode, body } = await supertest(app)
@@ -90,7 +90,7 @@ describe('/posts endpoint', () => {
     });
 
     it('should response 404 when post not found', async () => {
-      const token = await testHelper.getToken();
+      const { token } = await testHelper.getToken();
 
       const { statusCode, body } = await supertest(app)
         .get('/posts/id/invalid_id')
@@ -122,7 +122,7 @@ describe('/posts endpoint', () => {
     });
 
     it('should response 200 and blank array if posts not exists', async () => {
-      const token = await testHelper.getToken();
+      const { token } = await testHelper.getToken();
 
       const { statusCode, body } = await supertest(app)
         .get('/posts/home')

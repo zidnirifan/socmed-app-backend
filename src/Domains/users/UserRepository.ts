@@ -1,5 +1,13 @@
 import { IUser } from './entities/User';
 
+export interface UserGet {
+  id: string;
+  username: string;
+  fullName: string;
+  profilePhoto: string;
+  bio: string;
+}
+
 export interface IUserRepository {
   addUser(payload: IUser): Promise<string>;
   verifyAvailableUsername(username: string): Promise<void>;
@@ -8,6 +16,7 @@ export interface IUserRepository {
   getPasswordByUsername(username: string): Promise<string>;
   getIdByUsername(username: string): Promise<string>;
   editProfilePhotoById(id: string, profilePhoto: string): Promise<void>;
+  getUserById(id: string): Promise<UserGet>;
 }
 
 abstract class UserRepository implements IUserRepository {
@@ -27,6 +36,8 @@ abstract class UserRepository implements IUserRepository {
     id: string,
     profilePhoto: string
   ): Promise<void>;
+
+  abstract getUserById(id: string): Promise<UserGet>;
 }
 
 export default UserRepository;
