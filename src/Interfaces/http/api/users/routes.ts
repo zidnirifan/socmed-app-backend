@@ -15,6 +15,7 @@ class UsersRoutes extends BaseRouter {
       multer({ dest: os.tmpdir() }).single('photo'),
       handler.putProfilePhoto
     );
+    this.router.get('/:id', auth, handler.getUserProfile);
   }
 }
 

@@ -164,7 +164,7 @@ describe('/users endpoint', () => {
     it('should response 200 and valid profilePhoto url', async () => {
       const photoPath = path.resolve(__dirname, './images/gedang.jpg');
 
-      const token = await testHelper.getToken();
+      const { token } = await testHelper.getToken();
 
       const { statusCode, body } = await supertest(app)
         .put('/users/photo')
@@ -178,7 +178,7 @@ describe('/users endpoint', () => {
     });
 
     it('should response 400 when photo not attached', async () => {
-      const token = await testHelper.getToken();
+      const { token } = await testHelper.getToken();
 
       const { statusCode, body } = await supertest(app)
         .put('/users/photo')
@@ -191,7 +191,7 @@ describe('/users endpoint', () => {
 
     it('should response 404 when user not found', async () => {
       const photoPath = path.resolve(__dirname, './images/gedang.jpg');
-      const token = await testHelper.getToken();
+      const { token } = await testHelper.getToken();
 
       await UserModel.deleteOne({ username: 'jhondoe' });
 
@@ -199,6 +199,38 @@ describe('/users endpoint', () => {
         .put('/users/photo')
         .set('Authorization', `Bearer ${token}`)
         .attach('photo', photoPath);
+
+      expect(statusCode).toEqual(404);
+      expect(body.status).toEqual('fail');
+      expect(body.message).toBeDefined();
+    });
+  });
+
+  describe('when GET /users/:id', () => {
+    it('should response 200 and user profile', async () => {
+      const { token, id } = await testHelper.getToken();
+
+      const { statusCode, body } = await supertest(app)
+        .get(`/users/${id}`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.data.userProfile).toHaveProperty('id');
+      expect(body.data.userProfile).toHaveProperty('username');
+      expect(body.data.userProfile).toHaveProperty('fullName');
+      expect(body.data.userProfile).toHaveProperty('profilePhoto');
+      expect(body.data.userProfile).toHaveProperty('bio');
+      expect(body.data.userProfile).toHaveProperty('posts');
+      expect(body.data.userProfile).toHaveProperty('postsCount');
+    });
+
+    it('should response 404 when user not found', async () => {
+      const { token } = await testHelper.getToken();
+
+      const { statusCode, body } = await supertest(app)
+        .get('/users/not_found_id')
+        .set('Authorization', `Bearer ${token}`);
 
       expect(statusCode).toEqual(404);
       expect(body.status).toEqual('fail');
