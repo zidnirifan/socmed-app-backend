@@ -20,6 +20,8 @@ import LogoutUserValidator from './validator/auth/LogoutUserValidator';
 import PostValidator from './validator/post/PostValidator';
 import PostRepository from '../Domains/posts/PostRepository';
 import PostRepositoryMongo from './repository/PostRepositoryMongo';
+import LocalStorage from './storage/LocalStorage';
+import FirebaseStorage from './storage/FirebaseStorage';
 
 // use case
 import AddUser from '../Applications/use_case/AddUser';
@@ -30,7 +32,6 @@ import EditProfilePhoto from '../Applications/use_case/EditProfilePhoto';
 import AddPost from '../Applications/use_case/AddPost';
 import GetPost from '../Applications/use_case/GetPost';
 import GetHomePost from '../Applications/use_case/GetHomePosts';
-import FirebaseStorage from './storage/FirebaseStorage';
 
 const container = createContainer();
 
@@ -77,7 +78,7 @@ container.register([
   },
   {
     key: Storage.name,
-    Class: FirebaseStorage,
+    Class: process.env.NODE_ENV === 'test' ? LocalStorage : FirebaseStorage,
   },
   {
     key: PostValidator.name,
