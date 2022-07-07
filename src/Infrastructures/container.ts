@@ -15,7 +15,6 @@ import ProfilePhotoValidator from './validator/user/ProfilePhotoValidator';
 import ImageResizer from '../Applications/storage/ImageResizer';
 import ImageResizerSharp from './storage/ImageResizer';
 import Storage from '../Applications/storage/Storage';
-import LocalStorage from './storage/LocalStorage';
 import RefreshAuthValidator from './validator/auth/RefreshAuthValidator';
 import LogoutUserValidator from './validator/auth/LogoutUserValidator';
 import PostValidator from './validator/post/PostValidator';
@@ -31,6 +30,7 @@ import EditProfilePhoto from '../Applications/use_case/EditProfilePhoto';
 import AddPost from '../Applications/use_case/AddPost';
 import GetPost from '../Applications/use_case/GetPost';
 import GetHomePost from '../Applications/use_case/GetHomePosts';
+import FirebaseStorage from './storage/FirebaseStorage';
 
 const container = createContainer();
 
@@ -77,7 +77,7 @@ container.register([
   },
   {
     key: Storage.name,
-    Class: LocalStorage,
+    Class: FirebaseStorage,
   },
   {
     key: PostValidator.name,
