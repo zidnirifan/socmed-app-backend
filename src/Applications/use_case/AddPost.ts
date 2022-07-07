@@ -35,12 +35,14 @@ class AddPost {
           e.path,
           imgWidth
         );
-        return { buffer, fileName: e.fileName };
+        return { buffer, fileName: e.fileName, fileType: e.fileType };
       })
     );
 
-    const fileNames = buffers.map((b) =>
-      this.storage.writeFileFromBuffer(b.buffer, b.fileName)
+    const fileNames = await Promise.all(
+      buffers.map((b) =>
+        this.storage.writeFileFromBuffer(b.buffer, b.fileName, b.fileType)
+      )
     );
 
     return this.postRepository.addPost({

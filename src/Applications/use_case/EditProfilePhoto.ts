@@ -29,10 +29,14 @@ class EditProfilePhoto {
   async execute(payload: IProfilePhoto) {
     this.validator.validate(payload);
     await this.userRepository.isUserExistById(payload.userId);
-    const { path, fileName, userId } = new ProfilePhoto(payload);
+    const { path, fileName, userId, fileType } = new ProfilePhoto(payload);
     const widthImg = 400;
     const buffer = await this.imageResizer.resizeImageToBuffer(path, widthImg);
-    const photoUrl = this.storage.writeFileFromBuffer(buffer, fileName);
+    const photoUrl = await this.storage.writeFileFromBuffer(
+      buffer,
+      fileName,
+      fileType
+    );
     await this.userRepository.editProfilePhotoById(userId, photoUrl);
     return photoUrl;
   }

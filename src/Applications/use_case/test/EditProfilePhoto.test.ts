@@ -14,7 +14,7 @@ describe('EditProfilePhoto use case', () => {
       fileType: 'image/jpeg' as const,
     };
 
-    const buffer = new Uint8ClampedArray([1, 2]);
+    const buffer = new Uint8Array([1, 2]);
     const profilePhotoUrl = 'http://image.com/img.jpg';
 
     const mockValidator = new MockValidator();
@@ -28,7 +28,9 @@ describe('EditProfilePhoto use case', () => {
     mockImageResizer.resizeImageToBuffer = jest.fn(() =>
       Promise.resolve(buffer)
     );
-    mockStorage.writeFileFromBuffer = jest.fn(() => profilePhotoUrl);
+    mockStorage.writeFileFromBuffer = jest.fn(() =>
+      Promise.resolve(profilePhotoUrl)
+    );
     mockUserRepository.editProfilePhotoById = jest.fn(() => Promise.resolve());
 
     // Create use case instance
