@@ -3,7 +3,7 @@ import ImageResizer from '../ImageResizer';
 
 describe('ImageResizer', () => {
   describe('resizeImageToBuffer function', () => {
-    it('should resize image correctly and return buffer Uint8ClampedArray', async () => {
+    it('should resize image correctly and return buffer Uint8Array', async () => {
       const imgPath = path.resolve(
         __dirname,
         '../../../test/images/gedang.jpg'
@@ -12,7 +12,7 @@ describe('ImageResizer', () => {
 
       const buffer = await imageResizer.resizeImageToBuffer(imgPath, 400);
 
-      expect(buffer).toBeInstanceOf(Uint8ClampedArray);
+      expect(buffer).toBeInstanceOf(Uint8Array);
     });
   });
 });
