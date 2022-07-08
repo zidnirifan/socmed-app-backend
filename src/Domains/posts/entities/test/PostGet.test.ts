@@ -11,6 +11,7 @@ describe('PostGet entity', () => {
       caption: 'helo ges',
       media: ['img.jpg'],
       createdAt: new Date(),
+      likesCount: 1,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);
@@ -35,6 +36,7 @@ describe('PostGet entity', () => {
       caption: 'helo ges',
       media: ['img.jpg'],
       createdAt: new Date(Date.now() - yearInMs),
+      likesCount: 1,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);
@@ -59,6 +61,7 @@ describe('PostGet entity', () => {
       caption: 'helo ges',
       media: ['img.jpg'],
       createdAt: new Date(Date.now() - yearInMs),
+      likesCount: 1,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);
@@ -83,6 +86,7 @@ describe('PostGet entity', () => {
       caption: 'helo ges',
       media: ['img.jpg'],
       createdAt: new Date(Date.now() - monthInMs),
+      likesCount: 1,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);
@@ -106,6 +110,7 @@ describe('PostGet entity', () => {
       },
       caption: 'helo ges',
       media: ['img.jpg'],
+      likesCount: 1,
       createdAt: new Date(Date.now() - weekInMs),
     };
 
@@ -131,6 +136,7 @@ describe('PostGet entity', () => {
       caption: 'helo ges',
       media: ['img.jpg'],
       createdAt: new Date(Date.now() - dayInMs),
+      likesCount: 1,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);
@@ -155,6 +161,7 @@ describe('PostGet entity', () => {
       caption: 'helo ges',
       media: ['img.jpg'],
       createdAt: new Date(Date.now() - hourInMs),
+      likesCount: 1,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);
@@ -178,6 +185,7 @@ describe('PostGet entity', () => {
       },
       caption: 'helo ges',
       media: ['img.jpg'],
+      likesCount: 1,
       createdAt: new Date(Date.now() - minuteInMs),
     };
 

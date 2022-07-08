@@ -41,8 +41,9 @@ class PostRepositoryMongo extends PostRepository {
       media,
       createdAt,
       userId: user,
+      likes,
     } = await this.Model.findById(id)
-      .select('_id caption media createdAt')
+      .select('_id caption media createdAt likes')
       .populate('userId', 'username profilePhoto -_id');
 
     return {
@@ -51,21 +52,25 @@ class PostRepositoryMongo extends PostRepository {
       caption,
       media,
       createdAt,
+      likesCount: likes.length,
     };
   }
 
   async getHomePosts(): Promise<PayloadPostGet[]> {
     const posts = await this.Model.find()
-      .select('_id caption media createdAt')
+      .select('_id caption media createdAt likes')
       .populate('userId', 'username profilePhoto -_id');
 
-    return posts.map(({ _id, caption, media, createdAt, userId: user }) => ({
-      id: _id.toString(),
-      user,
-      caption,
-      media,
-      createdAt,
-    }));
+    return posts.map(
+      ({ _id, caption, media, createdAt, userId: user, likes }) => ({
+        id: _id.toString(),
+        user,
+        caption,
+        media,
+        createdAt,
+        likesCount: likes.length,
+      })
+    );
   }
 
   async getPostMediaByUserId(userId: string): Promise<PostMediaGet[]> {
