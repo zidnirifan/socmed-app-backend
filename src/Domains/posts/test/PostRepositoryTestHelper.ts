@@ -1,7 +1,11 @@
 /* istanbul ignore file */
 
 import { PayloadPostGet } from '../entities/PostGet';
-import PostRepository, { PostMediaGet, PostPayload } from '../PostRepository';
+import PostRepository, {
+  PostLikePayload,
+  PostMediaGet,
+  PostPayload,
+} from '../PostRepository';
 
 class MockPostRepository extends PostRepository {
   addPost(payload: PostPayload): Promise<string> {
@@ -17,6 +21,15 @@ class MockPostRepository extends PostRepository {
     throw new Error('Method not implemented.');
   }
   getPostMediaByUserId(userId: string): Promise<PostMediaGet[]> {
+    throw new Error('Method not implemented.');
+  }
+  isPostLiked(payload: PostLikePayload): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
+  likePost(payload: PostLikePayload): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  unlikePost(payload: PostLikePayload): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }
