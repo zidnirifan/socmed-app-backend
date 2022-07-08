@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 
 const userSchema = new Schema({
   username: {
@@ -21,6 +21,7 @@ const userSchema = new Schema({
   bio: {
     type: String,
   },
+  followers: [{ type: Types.ObjectId, ref: 'User' }],
 });
 
 const User = model('User', userSchema);

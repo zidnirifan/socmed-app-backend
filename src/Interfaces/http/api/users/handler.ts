@@ -4,6 +4,7 @@ import EditProfilePhoto from '../../../../Applications/use_case/EditProfilePhoto
 import BaseHandler from '../BaseHandler';
 import { RequestAuth } from '../../middleware/auth';
 import GetUserProfile from '../../../../Applications/use_case/GetUserProfile';
+import ToggleFollowUser from '../../../../Applications/use_case/ToggleFollowUser';
 
 class UsersHandler extends BaseHandler {
   async postUserHandler(
@@ -80,6 +81,29 @@ class UsersHandler extends BaseHandler {
         data: {
           userProfile,
         },
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  async toggleFollowUser(
+    req: RequestAuth,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      /* istanbul ignore next */
+      const userId = req.auth?.id;
+      const payload = { userId, userFollow: req.params.id };
+
+      const toggleFollowUser = this.container.getInstance(
+        ToggleFollowUser.name
+      );
+      const followUnfollow = await toggleFollowUser.execute(payload);
+      return res.status(200).json({
+        status: 'success',
+        message: `user ${followUnfollow}`,
       });
     } catch (error) {
       return next(error);

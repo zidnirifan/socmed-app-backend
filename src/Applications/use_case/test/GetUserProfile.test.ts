@@ -12,6 +12,8 @@ describe('GetUserProfile use case', () => {
       fullName: 'Jhon Doe',
       profilePhoto: 'img.jpg',
       bio: 'i am an engineer',
+      followersCount: 1,
+      followingCount: 1,
     };
     const posts = [
       {

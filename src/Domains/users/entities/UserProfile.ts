@@ -11,6 +11,8 @@ export interface IUserProfile {
   bio: string;
   posts: Post[];
   postsCount: number;
+  followersCount: number;
+  followingCount: number;
 }
 
 class UserProfile implements IUserProfile {
@@ -21,6 +23,8 @@ class UserProfile implements IUserProfile {
   bio: string;
   posts: Post[];
   postsCount: number;
+  followersCount: number;
+  followingCount: number;
 
   constructor(payload: IUserProfile) {
     this.id = payload.id;
@@ -30,6 +34,8 @@ class UserProfile implements IUserProfile {
     this.bio = payload.bio;
     this.posts = payload.posts;
     this.postsCount = payload.postsCount;
+    this.followersCount = payload.followersCount;
+    this.followingCount = payload.followingCount;
   }
 }
 

@@ -199,12 +199,21 @@ describe('UserRepositoryMongo', () => {
 
   describe('getUserById', () => {
     it('should return user correctly', async () => {
+      const userFollow = new UserModel({
+        username: 'gedang',
+        fullName: 'Gedang goreng',
+        password: 'password',
+      });
+
+      const { _id: userFollowId } = await userFollow.save();
+
       const user = new UserModel({
         username: 'jhondoe',
         fullName: 'Jhon Doe',
         password: 'password',
         profilePhoto: 'img.jpg',
         bio: 'i am an engineer',
+        followers: [userFollowId],
       });
 
       const { _id } = await user.save();
@@ -218,6 +227,125 @@ describe('UserRepositoryMongo', () => {
       expect(resultUser.fullName).toEqual(user.fullName);
       expect(resultUser.profilePhoto).toEqual(user.profilePhoto);
       expect(resultUser.bio).toEqual(user.bio);
+      expect(resultUser.followersCount).toEqual(1);
+      expect(resultUser.followingCount).toEqual(0);
+    });
+  });
+
+  describe('isUserFollowed function', () => {
+    it('should return true if user followed', async () => {
+      const user = new UserModel({
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+      });
+
+      const { _id: userId } = await user.save();
+
+      const userFollow = new UserModel({
+        username: 'gedang',
+        fullName: 'Jhon Doe',
+        password: 'password',
+        followers: [userId],
+      });
+
+      const { _id: userFollowId } = await userFollow.save();
+
+      const userRepositoryMongo = new UserRepositoryMongo();
+
+      const isFollowd = await userRepositoryMongo.isUserFollowed({
+        userId,
+        userFollow: userFollowId,
+      });
+
+      expect(isFollowd).toEqual(true);
+    });
+
+    it('should return false if user not followed', async () => {
+      const user = new UserModel({
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+      });
+
+      const userFollow = new UserModel({
+        username: 'gedang',
+        fullName: 'Jhon Doe',
+        password: 'password',
+      });
+
+      const { _id: userId } = await user.save();
+      const { _id: userFollowId } = await userFollow.save();
+
+      const userRepositoryMongo = new UserRepositoryMongo();
+
+      const isFollowd = await userRepositoryMongo.isUserFollowed({
+        userId,
+        userFollow: userFollowId,
+      });
+
+      expect(isFollowd).toEqual(false);
+    });
+  });
+
+  describe('followUser function', () => {
+    it('should update user followers', async () => {
+      const user = new UserModel({
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+      });
+
+      const userFollow = new UserModel({
+        username: 'gedang',
+        fullName: 'Jhon Doe',
+        password: 'password',
+      });
+
+      const { _id: userId } = await user.save();
+      const { _id: userFollowId } = await userFollow.save();
+
+      const userRepositoryMongo = new UserRepositoryMongo();
+
+      await userRepositoryMongo.followUser({
+        userId,
+        userFollow: userFollowId,
+      });
+
+      const userUpdated = await UserModel.findOne({ _id: userFollow });
+
+      expect(userUpdated.followers).toHaveLength(1);
+      expect(userUpdated.followers[0]).toEqual(userId);
+    });
+  });
+
+  describe('unfollowUser function', () => {
+    it('should update user followers', async () => {
+      const user = new UserModel({
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+      });
+
+      const userFollow = new UserModel({
+        username: 'gedang',
+        fullName: 'Jhon Doe',
+        password: 'password',
+      });
+
+      const { _id: userId } = await user.save();
+      const { _id: userFollowId } = await userFollow.save();
+
+      const userRepositoryMongo = new UserRepositoryMongo();
+
+      await userRepositoryMongo.unfollowUser({
+        userId,
+        userFollow: userFollowId,
+      });
+
+      const userUpdated = await UserModel.findOne({ _id: userFollow });
+
+      expect(userUpdated.followers).toHaveLength(0);
     });
   });
 });

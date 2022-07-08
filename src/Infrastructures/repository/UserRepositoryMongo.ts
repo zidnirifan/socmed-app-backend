@@ -4,6 +4,7 @@ import UserRepository, { UserGet } from '../../Domains/users/UserRepository';
 import InvariantError from '../../Commons/exceptions/InvariantError';
 import UserModel from '../model/User';
 import NotFoundError from '../../Commons/exceptions/NotFoundError';
+import { PayloadFollowUser } from '../../Applications/use_case/ToggleFollowUser';
 
 class UserRepositoryMongo extends UserRepository {
   private Model;
@@ -61,11 +62,10 @@ class UserRepositoryMongo extends UserRepository {
   }
 
   async getUserById(id: string): Promise<UserGet> {
-    const { _id, username, fullName, profilePhoto, bio } =
-      await this.Model.findOne(
-        { _id: id },
-        'username fullName profilePhoto bio'
-      );
+    const { _id, username, fullName, profilePhoto, bio, followers } =
+      await this.Model.findOne({ _id: id }, '-password');
+
+    const followingCount = await this.Model.countDocuments({ followers: id });
 
     return {
       id: _id.toString(),
@@ -73,7 +73,31 @@ class UserRepositoryMongo extends UserRepository {
       fullName,
       profilePhoto,
       bio,
+      followersCount: followers.length,
+      followingCount,
     };
+  }
+
+  async isUserFollowed(payload: PayloadFollowUser): Promise<boolean> {
+    const isFollowed = await this.Model.countDocuments({
+      _id: payload.userFollow,
+      followers: payload.userId,
+    });
+    return !!isFollowed;
+  }
+
+  async followUser(payload: PayloadFollowUser): Promise<void> {
+    await this.Model.updateOne(
+      { _id: payload.userFollow },
+      { $push: { followers: payload.userId } }
+    );
+  }
+
+  async unfollowUser(payload: PayloadFollowUser): Promise<void> {
+    await this.Model.updateOne(
+      { _id: payload.userFollow },
+      { $pull: { followers: payload.userId } }
+    );
   }
 }
 
