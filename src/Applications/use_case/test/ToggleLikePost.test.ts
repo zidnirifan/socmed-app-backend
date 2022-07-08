@@ -1,7 +1,7 @@
 import MockPostRepository from '../../../Domains/posts/test/PostRepositoryTestHelper';
 import ToggleLikePost from '../ToggleLikePost';
 
-describe('GetPost use case', () => {
+describe('ToggleLikePost use case', () => {
   it('should orchestrating like post action correctly if post not liked', async () => {
     // Arrange
     const payload = {
@@ -23,9 +23,10 @@ describe('GetPost use case', () => {
     });
 
     // Action
-    await toggleLike.execute(payload);
+    const result = await toggleLike.execute(payload);
 
     // Assert
+    expect(result).toEqual('liked');
     expect(mockPostRepository.isPostExist).toBeCalledWith(payload.postId);
     expect(mockPostRepository.isPostLiked).toBeCalledWith(payload);
     expect(mockPostRepository.likePost).toBeCalledWith(payload);
@@ -53,9 +54,10 @@ describe('GetPost use case', () => {
     });
 
     // Action
-    await toggleLike.execute(payload);
+    const result = await toggleLike.execute(payload);
 
     // Assert
+    expect(result).toEqual('unliked');
     expect(mockPostRepository.isPostExist).toBeCalledWith(payload.postId);
     expect(mockPostRepository.isPostLiked).toBeCalledWith(payload);
     expect(mockPostRepository.unlikePost).toBeCalledWith(payload);

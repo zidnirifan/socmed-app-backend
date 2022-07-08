@@ -20,9 +20,13 @@ class ToggleLikePost {
     await this.postRepository.isPostExist(payload.postId);
     const isLiked = await this.postRepository.isPostLiked(payload);
 
-    if (isLiked) return this.postRepository.unlikePost(payload);
+    if (isLiked) {
+      await this.postRepository.unlikePost(payload);
+      return 'unliked';
+    }
 
-    return this.postRepository.likePost(payload);
+    await this.postRepository.likePost(payload);
+    return 'liked';
   }
 }
 
