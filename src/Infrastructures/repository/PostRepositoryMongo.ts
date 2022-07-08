@@ -2,6 +2,7 @@ import { Types } from 'mongoose';
 import NotFoundError from '../../Commons/exceptions/NotFoundError';
 import { PayloadPostGet } from '../../Domains/posts/entities/PostGet';
 import PostRepository, {
+  PostLikePayload,
   PostMediaGet,
   PostPayload,
 } from '../../Domains/posts/PostRepository';
@@ -74,6 +75,28 @@ class PostRepositoryMongo extends PostRepository {
       id: _id.toString(),
       media: media[0],
     }));
+  }
+
+  async isPostLiked(payload: PostLikePayload): Promise<boolean> {
+    const isLiked = await this.Model.countDocuments({
+      _id: payload.postId,
+      likes: payload.userId,
+    });
+    return !!isLiked;
+  }
+
+  async likePost(payload: PostLikePayload): Promise<void> {
+    await this.Model.updateOne(
+      { _id: payload.postId },
+      { $push: { likes: payload.userId } }
+    );
+  }
+
+  async unlikePost(payload: PostLikePayload): Promise<void> {
+    await this.Model.updateOne(
+      { _id: payload.postId },
+      { $pull: { likes: payload.userId } }
+    );
   }
 }
 
