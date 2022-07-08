@@ -7,6 +7,8 @@ export interface UserGet {
   fullName: string;
   profilePhoto: string;
   bio: string;
+  followersCount: number;
+  followingCount: number;
 }
 
 export interface IUserRepository {

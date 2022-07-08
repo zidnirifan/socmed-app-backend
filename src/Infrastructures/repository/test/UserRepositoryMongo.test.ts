@@ -199,12 +199,21 @@ describe('UserRepositoryMongo', () => {
 
   describe('getUserById', () => {
     it('should return user correctly', async () => {
+      const userFollow = new UserModel({
+        username: 'gedang',
+        fullName: 'Gedang goreng',
+        password: 'password',
+      });
+
+      const { _id: userFollowId } = await userFollow.save();
+
       const user = new UserModel({
         username: 'jhondoe',
         fullName: 'Jhon Doe',
         password: 'password',
         profilePhoto: 'img.jpg',
         bio: 'i am an engineer',
+        followers: [userFollowId],
       });
 
       const { _id } = await user.save();
@@ -218,6 +227,8 @@ describe('UserRepositoryMongo', () => {
       expect(resultUser.fullName).toEqual(user.fullName);
       expect(resultUser.profilePhoto).toEqual(user.profilePhoto);
       expect(resultUser.bio).toEqual(user.bio);
+      expect(resultUser.followersCount).toEqual(1);
+      expect(resultUser.followingCount).toEqual(0);
     });
   });
 

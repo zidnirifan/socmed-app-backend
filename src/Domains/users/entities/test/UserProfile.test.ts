@@ -10,10 +10,21 @@ describe('a UserProfile entities', () => {
       bio: 'I am an engineer',
       posts: [{ id: 'post-123', media: 'img.jpg' }],
       postsCount: 1,
+      followersCount: 1,
+      followingCount: 1,
     };
 
-    const { id, username, fullName, profilePhoto, bio, posts, postsCount } =
-      new UserProfile(payload);
+    const {
+      id,
+      username,
+      fullName,
+      profilePhoto,
+      bio,
+      posts,
+      postsCount,
+      followersCount,
+      followingCount,
+    } = new UserProfile(payload);
 
     expect(id).toEqual(payload.id);
     expect(username).toEqual(payload.username);
@@ -22,5 +33,7 @@ describe('a UserProfile entities', () => {
     expect(bio).toEqual(payload.bio);
     expect(posts).toEqual(payload.posts);
     expect(postsCount).toEqual(payload.postsCount);
+    expect(followersCount).toEqual(payload.followersCount);
+    expect(followingCount).toEqual(payload.followingCount);
   });
 });

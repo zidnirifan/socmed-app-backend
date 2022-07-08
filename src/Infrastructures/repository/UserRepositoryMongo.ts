@@ -62,11 +62,10 @@ class UserRepositoryMongo extends UserRepository {
   }
 
   async getUserById(id: string): Promise<UserGet> {
-    const { _id, username, fullName, profilePhoto, bio } =
-      await this.Model.findOne(
-        { _id: id },
-        'username fullName profilePhoto bio'
-      );
+    const { _id, username, fullName, profilePhoto, bio, followers } =
+      await this.Model.findOne({ _id: id }, '-password');
+
+    const followingCount = await this.Model.countDocuments({ followers: id });
 
     return {
       id: _id.toString(),
@@ -74,6 +73,8 @@ class UserRepositoryMongo extends UserRepository {
       fullName,
       profilePhoto,
       bio,
+      followersCount: followers.length,
+      followingCount,
     };
   }
 
