@@ -237,4 +237,37 @@ describe('/users endpoint', () => {
       expect(body.message).toBeDefined();
     });
   });
+
+  describe('when PUT /users/:id/follow', () => {
+    it('should response 200', async () => {
+      const userFollow = new UserModel({
+        username: 'gedang',
+        fullName: 'gedang goreng',
+        password: 'password',
+      });
+      const { _id: userFollowId } = await userFollow.save();
+
+      const { token } = await testHelper.getToken();
+
+      const { statusCode, body } = await supertest(app)
+        .put(`/users/${userFollowId}/follow`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.message).toBeDefined();
+    });
+
+    it('should response 404 when post not found', async () => {
+      const { token } = await testHelper.getToken();
+
+      const { statusCode, body } = await supertest(app)
+        .put('/users/not_found_id/follow')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(404);
+      expect(body.status).toEqual('fail');
+      expect(body.message).toBeDefined();
+    });
+  });
 });
