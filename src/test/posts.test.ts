@@ -133,4 +133,30 @@ describe('/posts endpoint', () => {
       expect(body.data.posts.length).toEqual(0);
     });
   });
+
+  describe('when PUT /posts/:id/like', () => {
+    it('should response 200', async () => {
+      const { token, postId } = await testHelper.postPost();
+
+      const { statusCode, body } = await supertest(app)
+        .put(`/posts/${postId}/like`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.message).toBeDefined();
+    });
+
+    it('should response 404 when post not found', async () => {
+      const { token } = await testHelper.getToken();
+
+      const { statusCode, body } = await supertest(app)
+        .put('/posts/not_found_id/like')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(404);
+      expect(body.status).toEqual('fail');
+      expect(body.message).toBeDefined();
+    });
+  });
 });

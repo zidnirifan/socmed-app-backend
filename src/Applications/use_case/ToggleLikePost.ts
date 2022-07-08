@@ -9,6 +9,8 @@ interface Payload {
   postId: string;
 }
 
+type likeUnlike = 'liked' | 'unliked';
+
 class ToggleLikePost {
   private postRepository: IPostRepository;
 
@@ -16,7 +18,7 @@ class ToggleLikePost {
     this.postRepository = dependency.postRepository;
   }
 
-  async execute(payload: Payload) {
+  async execute(payload: Payload): Promise<likeUnlike> {
     await this.postRepository.isPostExist(payload.postId);
     const isLiked = await this.postRepository.isPostLiked(payload);
 
