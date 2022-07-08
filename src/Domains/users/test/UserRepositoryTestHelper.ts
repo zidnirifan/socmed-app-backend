@@ -1,5 +1,6 @@
 /* istanbul ignore file */
 
+import { PayloadFollowUser } from '../../../Applications/use_case/ToggleFollowUser';
 import { IUser } from '../entities/User';
 import UserRepository, { UserGet } from '../UserRepository';
 
@@ -33,6 +34,15 @@ class MockUserRepository extends UserRepository {
   }
 
   getUserById(id: string): Promise<UserGet> {
+    throw new Error('Method not implemented.');
+  }
+  isUserFollowed(payload: PayloadFollowUser): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
+  followUser(payload: PayloadFollowUser): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  unfollowUser(payload: PayloadFollowUser): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }
