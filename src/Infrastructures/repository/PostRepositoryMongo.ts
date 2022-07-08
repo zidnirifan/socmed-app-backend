@@ -2,6 +2,7 @@ import { Types } from 'mongoose';
 import NotFoundError from '../../Commons/exceptions/NotFoundError';
 import { PayloadPostGet } from '../../Domains/posts/entities/PostGet';
 import PostRepository, {
+  PostLikePayload,
   PostMediaGet,
   PostPayload,
 } from '../../Domains/posts/PostRepository';
@@ -40,8 +41,9 @@ class PostRepositoryMongo extends PostRepository {
       media,
       createdAt,
       userId: user,
+      likes,
     } = await this.Model.findById(id)
-      .select('_id caption media createdAt')
+      .select('_id caption media createdAt likes')
       .populate('userId', 'username profilePhoto -_id');
 
     return {
@@ -50,21 +52,25 @@ class PostRepositoryMongo extends PostRepository {
       caption,
       media,
       createdAt,
+      likesCount: likes.length,
     };
   }
 
   async getHomePosts(): Promise<PayloadPostGet[]> {
     const posts = await this.Model.find()
-      .select('_id caption media createdAt')
+      .select('_id caption media createdAt likes')
       .populate('userId', 'username profilePhoto -_id');
 
-    return posts.map(({ _id, caption, media, createdAt, userId: user }) => ({
-      id: _id.toString(),
-      user,
-      caption,
-      media,
-      createdAt,
-    }));
+    return posts.map(
+      ({ _id, caption, media, createdAt, userId: user, likes }) => ({
+        id: _id.toString(),
+        user,
+        caption,
+        media,
+        createdAt,
+        likesCount: likes.length,
+      })
+    );
   }
 
   async getPostMediaByUserId(userId: string): Promise<PostMediaGet[]> {
@@ -74,6 +80,28 @@ class PostRepositoryMongo extends PostRepository {
       id: _id.toString(),
       media: media[0],
     }));
+  }
+
+  async isPostLiked(payload: PostLikePayload): Promise<boolean> {
+    const isLiked = await this.Model.countDocuments({
+      _id: payload.postId,
+      likes: payload.userId,
+    });
+    return !!isLiked;
+  }
+
+  async likePost(payload: PostLikePayload): Promise<void> {
+    await this.Model.updateOne(
+      { _id: payload.postId },
+      { $push: { likes: payload.userId } }
+    );
+  }
+
+  async unlikePost(payload: PostLikePayload): Promise<void> {
+    await this.Model.updateOne(
+      { _id: payload.postId },
+      { $pull: { likes: payload.userId } }
+    );
   }
 }
 

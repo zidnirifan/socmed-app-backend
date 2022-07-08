@@ -99,6 +99,7 @@ describe('PostRepositoryMongo', () => {
       expect(postGet).toHaveProperty('media');
       expect(postGet).toHaveProperty('caption');
       expect(postGet).toHaveProperty('createdAt');
+      expect(postGet).toHaveProperty('likesCount');
       expect(postGet.user).toHaveProperty('username');
       expect(postGet.user).toHaveProperty('profilePhoto');
     });
@@ -131,6 +132,7 @@ describe('PostRepositoryMongo', () => {
       expect(posts[0]).toHaveProperty('media');
       expect(posts[0]).toHaveProperty('caption');
       expect(posts[0]).toHaveProperty('createdAt');
+      expect(posts[0]).toHaveProperty('likesCount');
       expect(posts[0].user).toHaveProperty('username');
       expect(posts[0].user).toHaveProperty('profilePhoto');
     });
@@ -161,6 +163,119 @@ describe('PostRepositoryMongo', () => {
 
       expect(posts[0].id).toEqual(postId.toString());
       expect(posts[0].media).toEqual(post.media[0]);
+    });
+  });
+
+  describe('isPostLiked function', () => {
+    it('should return true if post liked', async () => {
+      const user = new UserModel({
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+      });
+
+      const { _id: userId } = await user.save();
+
+      const post = {
+        userId,
+        caption: 'hello ges',
+        media: ['http://images.com/img.png'],
+        likes: [userId],
+      };
+
+      const postRepositoryMongo = new PostRepositoryMongo();
+
+      const postInstanse = new PostModel(post);
+      const { _id: postId } = await postInstanse.save();
+
+      const isLiked = await postRepositoryMongo.isPostLiked({ userId, postId });
+
+      expect(isLiked).toEqual(true);
+    });
+
+    it('should return false if post not liked', async () => {
+      const user = new UserModel({
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+      });
+
+      const { _id: userId } = await user.save();
+
+      const post = {
+        userId,
+        caption: 'hello ges',
+        media: ['http://images.com/img.png'],
+      };
+
+      const postRepositoryMongo = new PostRepositoryMongo();
+
+      const postInstanse = new PostModel(post);
+      const { _id: postId } = await postInstanse.save();
+
+      const isLiked = await postRepositoryMongo.isPostLiked({ userId, postId });
+
+      expect(isLiked).toEqual(false);
+    });
+  });
+
+  describe('likePost function', () => {
+    it('should update post likes', async () => {
+      const user = new UserModel({
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+      });
+
+      const { _id: userId } = await user.save();
+
+      const post = {
+        userId,
+        caption: 'hello ges',
+        media: ['http://images.com/img.png'],
+      };
+
+      const postRepositoryMongo = new PostRepositoryMongo();
+
+      const postInstanse = new PostModel(post);
+      const { _id: postId } = await postInstanse.save();
+
+      await postRepositoryMongo.likePost({ userId, postId });
+
+      const postUpdated = await PostModel.findOne({ _id: postId });
+
+      expect(postUpdated.likes).toHaveLength(1);
+      expect(postUpdated.likes[0]).toEqual(userId);
+    });
+  });
+
+  describe('likePost function', () => {
+    it('should update post likes', async () => {
+      const user = new UserModel({
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+      });
+
+      const { _id: userId } = await user.save();
+
+      const post = {
+        userId,
+        caption: 'hello ges',
+        media: ['http://images.com/img.png'],
+        likes: [userId],
+      };
+
+      const postRepositoryMongo = new PostRepositoryMongo();
+
+      const postInstanse = new PostModel(post);
+      const { _id: postId } = await postInstanse.save();
+
+      await postRepositoryMongo.unlikePost({ userId, postId });
+
+      const postUpdated = await PostModel.findOne({ _id: postId });
+
+      expect(postUpdated.likes).toHaveLength(0);
     });
   });
 });

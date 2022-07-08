@@ -13,6 +13,7 @@ describe('GetHomePosts use case', () => {
       media: ['http://img.com/img.jpg'],
       caption: 'hello ges',
       createdAt: new Date(),
+      likesCount: 1,
     };
 
     const expectedPost = new PostGet(postFromRepo);

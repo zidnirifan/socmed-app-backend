@@ -9,6 +9,7 @@ export interface PayloadPostGet {
   caption: string;
   media: string[];
   createdAt: Date;
+  likesCount: number;
 }
 
 export interface IPostGet {
@@ -17,6 +18,7 @@ export interface IPostGet {
   caption: string;
   media: string[];
   createdAt: string;
+  likesCount: number;
 }
 
 class PostGet implements IPostGet {
@@ -25,12 +27,14 @@ class PostGet implements IPostGet {
   caption: string;
   media: string[];
   createdAt: string;
+  likesCount: number;
 
   constructor(payload: PayloadPostGet) {
     this.id = payload.id;
     this.user = payload.user;
     this.caption = payload.caption;
     this.media = payload.media;
+    this.likesCount = payload.likesCount;
     this.createdAt = this.timeSince(payload.createdAt);
   }
 

@@ -2,6 +2,7 @@ import { NextFunction, Response, Request } from 'express';
 import AddPost from '../../../../Applications/use_case/AddPost';
 import GetHomePost from '../../../../Applications/use_case/GetHomePosts';
 import GetPost from '../../../../Applications/use_case/GetPost';
+import ToggleLikePost from '../../../../Applications/use_case/ToggleLikePost';
 import { RequestAuth } from '../../middleware/auth';
 import BaseHandler from '../BaseHandler';
 
@@ -66,6 +67,28 @@ class PostsHandler extends BaseHandler {
       status: 'success',
       data: { posts },
     });
+  }
+
+  async toggleLike(
+    req: RequestAuth,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      /* istanbul ignore next */
+      const userId = req.auth?.id;
+      const payload = { userId, postId: req.params.id };
+
+      const toggleLike = this.container.getInstance(ToggleLikePost.name);
+      const likeUnlike = await toggleLike.execute(payload);
+
+      return res.status(200).json({
+        status: 'success',
+        message: `post ${likeUnlike}`,
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 }
 

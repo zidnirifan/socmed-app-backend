@@ -85,6 +85,7 @@ describe('/posts endpoint', () => {
       expect(body.data.post).toHaveProperty('caption');
       expect(body.data.post).toHaveProperty('media');
       expect(body.data.post).toHaveProperty('createdAt');
+      expect(body.data.post).toHaveProperty('likesCount');
       expect(body.data.post.user).toHaveProperty('username');
       expect(body.data.post.user).toHaveProperty('profilePhoto');
     });
@@ -117,6 +118,7 @@ describe('/posts endpoint', () => {
       expect(body.data.posts[0]).toHaveProperty('caption');
       expect(body.data.posts[0]).toHaveProperty('media');
       expect(body.data.posts[0]).toHaveProperty('createdAt');
+      expect(body.data.posts[0]).toHaveProperty('likesCount');
       expect(body.data.posts[0].user).toHaveProperty('username');
       expect(body.data.posts[0].user).toHaveProperty('profilePhoto');
     });
@@ -131,6 +133,32 @@ describe('/posts endpoint', () => {
       expect(statusCode).toEqual(200);
       expect(body.status).toEqual('success');
       expect(body.data.posts.length).toEqual(0);
+    });
+  });
+
+  describe('when PUT /posts/:id/like', () => {
+    it('should response 200', async () => {
+      const { token, postId } = await testHelper.postPost();
+
+      const { statusCode, body } = await supertest(app)
+        .put(`/posts/${postId}/like`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.message).toBeDefined();
+    });
+
+    it('should response 404 when post not found', async () => {
+      const { token } = await testHelper.getToken();
+
+      const { statusCode, body } = await supertest(app)
+        .put('/posts/not_found_id/like')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(404);
+      expect(body.status).toEqual('fail');
+      expect(body.message).toBeDefined();
     });
   });
 });
