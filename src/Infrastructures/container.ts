@@ -36,6 +36,7 @@ import GetPost from '../Applications/use_case/GetPost';
 import GetHomePost from '../Applications/use_case/GetHomePosts';
 import GetUserProfile from '../Applications/use_case/GetUserProfile';
 import ToggleLikePost from '../Applications/use_case/ToggleLikePost';
+import ToggleFollowUser from '../Applications/use_case/ToggleFollowUser';
 
 const container = createContainer();
 
@@ -285,6 +286,19 @@ container.register([
         {
           name: 'postRepository',
           internal: PostRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: ToggleFollowUser.name,
+    Class: ToggleFollowUser,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'userRepository',
+          internal: UserRepository.name,
         },
       ],
     },
