@@ -35,6 +35,7 @@ import AddPost from '../Applications/use_case/AddPost';
 import GetPost from '../Applications/use_case/GetPost';
 import GetHomePost from '../Applications/use_case/GetHomePosts';
 import GetUserProfile from '../Applications/use_case/GetUserProfile';
+import ToggleLikePost from '../Applications/use_case/ToggleLikePost';
 
 const container = createContainer();
 
@@ -268,6 +269,19 @@ container.register([
           name: 'userRepository',
           internal: UserRepository.name,
         },
+        {
+          name: 'postRepository',
+          internal: PostRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: ToggleLikePost.name,
+    Class: ToggleLikePost,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
         {
           name: 'postRepository',
           internal: PostRepository.name,
