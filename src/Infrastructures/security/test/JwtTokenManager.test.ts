@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import config from '../../../Commons/config';
+import AuthenticationError from '../../../Commons/exceptions/AuthenticationError';
 import InvariantError from '../../../Commons/exceptions/InvariantError';
 import JwtTokenManager from '../JwtTokenManager';
 
@@ -62,17 +63,17 @@ describe('JwtTokenManager', () => {
   });
 
   describe('verifyAccessToken function', () => {
-    it('should throw InvariantError when access token invalid', () => {
+    it('should throw AuthenticationError when access token invalid', () => {
       const jwtTokenManager = new JwtTokenManager();
 
       const accessToken = 'invalid_access_token';
 
       expect(() => jwtTokenManager.verifyAccessToken(accessToken)).toThrowError(
-        InvariantError
+        AuthenticationError
       );
     });
 
-    it('should throw InvariantError when access token expired', async () => {
+    it('should throw AuthenticationError when access token expired', async () => {
       const payload = {
         id: 'user-123',
         username: 'jhondoe',
@@ -85,11 +86,11 @@ describe('JwtTokenManager', () => {
       });
 
       expect(() => jwtTokenManager.verifyAccessToken(accessToken)).toThrowError(
-        InvariantError
+        AuthenticationError
       );
     });
 
-    it('should not throw InvariantError when access token is valid', () => {
+    it('should not throw AuthenticationError when access token is valid', () => {
       const payload = {
         id: 'user-123',
         username: 'jhondoe',
@@ -101,7 +102,7 @@ describe('JwtTokenManager', () => {
 
       expect(() =>
         jwtTokenManager.verifyAccessToken(accessToken)
-      ).not.toThrowError(InvariantError);
+      ).not.toThrowError(AuthenticationError);
     });
   });
 
