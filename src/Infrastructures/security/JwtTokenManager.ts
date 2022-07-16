@@ -3,6 +3,7 @@ import TokenManager, {
   PayloadToken,
 } from '../../Applications/security/TokenManager';
 import config from '../../Commons/config';
+import AuthenticationError from '../../Commons/exceptions/AuthenticationError';
 import InvariantError from '../../Commons/exceptions/InvariantError';
 
 class JwtTokenManager extends TokenManager {
@@ -40,9 +41,9 @@ class JwtTokenManager extends TokenManager {
       jwt.verify(accessToken, this.accessTokenKey);
     } catch (error) {
       if (error instanceof Error && error.message === 'jwt expired') {
-        throw new InvariantError('token expired');
+        throw new AuthenticationError('token expired');
       }
-      throw new InvariantError('invalid access token');
+      throw new AuthenticationError('invalid access token');
     }
   }
 
