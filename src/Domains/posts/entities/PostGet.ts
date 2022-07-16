@@ -1,4 +1,5 @@
 interface User {
+  id: string;
   username: string;
   profilePhoto: string;
 }
@@ -10,6 +11,7 @@ export interface PayloadPostGet {
   media: string[];
   createdAt: Date;
   likesCount: number;
+  isLiked: boolean;
 }
 
 export interface IPostGet {
@@ -19,6 +21,7 @@ export interface IPostGet {
   media: string[];
   createdAt: string;
   likesCount: number;
+  isLiked: boolean;
 }
 
 class PostGet implements IPostGet {
@@ -28,6 +31,7 @@ class PostGet implements IPostGet {
   media: string[];
   createdAt: string;
   likesCount: number;
+  isLiked: boolean;
 
   constructor(payload: PayloadPostGet) {
     this.id = payload.id;
@@ -36,6 +40,7 @@ class PostGet implements IPostGet {
     this.media = payload.media;
     this.likesCount = payload.likesCount;
     this.createdAt = this.timeSince(payload.createdAt);
+    this.isLiked = payload.isLiked;
   }
 
   private timeSince(date: Date) {
