@@ -52,7 +52,7 @@ class Server {
         }
 
         /* istanbul ignore next */
-        console.log(error.message);
+        console.error(error);
         /* istanbul ignore next */
         return res.status(500).json({
           status: 'error',
