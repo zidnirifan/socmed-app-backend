@@ -6,6 +6,7 @@ import GetUserProfile from '../GetUserProfile';
 describe('GetUserProfile use case', () => {
   it('should orchestrating the add user action correctly', async () => {
     const id = 'user-123';
+    const userId = 'user-333';
     const user = {
       id,
       username: 'jhondoe',
@@ -14,6 +15,7 @@ describe('GetUserProfile use case', () => {
       bio: 'i am an engineer',
       followersCount: 1,
       followingCount: 1,
+      isFollowed: true,
     };
     const posts = [
       {
@@ -41,12 +43,12 @@ describe('GetUserProfile use case', () => {
       postRepository: mockPostRepository,
     });
 
-    const userProfile = await getUserProfileUseCase.execute(id);
+    const userProfile = await getUserProfileUseCase.execute(id, userId);
 
     expect(userProfile).toBeInstanceOf(UserProfile);
     expect(userProfile).toEqual(expectedUserProfile);
     expect(mockUserRepository.isUserExistById).toBeCalledWith(id);
-    expect(mockUserRepository.getUserById).toBeCalledWith(id);
+    expect(mockUserRepository.getUserById).toBeCalledWith(id, userId);
     expect(mockPostRepository.getPostMediaByUserId).toBeCalledWith(id);
   });
 });

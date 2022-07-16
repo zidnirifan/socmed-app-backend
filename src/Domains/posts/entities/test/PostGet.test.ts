@@ -5,6 +5,7 @@ describe('PostGet entity', () => {
     const payload = {
       id: 'post-123',
       user: {
+        id: 'user-123',
         username: 'jhondoe',
         profilePhoto: 'photo.png',
       },
@@ -12,9 +13,12 @@ describe('PostGet entity', () => {
       media: ['img.jpg'],
       createdAt: new Date(),
       likesCount: 1,
+      isLiked: true,
     };
 
-    const { id, caption, user, media, createdAt } = new PostGet(payload);
+    const { id, caption, user, media, createdAt, isLiked } = new PostGet(
+      payload
+    );
 
     expect(id).toEqual(payload.id);
     expect(user).toEqual(payload.user);
@@ -22,6 +26,7 @@ describe('PostGet entity', () => {
     expect(media[0]).toEqual(payload.media[0]);
     expect(typeof createdAt).toEqual('string');
     expect(createdAt).toEqual('0 seconds ago');
+    expect(isLiked).toEqual(payload.isLiked);
   });
 
   it('createdAt should have value "2 year ago"', () => {
@@ -30,6 +35,7 @@ describe('PostGet entity', () => {
     const payload = {
       id: 'post-123',
       user: {
+        id: 'user-123',
         username: 'jhondoe',
         profilePhoto: 'photo.png',
       },
@@ -37,6 +43,7 @@ describe('PostGet entity', () => {
       media: ['img.jpg'],
       createdAt: new Date(Date.now() - yearInMs),
       likesCount: 1,
+      isLiked: true,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);
@@ -55,6 +62,7 @@ describe('PostGet entity', () => {
     const payload = {
       id: 'post-123',
       user: {
+        id: 'user-123',
         username: 'jhondoe',
         profilePhoto: 'photo.png',
       },
@@ -62,6 +70,7 @@ describe('PostGet entity', () => {
       media: ['img.jpg'],
       createdAt: new Date(Date.now() - yearInMs),
       likesCount: 1,
+      isLiked: true,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);
@@ -80,6 +89,7 @@ describe('PostGet entity', () => {
     const payload = {
       id: 'post-123',
       user: {
+        id: 'user-123',
         username: 'jhondoe',
         profilePhoto: 'photo.png',
       },
@@ -87,6 +97,7 @@ describe('PostGet entity', () => {
       media: ['img.jpg'],
       createdAt: new Date(Date.now() - monthInMs),
       likesCount: 1,
+      isLiked: true,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);
@@ -105,6 +116,7 @@ describe('PostGet entity', () => {
     const payload = {
       id: 'post-123',
       user: {
+        id: 'user-123',
         username: 'jhondoe',
         profilePhoto: 'photo.png',
       },
@@ -112,6 +124,7 @@ describe('PostGet entity', () => {
       media: ['img.jpg'],
       likesCount: 1,
       createdAt: new Date(Date.now() - weekInMs),
+      isLiked: true,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);
@@ -130,6 +143,7 @@ describe('PostGet entity', () => {
     const payload = {
       id: 'post-123',
       user: {
+        id: 'user-123',
         username: 'jhondoe',
         profilePhoto: 'photo.png',
       },
@@ -137,6 +151,7 @@ describe('PostGet entity', () => {
       media: ['img.jpg'],
       createdAt: new Date(Date.now() - dayInMs),
       likesCount: 1,
+      isLiked: true,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);
@@ -155,6 +170,7 @@ describe('PostGet entity', () => {
     const payload = {
       id: 'post-123',
       user: {
+        id: 'user-123',
         username: 'jhondoe',
         profilePhoto: 'photo.png',
       },
@@ -162,6 +178,7 @@ describe('PostGet entity', () => {
       media: ['img.jpg'],
       createdAt: new Date(Date.now() - hourInMs),
       likesCount: 1,
+      isLiked: true,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);
@@ -180,6 +197,7 @@ describe('PostGet entity', () => {
     const payload = {
       id: 'post-123',
       user: {
+        id: 'user-123',
         username: 'jhondoe',
         profilePhoto: 'photo.png',
       },
@@ -187,6 +205,7 @@ describe('PostGet entity', () => {
       media: ['img.jpg'],
       likesCount: 1,
       createdAt: new Date(Date.now() - minuteInMs),
+      isLiked: true,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);

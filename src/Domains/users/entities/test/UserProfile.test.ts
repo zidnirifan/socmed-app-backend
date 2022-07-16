@@ -12,6 +12,7 @@ describe('a UserProfile entities', () => {
       postsCount: 1,
       followersCount: 1,
       followingCount: 1,
+      isFollowed: true,
     };
 
     const {
@@ -24,6 +25,7 @@ describe('a UserProfile entities', () => {
       postsCount,
       followersCount,
       followingCount,
+      isFollowed,
     } = new UserProfile(payload);
 
     expect(id).toEqual(payload.id);
@@ -35,5 +37,6 @@ describe('a UserProfile entities', () => {
     expect(postsCount).toEqual(payload.postsCount);
     expect(followersCount).toEqual(payload.followersCount);
     expect(followingCount).toEqual(payload.followingCount);
+    expect(isFollowed).toEqual(payload.isFollowed);
   });
 });

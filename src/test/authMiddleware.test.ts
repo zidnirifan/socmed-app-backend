@@ -13,14 +13,14 @@ describe('auth middleware', () => {
     expect(body.message).toBeDefined();
   });
 
-  it('should response 400 when token is invalid', async () => {
+  it('should response 401 when token is invalid', async () => {
     const token = 'invalid_token';
 
     const { statusCode, body } = await supertest(app)
       .put('/users/photo')
       .set('Authorization', `Bearer ${token}`);
 
-    expect(statusCode).toEqual(400);
+    expect(statusCode).toEqual(401);
     expect(body.status).toEqual('fail');
     expect(body.message).toBeDefined();
   });

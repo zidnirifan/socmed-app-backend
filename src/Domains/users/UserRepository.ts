@@ -9,6 +9,7 @@ export interface UserGet {
   bio: string;
   followersCount: number;
   followingCount: number;
+  isFollowed: boolean;
 }
 
 export interface IUserRepository {
@@ -19,7 +20,7 @@ export interface IUserRepository {
   getPasswordByUsername(username: string): Promise<string>;
   getIdByUsername(username: string): Promise<string>;
   editProfilePhotoById(id: string, profilePhoto: string): Promise<void>;
-  getUserById(id: string): Promise<UserGet>;
+  getUserById(id: string, userId: string): Promise<UserGet>;
   isUserFollowed(payload: PayloadFollowUser): Promise<boolean>;
   followUser(payload: PayloadFollowUser): Promise<void>;
   unfollowUser(payload: PayloadFollowUser): Promise<void>;
@@ -43,7 +44,7 @@ abstract class UserRepository implements IUserRepository {
     profilePhoto: string
   ): Promise<void>;
 
-  abstract getUserById(id: string): Promise<UserGet>;
+  abstract getUserById(id: string, userId: string): Promise<UserGet>;
 
   abstract isUserFollowed(payload: PayloadFollowUser): Promise<boolean>;
 

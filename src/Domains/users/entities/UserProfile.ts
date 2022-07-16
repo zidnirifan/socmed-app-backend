@@ -13,6 +13,7 @@ export interface IUserProfile {
   postsCount: number;
   followersCount: number;
   followingCount: number;
+  isFollowed: boolean;
 }
 
 class UserProfile implements IUserProfile {
@@ -25,6 +26,7 @@ class UserProfile implements IUserProfile {
   postsCount: number;
   followersCount: number;
   followingCount: number;
+  isFollowed: boolean;
 
   constructor(payload: IUserProfile) {
     this.id = payload.id;
@@ -36,6 +38,7 @@ class UserProfile implements IUserProfile {
     this.postsCount = payload.postsCount;
     this.followersCount = payload.followersCount;
     this.followingCount = payload.followingCount;
+    this.isFollowed = payload.isFollowed;
   }
 }
 

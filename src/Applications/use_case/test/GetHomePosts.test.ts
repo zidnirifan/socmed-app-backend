@@ -6,14 +6,16 @@ describe('GetHomePosts use case', () => {
   it('should orchestrating get home posts action correctly', async () => {
     // Arrange
     const id = 'post-123';
+    const userId = 'user-123';
 
     const postFromRepo = {
       id,
-      user: { username: 'jhondoe', profilePhoto: 'photo.png' },
+      user: { id: userId, username: 'jhondoe', profilePhoto: 'photo.png' },
       media: ['http://img.com/img.jpg'],
       caption: 'hello ges',
       createdAt: new Date(),
       likesCount: 1,
+      isLiked: true,
     };
 
     const expectedPost = new PostGet(postFromRepo);
@@ -31,11 +33,11 @@ describe('GetHomePosts use case', () => {
     });
 
     // Action
-    const posts = await getHomePosts.execute();
+    const posts = await getHomePosts.execute(userId);
 
     // Assert
     expect(posts[0]).toBeInstanceOf(PostGet);
     expect(posts[0]).toEqual(expectedPost);
-    expect(mockPostRepository.getHomePosts).toBeCalled();
+    expect(mockPostRepository.getHomePosts).toBeCalledWith(userId);
   });
 });
