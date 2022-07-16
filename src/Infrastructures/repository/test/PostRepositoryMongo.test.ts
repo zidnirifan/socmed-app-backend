@@ -87,12 +87,13 @@ describe('PostRepositoryMongo', () => {
         userId,
         caption: 'hello ges',
         media: ['http://images.com/img.png'],
+        likes: [userId],
       };
 
       const postRepositoryMongo = new PostRepositoryMongo();
       const id = await postRepositoryMongo.addPost(post);
 
-      const postGet = await postRepositoryMongo.getPostById(id);
+      const postGet = await postRepositoryMongo.getPostById(id, userId);
 
       expect(postGet).toHaveProperty('id');
       expect(postGet).toHaveProperty('user');
@@ -100,6 +101,8 @@ describe('PostRepositoryMongo', () => {
       expect(postGet).toHaveProperty('caption');
       expect(postGet).toHaveProperty('createdAt');
       expect(postGet).toHaveProperty('likesCount');
+      expect(postGet).toHaveProperty('isLiked');
+      expect(postGet.user).toHaveProperty('id');
       expect(postGet.user).toHaveProperty('username');
       expect(postGet.user).toHaveProperty('profilePhoto');
     });
@@ -120,12 +123,13 @@ describe('PostRepositoryMongo', () => {
         userId,
         caption: 'hello ges',
         media: ['http://images.com/img.png'],
+        likes: [userId],
       };
 
       const postRepositoryMongo = new PostRepositoryMongo();
       await postRepositoryMongo.addPost(post);
 
-      const posts = await postRepositoryMongo.getHomePosts();
+      const posts = await postRepositoryMongo.getHomePosts(userId);
 
       expect(posts[0]).toHaveProperty('id');
       expect(posts[0]).toHaveProperty('user');
@@ -133,6 +137,8 @@ describe('PostRepositoryMongo', () => {
       expect(posts[0]).toHaveProperty('caption');
       expect(posts[0]).toHaveProperty('createdAt');
       expect(posts[0]).toHaveProperty('likesCount');
+      expect(posts[0]).toHaveProperty('isLiked');
+      expect(posts[0].user).toHaveProperty('id');
       expect(posts[0].user).toHaveProperty('username');
       expect(posts[0].user).toHaveProperty('profilePhoto');
     });

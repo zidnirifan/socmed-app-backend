@@ -14,10 +14,10 @@ class MockPostRepository extends PostRepository {
   isPostExist(id: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  getPostById(id: string): Promise<PayloadPostGet> {
+  getPostById(id: string, userId: string): Promise<PayloadPostGet> {
     throw new Error('Method not implemented.');
   }
-  getHomePosts(): Promise<PayloadPostGet[]> {
+  getHomePosts(userId: string): Promise<PayloadPostGet[]> {
     throw new Error('Method not implemented.');
   }
   getPostMediaByUserId(userId: string): Promise<PostMediaGet[]> {

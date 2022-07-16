@@ -34,7 +34,7 @@ class PostRepositoryMongo extends PostRepository {
     }
   }
 
-  async getPostById(id: string): Promise<PayloadPostGet> {
+  async getPostById(id: string, userId: string): Promise<PayloadPostGet> {
     const {
       _id,
       caption,
@@ -44,31 +44,45 @@ class PostRepositoryMongo extends PostRepository {
       likes,
     } = await this.Model.findById(id)
       .select('_id caption media createdAt likes')
-      .populate('userId', 'username profilePhoto -_id');
+      .populate('userId', 'username profilePhoto _id');
 
     return {
       id: _id.toString(),
-      user,
+      user: {
+        id: user._id.toString(),
+        username: user.username,
+        profilePhoto: user.profilePhoto,
+      },
       caption,
       media,
       createdAt,
       likesCount: likes.length,
+      isLiked:
+        likes.filter((like: Types.ObjectId) => like.toString() === userId)
+          .length > 0,
     };
   }
 
-  async getHomePosts(): Promise<PayloadPostGet[]> {
+  async getHomePosts(userId: string): Promise<PayloadPostGet[]> {
     const posts = await this.Model.find()
       .select('_id caption media createdAt likes')
-      .populate('userId', 'username profilePhoto -_id');
+      .populate('userId', 'username profilePhoto _id');
 
     return posts.map(
       ({ _id, caption, media, createdAt, userId: user, likes }) => ({
         id: _id.toString(),
-        user,
+        user: {
+          id: user._id.toString(),
+          username: user.username,
+          profilePhoto: user.profilePhoto,
+        },
         caption,
         media,
         createdAt,
         likesCount: likes.length,
+        isLiked:
+          likes.filter((like: Types.ObjectId) => like.toString() === userId)
+            .length > 0,
       })
     );
   }
