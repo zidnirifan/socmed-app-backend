@@ -33,7 +33,7 @@ class MockUserRepository extends UserRepository {
     throw new Error('Method not implemented.');
   }
 
-  getUserById(id: string): Promise<UserGet> {
+  getUserById(id: string, userId: string): Promise<UserGet> {
     throw new Error('Method not implemented.');
   }
   isUserFollowed(payload: PayloadFollowUser): Promise<boolean> {

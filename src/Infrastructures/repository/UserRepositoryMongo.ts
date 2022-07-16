@@ -15,7 +15,7 @@ class UserRepositoryMongo extends UserRepository {
   }
 
   async verifyAvailableUsername(username: string): Promise<void> {
-    const result = await this.Model.findOne({ username });
+    const result = await this.Model.countDocuments({ username });
     if (result) {
       throw new InvariantError('username already exist');
     }
@@ -29,7 +29,7 @@ class UserRepositoryMongo extends UserRepository {
   }
 
   async isUsernameExist(username: string): Promise<void> {
-    const result = await this.Model.findOne({ username });
+    const result = await this.Model.countDocuments({ username });
     if (!result) {
       throw new NotFoundError('username not found');
     }
@@ -61,7 +61,7 @@ class UserRepositoryMongo extends UserRepository {
     await this.Model.updateOne({ _id: id }, { profilePhoto });
   }
 
-  async getUserById(id: string): Promise<UserGet> {
+  async getUserById(id: string, userId: string): Promise<UserGet> {
     const { _id, username, fullName, profilePhoto, bio, followers } =
       await this.Model.findOne({ _id: id }, '-password');
 
@@ -75,6 +75,10 @@ class UserRepositoryMongo extends UserRepository {
       bio,
       followersCount: followers.length,
       followingCount,
+      isFollowed:
+        followers.filter(
+          (follow: Types.ObjectId) => follow.toString() === userId
+        ).length > 0,
     };
   }
 

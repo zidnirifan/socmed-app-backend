@@ -18,10 +18,10 @@ class GetUserProfile {
     this.postRepository = dependency.postRepository;
   }
 
-  async execute(id: string): Promise<IUserProfile> {
+  async execute(id: string, userId: string): Promise<IUserProfile> {
     await this.userRepository.isUserExistById(id);
 
-    const user = await this.userRepository.getUserById(id);
+    const user = await this.userRepository.getUserById(id, userId);
     const postMedia = await this.postRepository.getPostMediaByUserId(id);
 
     return new UserProfile({

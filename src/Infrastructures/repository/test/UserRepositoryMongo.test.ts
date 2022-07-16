@@ -220,7 +220,7 @@ describe('UserRepositoryMongo', () => {
 
       const userRepositoryMongo = new UserRepositoryMongo();
 
-      const resultUser = await userRepositoryMongo.getUserById(_id);
+      const resultUser = await userRepositoryMongo.getUserById(_id, 'user-123');
 
       expect(resultUser.id).toEqual(_id.toString());
       expect(resultUser.username).toEqual(user.username);
@@ -229,6 +229,7 @@ describe('UserRepositoryMongo', () => {
       expect(resultUser.bio).toEqual(user.bio);
       expect(resultUser.followersCount).toEqual(1);
       expect(resultUser.followingCount).toEqual(0);
+      expect(resultUser.isFollowed).toEqual(false);
     });
   });
 
