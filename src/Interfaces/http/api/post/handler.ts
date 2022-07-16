@@ -1,4 +1,4 @@
-import { NextFunction, Response, Request } from 'express';
+import { NextFunction, Response } from 'express';
 import AddPost from '../../../../Applications/use_case/AddPost';
 import GetHomePost from '../../../../Applications/use_case/GetHomePosts';
 import GetPost from '../../../../Applications/use_case/GetPost';
@@ -42,13 +42,15 @@ class PostsHandler extends BaseHandler {
   }
 
   async getPostById(
-    req: Request,
+    req: RequestAuth,
     res: Response,
     next: NextFunction
   ): Promise<Response | void> {
     try {
+      /* istanbul ignore next */
+      const userId = req.auth?.id;
       const getPost = this.container.getInstance(GetPost.name);
-      const post = await getPost.execute(req.params.id);
+      const post = await getPost.execute(req.params.id, userId);
 
       return res.status(200).json({
         status: 'success',
@@ -59,9 +61,11 @@ class PostsHandler extends BaseHandler {
     }
   }
 
-  async getHomePosts(req: Request, res: Response): Promise<Response> {
-    const getPost = this.container.getInstance(GetHomePost.name);
-    const posts = await getPost.execute(req.params.id);
+  async getHomePosts(req: RequestAuth, res: Response): Promise<Response> {
+    /* istanbul ignore next */
+    const userId = req.auth?.id;
+    const getHomePosts = this.container.getInstance(GetHomePost.name);
+    const posts = await getHomePosts.execute(userId);
 
     return res.status(200).json({
       status: 'success',
