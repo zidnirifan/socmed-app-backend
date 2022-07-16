@@ -12,10 +12,10 @@ class GetPost {
     this.postRepository = dependency.postRepository;
   }
 
-  async execute(id: string): Promise<IPostGet> {
+  async execute(id: string, userId: string): Promise<IPostGet> {
     await this.postRepository.isPostExist(id);
 
-    const post = await this.postRepository.getPostById(id);
+    const post = await this.postRepository.getPostById(id, userId);
     return new PostGet(post);
   }
 }

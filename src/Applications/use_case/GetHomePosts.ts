@@ -12,8 +12,8 @@ class GetHomePost {
     this.postRepository = dependency.postRepository;
   }
 
-  async execute(): Promise<IPostGet[]> {
-    const posts = await this.postRepository.getHomePosts();
+  async execute(userId: string): Promise<IPostGet[]> {
+    const posts = await this.postRepository.getHomePosts(userId);
     return posts.map((p) => new PostGet(p));
   }
 }
