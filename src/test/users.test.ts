@@ -223,6 +223,44 @@ describe('/users endpoint', () => {
       expect(body.data.userProfile).toHaveProperty('bio');
       expect(body.data.userProfile).toHaveProperty('posts');
       expect(body.data.userProfile).toHaveProperty('postsCount');
+      expect(body.data.userProfile).toHaveProperty('followersCount');
+      expect(body.data.userProfile).toHaveProperty('followingCount');
+      expect(body.data.userProfile).toHaveProperty('isFollowed');
+    });
+
+    it('should response 404 when user not found', async () => {
+      const { token } = await testHelper.getToken();
+
+      const { statusCode, body } = await supertest(app)
+        .get('/users/not_found_id')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(404);
+      expect(body.status).toEqual('fail');
+      expect(body.message).toBeDefined();
+    });
+  });
+
+  describe('when GET /users', () => {
+    it('should response 200 and user profile', async () => {
+      const { token } = await testHelper.getToken();
+
+      const { statusCode, body } = await supertest(app)
+        .get('/users')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.data.userProfile).toHaveProperty('id');
+      expect(body.data.userProfile).toHaveProperty('username');
+      expect(body.data.userProfile).toHaveProperty('fullName');
+      expect(body.data.userProfile).toHaveProperty('profilePhoto');
+      expect(body.data.userProfile).toHaveProperty('bio');
+      expect(body.data.userProfile).toHaveProperty('posts');
+      expect(body.data.userProfile).toHaveProperty('postsCount');
+      expect(body.data.userProfile).toHaveProperty('followersCount');
+      expect(body.data.userProfile).toHaveProperty('followingCount');
+      expect(body.data.userProfile).toHaveProperty('isFollowed');
     });
 
     it('should response 404 when user not found', async () => {

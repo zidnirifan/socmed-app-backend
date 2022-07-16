@@ -69,13 +69,18 @@ class UsersHandler extends BaseHandler {
   }
 
   async getUserProfile(
-    req: Request,
+    req: RequestAuth,
     res: Response,
     next: NextFunction
   ): Promise<Response | void> {
     try {
+      /* istanbul ignore next */
+      const userId = req.auth?.id;
       const getUserProfile = this.container.getInstance(GetUserProfile.name);
-      const userProfile = await getUserProfile.execute(req.params.id);
+      const userProfile = await getUserProfile.execute(
+        req.params.id || userId,
+        userId
+      );
       return res.status(200).json({
         status: 'success',
         data: {
