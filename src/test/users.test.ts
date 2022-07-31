@@ -308,4 +308,39 @@ describe('/users endpoint', () => {
       expect(body.message).toBeDefined();
     });
   });
+
+  describe('when PUT /users', () => {
+    it('should response 200', async () => {
+      const { token } = await testHelper.getToken();
+      const payload = {
+        fullName: 'Paijo',
+        bio: 'an engineer',
+      };
+
+      const { statusCode, body } = await supertest(app)
+        .put('/users')
+        .set('Authorization', `Bearer ${token}`)
+        .send(payload);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.message).toBeDefined();
+    });
+
+    it('should response 400 when payload not meet data spesification', async () => {
+      const { token } = await testHelper.getToken();
+      const payload = {
+        bio: 'an engineer',
+      };
+
+      const { statusCode, body } = await supertest(app)
+        .put('/users')
+        .set('Authorization', `Bearer ${token}`)
+        .send(payload);
+
+      expect(statusCode).toEqual(400);
+      expect(body.status).toEqual('fail');
+      expect(body.message).toBeDefined();
+    });
+  });
 });
