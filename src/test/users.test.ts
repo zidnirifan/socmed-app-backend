@@ -206,12 +206,12 @@ describe('/users endpoint', () => {
     });
   });
 
-  describe('when GET /users/:id', () => {
+  describe('when GET /users/profile/:id', () => {
     it('should response 200 and user profile', async () => {
       const { token, id } = await testHelper.getToken();
 
       const { statusCode, body } = await supertest(app)
-        .get(`/users/${id}`)
+        .get(`/users/profile/${id}`)
         .set('Authorization', `Bearer ${token}`);
 
       expect(statusCode).toEqual(200);
@@ -232,7 +232,7 @@ describe('/users endpoint', () => {
       const { token } = await testHelper.getToken();
 
       const { statusCode, body } = await supertest(app)
-        .get('/users/not_found_id')
+        .get('/users/profile/not_found_id')
         .set('Authorization', `Bearer ${token}`);
 
       expect(statusCode).toEqual(404);
@@ -241,12 +241,12 @@ describe('/users endpoint', () => {
     });
   });
 
-  describe('when GET /users', () => {
-    it('should response 200 and user profile', async () => {
+  describe('when GET /users/profile', () => {
+    it('should response 200 and own user profile', async () => {
       const { token } = await testHelper.getToken();
 
       const { statusCode, body } = await supertest(app)
-        .get('/users')
+        .get('/users/profile')
         .set('Authorization', `Bearer ${token}`);
 
       expect(statusCode).toEqual(200);
@@ -261,18 +261,6 @@ describe('/users endpoint', () => {
       expect(body.data.userProfile).toHaveProperty('followersCount');
       expect(body.data.userProfile).toHaveProperty('followingCount');
       expect(body.data.userProfile).toHaveProperty('isFollowed');
-    });
-
-    it('should response 404 when user not found', async () => {
-      const { token } = await testHelper.getToken();
-
-      const { statusCode, body } = await supertest(app)
-        .get('/users/not_found_id')
-        .set('Authorization', `Bearer ${token}`);
-
-      expect(statusCode).toEqual(404);
-      expect(body.status).toEqual('fail');
-      expect(body.message).toBeDefined();
     });
   });
 
