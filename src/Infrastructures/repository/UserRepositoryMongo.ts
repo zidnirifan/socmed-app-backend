@@ -5,6 +5,7 @@ import InvariantError from '../../Commons/exceptions/InvariantError';
 import UserModel from '../model/User';
 import NotFoundError from '../../Commons/exceptions/NotFoundError';
 import { PayloadFollowUser } from '../../Applications/use_case/ToggleFollowUser';
+import UserEdit from '../../Domains/users/entities/UserEdit';
 
 class UserRepositoryMongo extends UserRepository {
   private Model;
@@ -102,6 +103,10 @@ class UserRepositoryMongo extends UserRepository {
       { _id: payload.userFollow },
       { $pull: { followers: payload.userId } }
     );
+  }
+
+  async editUser({ id, fullName, bio }: UserEdit): Promise<void> {
+    await this.Model.updateOne({ _id: id }, { fullName, bio });
   }
 }
 

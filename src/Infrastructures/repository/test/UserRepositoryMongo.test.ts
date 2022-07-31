@@ -349,4 +349,30 @@ describe('UserRepositoryMongo', () => {
       expect(userUpdated.followers).toHaveLength(0);
     });
   });
+
+  describe('editUser', () => {
+    it('should update user correctly', async () => {
+      const user = new UserModel({
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+      });
+
+      const { _id } = await user.save();
+
+      const userEdit = {
+        id: _id,
+        fullName: 'Paijo',
+        bio: 'engineer',
+      };
+
+      const userRepositoryMongo = new UserRepositoryMongo();
+
+      await userRepositoryMongo.editUser(userEdit);
+
+      const result = await UserModel.findOne({ _id });
+      expect(userEdit.fullName).toEqual(result.fullName);
+      expect(userEdit.bio).toEqual(result.bio);
+    });
+  });
 });
