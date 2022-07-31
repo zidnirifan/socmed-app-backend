@@ -3,6 +3,7 @@
 import { PayloadFollowUser } from '../../../Applications/use_case/ToggleFollowUser';
 import { IUser } from '../entities/User';
 import UserEdit from '../entities/UserEdit';
+import { IUserSearch } from '../entities/UserSearch';
 import UserRepository, { UserGet } from '../UserRepository';
 
 class MockUserRepository extends UserRepository {
@@ -47,6 +48,9 @@ class MockUserRepository extends UserRepository {
     throw new Error('Method not implemented.');
   }
   editUser(payload: UserEdit): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  searchUsers(text: string): Promise<IUserSearch[]> {
     throw new Error('Method not implemented.');
   }
 }

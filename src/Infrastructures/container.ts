@@ -39,6 +39,7 @@ import ToggleLikePost from '../Applications/use_case/ToggleLikePost';
 import ToggleFollowUser from '../Applications/use_case/ToggleFollowUser';
 import EditUser from '../Applications/use_case/EditUser';
 import EditUserValidator from './validator/user/EditUserValidator';
+import SearchUsers from '../Applications/use_case/SearchUsers';
 
 const container = createContainer();
 
@@ -319,6 +320,19 @@ container.register([
           name: 'validator',
           internal: EditUserValidator.name,
         },
+        {
+          name: 'userRepository',
+          internal: UserRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: SearchUsers.name,
+    Class: SearchUsers,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
         {
           name: 'userRepository',
           internal: UserRepository.name,

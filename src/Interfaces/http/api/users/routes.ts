@@ -15,10 +15,11 @@ class UsersRoutes extends BaseRouter {
       multer({ dest: os.tmpdir() }).single('photo'),
       handler.putProfilePhoto
     );
-    this.router.get('/:id', auth, handler.getUserProfile);
-    this.router.get('/', auth, handler.getUserProfile);
+    this.router.get('/profile/:id', auth, handler.getUserProfile);
+    this.router.get('/profile', auth, handler.getUserProfile);
     this.router.put('/:id/follow', auth, handler.toggleFollowUser);
     this.router.put('/', auth, handler.putUser);
+    this.router.get('/search', auth, handler.searchUsers);
   }
 }
 

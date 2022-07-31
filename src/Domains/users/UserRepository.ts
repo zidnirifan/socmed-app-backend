@@ -1,6 +1,7 @@
 import { PayloadFollowUser } from '../../Applications/use_case/ToggleFollowUser';
 import { IUser } from './entities/User';
 import UserEdit from './entities/UserEdit';
+import { IUserSearch } from './entities/UserSearch';
 
 export interface UserGet {
   id: string;
@@ -26,6 +27,7 @@ export interface IUserRepository {
   followUser(payload: PayloadFollowUser): Promise<void>;
   unfollowUser(payload: PayloadFollowUser): Promise<void>;
   editUser(payload: UserEdit): Promise<void>;
+  searchUsers(text: string): Promise<IUserSearch[]>;
 }
 
 abstract class UserRepository implements IUserRepository {
@@ -55,6 +57,8 @@ abstract class UserRepository implements IUserRepository {
   abstract unfollowUser(payload: PayloadFollowUser): Promise<void>;
 
   abstract editUser(payload: UserEdit): Promise<void>;
+
+  abstract searchUsers(text: string): Promise<IUserSearch[]>;
 }
 
 export default UserRepository;
