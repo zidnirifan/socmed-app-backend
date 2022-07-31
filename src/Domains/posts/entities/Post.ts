@@ -7,18 +7,18 @@ interface Media {
 }
 
 export interface IPost {
-  caption: string;
+  caption?: string;
   media: Media[];
   userId: string;
 }
 
 class Post {
-  caption: string;
+  caption?: string;
   media: Media[];
   userId: string;
 
   constructor(payload: IPost) {
-    this.caption = payload.caption;
+    this.caption = payload.caption || '';
     this.media = payload.media;
     this.media.forEach((e) => {
       e.fileName = +new Date() + e.fileName;

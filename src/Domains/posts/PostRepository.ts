@@ -2,7 +2,7 @@ import { PayloadPostGet } from './entities/PostGet';
 
 export interface PostPayload {
   userId: string;
-  caption: string;
+  caption?: string;
   media: string[];
 }
 
