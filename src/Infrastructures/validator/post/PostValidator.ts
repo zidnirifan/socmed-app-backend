@@ -8,7 +8,7 @@ class PostValidator extends Validator<IPost> {
 
     return Joi.object({
       userId: Joi.string().required(),
-      caption: Joi.string().required(),
+      caption: Joi.string().allow(''),
       media: Joi.array()
         .items(
           Joi.object({

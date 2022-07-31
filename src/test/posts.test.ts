@@ -41,20 +41,6 @@ describe('/posts endpoint', () => {
       expect(body.data).toHaveProperty('postId');
     });
 
-    it('should response 400 when body request not meet data spesification', async () => {
-      const mediaPath = path.resolve(__dirname, './images/gedang.jpg');
-      const { token } = await testHelper.getToken();
-
-      const { statusCode, body } = await supertest(app)
-        .post('/posts')
-        .set('Authorization', `Bearer ${token}`)
-        .attach('media', mediaPath);
-
-      expect(statusCode).toEqual(400);
-      expect(body.status).toEqual('fail');
-      expect(body.message).toBeDefined();
-    });
-
     it('should response 400 when not attach a media', async () => {
       const { token } = await testHelper.getToken();
       const caption = 'helo ges';

@@ -9,7 +9,6 @@ const postSchema = new Schema(
     },
     caption: {
       type: String,
-      required: true,
     },
     media: [{ type: String, required: true }],
     likes: [{ type: Types.ObjectId, ref: 'User' }],
