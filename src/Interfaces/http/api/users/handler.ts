@@ -5,6 +5,7 @@ import BaseHandler from '../BaseHandler';
 import { RequestAuth } from '../../middleware/auth';
 import GetUserProfile from '../../../../Applications/use_case/GetUserProfile';
 import ToggleFollowUser from '../../../../Applications/use_case/ToggleFollowUser';
+import EditUser from '../../../../Applications/use_case/EditUser';
 
 class UsersHandler extends BaseHandler {
   async postUserHandler(
@@ -109,6 +110,29 @@ class UsersHandler extends BaseHandler {
       return res.status(200).json({
         status: 'success',
         message: `user ${followUnfollow}`,
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  async putUser(
+    req: RequestAuth,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      /* istanbul ignore next */
+      const userId = req.auth?.id;
+      const payload = { id: userId, ...req.body };
+
+      const editUser = this.container.getInstance(EditUser.name);
+
+      await editUser.execute(payload);
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'user edited successfully',
       });
     } catch (error) {
       return next(error);
