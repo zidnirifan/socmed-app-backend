@@ -37,6 +37,8 @@ import GetHomePost from '../Applications/use_case/GetHomePosts';
 import GetUserProfile from '../Applications/use_case/GetUserProfile';
 import ToggleLikePost from '../Applications/use_case/ToggleLikePost';
 import ToggleFollowUser from '../Applications/use_case/ToggleFollowUser';
+import EditUser from '../Applications/use_case/EditUser';
+import EditUserValidator from './validator/user/EditUserValidator';
 
 const container = createContainer();
 
@@ -92,6 +94,10 @@ container.register([
   {
     key: PostRepository.name,
     Class: PostRepositoryMongo,
+  },
+  {
+    key: EditUserValidator.name,
+    Class: EditUserValidator,
   },
 ]);
 
@@ -296,6 +302,23 @@ container.register([
     parameter: {
       injectType: 'destructuring',
       dependencies: [
+        {
+          name: 'userRepository',
+          internal: UserRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: EditUser.name,
+    Class: EditUser,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'validator',
+          internal: EditUserValidator.name,
+        },
         {
           name: 'userRepository',
           internal: UserRepository.name,
