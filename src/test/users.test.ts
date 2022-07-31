@@ -331,4 +331,23 @@ describe('/users endpoint', () => {
       expect(body.message).toBeDefined();
     });
   });
+
+  describe('when GET /users/search?text=jhon', () => {
+    it('should response 200 and user data', async () => {
+      const { token } = await testHelper.getToken();
+      const text = 'jhon';
+
+      const { statusCode, body } = await supertest(app)
+        .get(`/users/search?text=${text}`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.data.users).toHaveLength(1);
+      expect(body.data.users[0]).toHaveProperty('id');
+      expect(body.data.users[0]).toHaveProperty('username');
+      expect(body.data.users[0]).toHaveProperty('fullName');
+      expect(body.data.users[0]).toHaveProperty('profilePhoto');
+    });
+  });
 });

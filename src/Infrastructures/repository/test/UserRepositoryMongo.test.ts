@@ -375,4 +375,33 @@ describe('UserRepositoryMongo', () => {
       expect(userEdit.bio).toEqual(result.bio);
     });
   });
+
+  describe('searchUsers function', () => {
+    it('should search user correctly', async () => {
+      const user = new UserModel({
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+      });
+
+      const { _id } = await user.save();
+
+      const userRepositoryMongo = new UserRepositoryMongo();
+
+      const users = await userRepositoryMongo.searchUsers('jhon');
+
+      expect(users).toHaveLength(1);
+      expect(users[0].id).toEqual(_id.toString());
+      expect(users[0].username).toEqual(user.username);
+      expect(users[0].fullName).toEqual(user.fullName);
+    });
+
+    it('should return blank array when user not found', async () => {
+      const userRepositoryMongo = new UserRepositoryMongo();
+
+      const users = await userRepositoryMongo.searchUsers('jhon');
+
+      expect(users).toHaveLength(0);
+    });
+  });
 });

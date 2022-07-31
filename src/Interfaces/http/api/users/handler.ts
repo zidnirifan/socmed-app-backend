@@ -6,6 +6,7 @@ import { RequestAuth } from '../../middleware/auth';
 import GetUserProfile from '../../../../Applications/use_case/GetUserProfile';
 import ToggleFollowUser from '../../../../Applications/use_case/ToggleFollowUser';
 import EditUser from '../../../../Applications/use_case/EditUser';
+import SearchUsers from '../../../../Applications/use_case/SearchUsers';
 
 class UsersHandler extends BaseHandler {
   async postUserHandler(
@@ -137,6 +138,20 @@ class UsersHandler extends BaseHandler {
     } catch (error) {
       return next(error);
     }
+  }
+  async searchUsers(req: RequestAuth, res: Response): Promise<Response | void> {
+    const { text } = req.query;
+
+    const searchUsers = this.container.getInstance(SearchUsers.name);
+
+    const users = await searchUsers.execute(text);
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        users,
+      },
+    });
   }
 }
 

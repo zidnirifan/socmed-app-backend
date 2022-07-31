@@ -6,6 +6,7 @@ import UserModel from '../model/User';
 import NotFoundError from '../../Commons/exceptions/NotFoundError';
 import { PayloadFollowUser } from '../../Applications/use_case/ToggleFollowUser';
 import UserEdit from '../../Domains/users/entities/UserEdit';
+import { IUserSearch } from '../../Domains/users/entities/UserSearch';
 
 class UserRepositoryMongo extends UserRepository {
   private Model;
@@ -107,6 +108,15 @@ class UserRepositoryMongo extends UserRepository {
 
   async editUser({ id, fullName, bio }: UserEdit): Promise<void> {
     await this.Model.updateOne({ _id: id }, { fullName, bio });
+  }
+
+  async searchUsers(text: string): Promise<IUserSearch[]> {
+    return this.Model.find({
+      $or: [
+        { username: { $regex: text, $options: 'i' } },
+        { fullName: { $regex: text, $options: 'i' } },
+      ],
+    });
   }
 }
 
