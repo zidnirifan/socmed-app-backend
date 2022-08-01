@@ -40,6 +40,10 @@ import ToggleFollowUser from '../Applications/use_case/ToggleFollowUser';
 import EditUser from '../Applications/use_case/EditUser';
 import EditUserValidator from './validator/user/EditUserValidator';
 import SearchUsers from '../Applications/use_case/SearchUsers';
+import AddComment from '../Applications/use_case/AddComment';
+import CommentValidator from './validator/comment/CommentValidator';
+import CommentRepository from '../Domains/comments/CommentRepository';
+import CommentRepositoryMongo from './repository/CommentRepositoryMongo';
 
 const container = createContainer();
 
@@ -99,6 +103,14 @@ container.register([
   {
     key: EditUserValidator.name,
     Class: EditUserValidator,
+  },
+  {
+    key: CommentValidator.name,
+    Class: CommentValidator,
+  },
+  {
+    key: CommentRepository.name,
+    Class: CommentRepositoryMongo,
   },
 ]);
 
@@ -336,6 +348,27 @@ container.register([
         {
           name: 'userRepository',
           internal: UserRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: AddComment.name,
+    Class: AddComment,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'validator',
+          internal: CommentValidator.name,
+        },
+        {
+          name: 'postRepository',
+          internal: PostRepository.name,
+        },
+        {
+          name: 'commentRepository',
+          internal: CommentRepository.name,
         },
       ],
     },
