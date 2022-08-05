@@ -6,8 +6,13 @@ class CommentsRoutes extends BaseRouter {
   routes(): void {
     const handler = new PostsHandler(this.container);
 
-    this.router.post('/:id/comments', auth, handler.postComment);
-    this.router.get('/:id/comments', auth, handler.getPostComments);
+    this.router.post('/:postId/comments', auth, handler.postComment);
+    this.router.get('/:postId/comments', auth, handler.getPostComments);
+    this.router.put(
+      '/:postId/comments/:commentId/like',
+      auth,
+      handler.toggleLikeComment
+    );
   }
 }
 

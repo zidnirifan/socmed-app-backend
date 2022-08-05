@@ -1,6 +1,7 @@
 import { NextFunction, Response } from 'express';
 import AddComment from '../../../../Applications/use_case/AddComment';
 import GetPostComments from '../../../../Applications/use_case/GetPostComments';
+import ToggleLikeComment from '../../../../Applications/use_case/ToggleLikeComment';
 import { RequestAuth } from '../../middleware/auth';
 import BaseHandler from '../BaseHandler';
 
@@ -13,7 +14,7 @@ class CommentsHandler extends BaseHandler {
     try {
       /* istanbul ignore next */
       const userId = req.auth?.id;
-      const postId = req.params.id;
+      const { postId } = req.params;
 
       const post = {
         ...req.body,
@@ -40,7 +41,7 @@ class CommentsHandler extends BaseHandler {
     next: NextFunction
   ): Promise<Response | void> {
     try {
-      const postId = req.params.id;
+      const { postId } = req.params;
 
       const getPostComments = this.container.getInstance(GetPostComments.name);
       const comments = await getPostComments.execute(postId);
@@ -48,6 +49,29 @@ class CommentsHandler extends BaseHandler {
       return res.status(200).json({
         status: 'success',
         data: { comments },
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
+  async toggleLikeComment(
+    req: RequestAuth,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      /* istanbul ignore next */
+      const userId = req.auth?.id;
+      const { commentId } = req.params;
+
+      const toggleLikeComment = this.container.getInstance(
+        ToggleLikeComment.name
+      );
+      const likeUnlike = await toggleLikeComment.execute({ userId, commentId });
+
+      return res.status(200).json({
+        status: 'success',
+        message: `comment ${likeUnlike}`,
       });
     } catch (error) {
       return next(error);

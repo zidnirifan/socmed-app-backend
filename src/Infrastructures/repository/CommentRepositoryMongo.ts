@@ -1,6 +1,8 @@
 import { Types } from 'mongoose';
 import NotFoundError from '../../Commons/exceptions/NotFoundError';
-import CommentRepository from '../../Domains/comments/CommentRepository';
+import CommentRepository, {
+  LikeCommentPayload,
+} from '../../Domains/comments/CommentRepository';
 import { IComment } from '../../Domains/comments/entities/Comment';
 import CommentGet, {
   ICommentGet,
@@ -96,6 +98,28 @@ class CommentRepositoryMongo extends CommentRepository {
           },
           createdAt,
         })
+    );
+  }
+
+  async isCommentLiked(payload: LikeCommentPayload): Promise<boolean> {
+    const isLiked = await this.Model.countDocuments({
+      _id: payload.commentId,
+      likes: payload.userId,
+    });
+    return !!isLiked;
+  }
+
+  async likeComment(payload: LikeCommentPayload): Promise<void> {
+    await this.Model.updateOne(
+      { _id: payload.commentId },
+      { $push: { likes: payload.userId } }
+    );
+  }
+
+  async unlikeComment(payload: LikeCommentPayload): Promise<void> {
+    await this.Model.updateOne(
+      { _id: payload.commentId },
+      { $pull: { likes: payload.userId } }
     );
   }
 }

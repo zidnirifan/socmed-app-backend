@@ -99,4 +99,30 @@ describe('/posts endpoint', () => {
       expect(body.message).toBeDefined();
     });
   });
+
+  describe('when PUT /posts/:postId/:commentId/like', () => {
+    it('should response 200', async () => {
+      const { token, commentId, postId } = await testHelper.postComment();
+
+      const { statusCode, body } = await supertest(app)
+        .put(`/posts/${postId}/comments/${commentId}/like`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.message).toBeDefined();
+    });
+
+    it('should response 404 when post or comment not found', async () => {
+      const { token } = await testHelper.getToken();
+
+      const { statusCode, body } = await supertest(app)
+        .put(`/posts/not_found_id/comments/not_found_id/like`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(404);
+      expect(body.status).toEqual('fail');
+      expect(body.message).toBeDefined();
+    });
+  });
 });

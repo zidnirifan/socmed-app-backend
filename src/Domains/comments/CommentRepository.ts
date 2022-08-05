@@ -1,11 +1,19 @@
 import { IComment } from './entities/Comment';
 import { ICommentGet, PayloadCommentGet } from './entities/CommentGet';
 
+export interface LikeCommentPayload {
+  userId: string;
+  commentId: string;
+}
+
 export interface ICommentRepository {
   addComment(payload: IComment): Promise<string>;
   isCommentExist(id: string): Promise<void>;
   getCommentsByPostId(postId: string): Promise<PayloadCommentGet[]>;
   getReplies(id: string): Promise<ICommentGet[]>;
+  isCommentLiked(payload: LikeCommentPayload): Promise<boolean>;
+  likeComment(payload: LikeCommentPayload): Promise<void>;
+  unlikeComment(payload: LikeCommentPayload): Promise<void>;
 }
 
 abstract class CommentRepository implements ICommentRepository {
@@ -13,6 +21,9 @@ abstract class CommentRepository implements ICommentRepository {
   abstract isCommentExist(id: string): Promise<void>;
   abstract getCommentsByPostId(postId: string): Promise<PayloadCommentGet[]>;
   abstract getReplies(id: string): Promise<ICommentGet[]>;
+  abstract isCommentLiked(payload: LikeCommentPayload): Promise<boolean>;
+  abstract likeComment(payload: LikeCommentPayload): Promise<void>;
+  abstract unlikeComment(payload: LikeCommentPayload): Promise<void>;
 }
 
 export default CommentRepository;

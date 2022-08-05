@@ -45,6 +45,7 @@ import CommentValidator from './validator/comment/CommentValidator';
 import CommentRepository from '../Domains/comments/CommentRepository';
 import CommentRepositoryMongo from './repository/CommentRepositoryMongo';
 import GetPostComments from '../Applications/use_case/GetPostComments';
+import ToggleLikeComment from '../Applications/use_case/ToggleLikeComment';
 
 const container = createContainer();
 
@@ -384,6 +385,19 @@ container.register([
           name: 'postRepository',
           internal: PostRepository.name,
         },
+        {
+          name: 'commentRepository',
+          internal: CommentRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: ToggleLikeComment.name,
+    Class: ToggleLikeComment,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
         {
           name: 'commentRepository',
           internal: CommentRepository.name,

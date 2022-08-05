@@ -168,4 +168,91 @@ describe('CommentRepositoryMongo', () => {
       expect(replies[0].createdAt).toEqual('0s');
     });
   });
+
+  describe('isCommentLiked function', () => {
+    it('should return true if comment liked', async () => {
+      const userId = '62b55fb7f96df4d764f67233';
+      const comment = new CommentModel({
+        userId,
+        content: 'comment',
+        postId: '62b55fb7f96df4d764f67255',
+        likes: [userId],
+      });
+
+      const { _id: commentId } = await comment.save();
+
+      const commentRepositoryMongo = new CommentRepositoryMongo();
+
+      const isLiked = await commentRepositoryMongo.isCommentLiked({
+        userId,
+        commentId,
+      });
+
+      expect(isLiked).toEqual(true);
+    });
+
+    it('should return false if comment not liked', async () => {
+      const userId = '62b55fb7f96df4d764f67233';
+      const comment = new CommentModel({
+        userId,
+        content: 'comment',
+        postId: '62b55fb7f96df4d764f67255',
+      });
+
+      const { _id: commentId } = await comment.save();
+
+      const commentRepositoryMongo = new CommentRepositoryMongo();
+
+      const isLiked = await commentRepositoryMongo.isCommentLiked({
+        userId,
+        commentId,
+      });
+
+      expect(isLiked).toEqual(false);
+    });
+  });
+
+  describe('likeComment function', () => {
+    it('should add userId to likes field', async () => {
+      const userId = '62b55fb7f96df4d764f67233';
+      const comment = new CommentModel({
+        userId,
+        content: 'comment',
+        postId: '62b55fb7f96df4d764f67255',
+      });
+
+      const { _id: commentId } = await comment.save();
+
+      const commentRepositoryMongo = new CommentRepositoryMongo();
+
+      await commentRepositoryMongo.likeComment({ userId, commentId });
+
+      const commentUpdated = await CommentModel.findOne({ _id: commentId });
+
+      expect(commentUpdated.likes).toHaveLength(1);
+      expect(commentUpdated.likes[0].toString()).toEqual(userId);
+    });
+  });
+
+  describe('unlikeComment function', () => {
+    it('should delete userId from likes field', async () => {
+      const userId = '62b55fb7f96df4d764f67233';
+      const comment = new CommentModel({
+        userId,
+        content: 'comment',
+        postId: '62b55fb7f96df4d764f67255',
+        likes: [userId],
+      });
+
+      const { _id: commentId } = await comment.save();
+
+      const commentRepositoryMongo = new CommentRepositoryMongo();
+
+      await commentRepositoryMongo.unlikeComment({ userId, commentId });
+
+      const commentUpdated = await CommentModel.findOne({ _id: commentId });
+
+      expect(commentUpdated.likes).toHaveLength(0);
+    });
+  });
 });
