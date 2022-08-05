@@ -4,34 +4,47 @@ interface User {
   profilePhoto: string;
 }
 
-export interface PayloadCommentGet {
-  user: User;
-  content: string;
-  postId: string;
-  replyTo?: string;
-  createdAt: Date;
+export interface ReplyTo {
+  id: string;
+  user: { id: string; username: string };
 }
 
 export interface ICommentGet {
+  id: string;
   user: User;
   content: string;
   postId: string;
-  replyTo?: string;
+  replyTo?: ReplyTo;
+  replies?: ICommentGet[];
   createdAt: string;
 }
 
-class CommentGet implements ICommentGet {
+export interface PayloadCommentGet {
+  id: string;
   user: User;
   content: string;
   postId: string;
-  replyTo?: string | undefined;
+  replyTo?: ReplyTo;
+  replies?: ICommentGet[];
+  createdAt: Date;
+}
+
+class CommentGet implements ICommentGet {
+  id: string;
+  user: User;
+  content: string;
+  postId: string;
+  replyTo?: ReplyTo;
+  replies?: ICommentGet[];
   createdAt: string;
 
   constructor(payload: PayloadCommentGet) {
+    this.id = payload.id;
     this.user = payload.user;
     this.content = payload.content;
     this.postId = payload.postId;
     this.replyTo = payload.replyTo;
+    this.replies = payload.replies;
     this.createdAt = this.timeSince(payload.createdAt);
   }
 
