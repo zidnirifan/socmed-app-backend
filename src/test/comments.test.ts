@@ -60,4 +60,43 @@ describe('/posts endpoint', () => {
       expect(body.message).toBeDefined();
     });
   });
+
+  describe('when GET /posts/:id/comments', () => {
+    it('should response 201 and id comment', async () => {
+      const { token, commentId, postId } = await testHelper.postComment();
+
+      await testHelper.postComment({
+        content: 'reply',
+        replyTo: commentId,
+        parentComment: commentId,
+      });
+
+      const { statusCode, body } = await supertest(app)
+        .get(`/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.data).toHaveProperty('comments');
+      expect(body.data.comments[0]).toHaveProperty('id');
+      expect(body.data.comments[0]).toHaveProperty('user');
+      expect(body.data.comments[0]).toHaveProperty('content');
+      expect(body.data.comments[0]).toHaveProperty('postId');
+      expect(body.data.comments[0]).toHaveProperty('replies');
+      expect(body.data.comments[0].replies).toHaveLength(1);
+      expect(body.data.comments[0]).toHaveProperty('createdAt');
+    });
+
+    it('should response 404 when post not found', async () => {
+      const { token } = await testHelper.postComment();
+
+      const { statusCode, body } = await supertest(app)
+        .get('/posts/not_found_id/comments')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(404);
+      expect(body.status).toEqual('fail');
+      expect(body.message).toBeDefined();
+    });
+  });
 });

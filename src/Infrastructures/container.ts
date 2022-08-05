@@ -44,6 +44,7 @@ import AddComment from '../Applications/use_case/AddComment';
 import CommentValidator from './validator/comment/CommentValidator';
 import CommentRepository from '../Domains/comments/CommentRepository';
 import CommentRepositoryMongo from './repository/CommentRepositoryMongo';
+import GetPostComments from '../Applications/use_case/GetPostComments';
 
 const container = createContainer();
 
@@ -362,6 +363,23 @@ container.register([
           name: 'validator',
           internal: CommentValidator.name,
         },
+        {
+          name: 'postRepository',
+          internal: PostRepository.name,
+        },
+        {
+          name: 'commentRepository',
+          internal: CommentRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: GetPostComments.name,
+    Class: GetPostComments,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
         {
           name: 'postRepository',
           internal: PostRepository.name,

@@ -1,5 +1,6 @@
 import { NextFunction, Response } from 'express';
 import AddComment from '../../../../Applications/use_case/AddComment';
+import GetPostComments from '../../../../Applications/use_case/GetPostComments';
 import { RequestAuth } from '../../middleware/auth';
 import BaseHandler from '../BaseHandler';
 
@@ -27,6 +28,26 @@ class CommentsHandler extends BaseHandler {
         status: 'success',
         message: 'comment successfully posted',
         data: { commentId },
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  async getPostComments(
+    req: RequestAuth,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      const postId = req.params.id;
+
+      const getPostComments = this.container.getInstance(GetPostComments.name);
+      const comments = await getPostComments.execute(postId);
+
+      return res.status(200).json({
+        status: 'success',
+        data: { comments },
       });
     } catch (error) {
       return next(error);

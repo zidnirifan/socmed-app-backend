@@ -1,6 +1,7 @@
 import NotFoundError from '../../../Commons/exceptions/NotFoundError';
 import db from '../../database/mongo/db';
 import CommentModel from '../../model/Comment';
+import UserModel from '../../model/User';
 import CommentRepositoryMongo from '../CommentRepositoryMongo';
 
 describe('CommentRepositoryMongo', () => {
@@ -10,6 +11,7 @@ describe('CommentRepositoryMongo', () => {
 
   afterEach(async () => {
     await CommentModel.deleteMany();
+    await UserModel.deleteMany();
   });
 
   afterAll(() => {
@@ -71,6 +73,99 @@ describe('CommentRepositoryMongo', () => {
       await expect(
         commentRepositoryMongo.isCommentExist(_id)
       ).resolves.not.toThrowError(NotFoundError);
+    });
+  });
+
+  describe('getCommentsByPostId function', () => {
+    it('should return comment object correctly', async () => {
+      const user = {
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+        profilePhoto: 'profile.png',
+      };
+
+      const userModel = new UserModel(user);
+
+      const { _id: userId } = await userModel.save();
+
+      const postId = '62b55fb7f96df4d764f67255';
+      const comment = new CommentModel({
+        userId,
+        content: 'comment',
+        postId,
+      });
+
+      const { _id } = await comment.save();
+
+      const commentRepositoryMongo = new CommentRepositoryMongo();
+
+      const comments = await commentRepositoryMongo.getCommentsByPostId(postId);
+
+      expect(comments[0].id).toEqual(_id);
+      expect(comments[0].user).toEqual({
+        id: userId,
+        username: user.username,
+        profilePhoto: user.profilePhoto,
+      });
+      expect(comments[0].content).toEqual('comment');
+      expect(comments[0].postId.toString()).toEqual(postId);
+      expect(comments[0].createdAt).toBeDefined();
+    });
+  });
+
+  describe('getReplies function', () => {
+    it('should return comment object correctly', async () => {
+      const user = {
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+        profilePhoto: 'profile.png',
+      };
+
+      const userModel = new UserModel(user);
+
+      const { _id: userId } = await userModel.save();
+
+      const postId = '62b55fb7f96df4d764f67255';
+      const comment = new CommentModel({
+        userId,
+        content: 'comment',
+        postId,
+      });
+
+      const { _id: commentId } = await comment.save();
+
+      const reply = new CommentModel({
+        userId,
+        content: 'comment',
+        postId,
+        replyTo: commentId,
+        parentComment: commentId,
+      });
+
+      const { _id: replyId } = await reply.save();
+
+      const commentRepositoryMongo = new CommentRepositoryMongo();
+
+      const replies = await commentRepositoryMongo.getReplies(commentId);
+
+      expect(replies[0].id).toEqual(replyId);
+      expect(replies[0].user).toEqual({
+        id: userId,
+        username: user.username,
+        profilePhoto: user.profilePhoto,
+      });
+      expect(replies[0].content).toEqual('comment');
+      expect(replies[0].postId.toString()).toEqual(postId);
+      expect(replies[0].replyTo).toEqual({
+        id: commentId,
+        user: {
+          id: userId,
+          username: user.username,
+        },
+      });
+      expect(replies[0].createdAt).toEqual('0s');
     });
   });
 });
