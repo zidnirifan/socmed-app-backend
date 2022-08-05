@@ -11,6 +11,7 @@ class CommentValidator extends Validator<IComment> {
       content: Joi.string().required(),
       postId: Joi.string().required(),
       replyTo: Joi.string(),
+      parentComment: Joi.string(),
     });
   }
 }

@@ -20,6 +20,10 @@ const commentSchema = new Schema(
       type: Types.ObjectId,
       ref: 'Comment',
     },
+    parentComment: {
+      type: Types.ObjectId,
+      ref: 'Comment',
+    },
   },
   { timestamps: true }
 );
