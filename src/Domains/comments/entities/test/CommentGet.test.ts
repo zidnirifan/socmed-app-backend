@@ -29,9 +29,13 @@ describe('CommentGet entity', () => {
             },
           },
           createdAt: '1d',
+          likesCount: 1,
+          isLiked: true,
         },
       ],
       createdAt: new Date(),
+      likesCount: 1,
+      isLiked: true,
     };
 
     const {
@@ -67,6 +71,8 @@ describe('CommentGet entity', () => {
       content: 'comment',
       postId: 'post-123',
       createdAt: new Date(Date.now() - weekInMs),
+      likesCount: 1,
+      isLiked: true,
     };
 
     const { createdAt } = new CommentGet(payload);
@@ -87,6 +93,8 @@ describe('CommentGet entity', () => {
       content: 'comment',
       postId: 'post-123',
       createdAt: new Date(Date.now() - dayInMs),
+      likesCount: 1,
+      isLiked: true,
     };
 
     const { createdAt } = new CommentGet(payload);
@@ -107,6 +115,8 @@ describe('CommentGet entity', () => {
       content: 'comment',
       postId: 'post-123',
       createdAt: new Date(Date.now() - hourInMs),
+      likesCount: 1,
+      isLiked: true,
     };
 
     const { createdAt } = new CommentGet(payload);
@@ -127,6 +137,8 @@ describe('CommentGet entity', () => {
       content: 'comment',
       postId: 'post-123',
       createdAt: new Date(Date.now() - minuteInMs),
+      likesCount: 1,
+      isLiked: true,
     };
 
     const { createdAt } = new CommentGet(payload);

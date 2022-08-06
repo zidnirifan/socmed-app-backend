@@ -36,7 +36,10 @@ class CommentRepositoryMongo extends CommentRepository {
     }
   }
 
-  async getCommentsByPostId(postId: string): Promise<PayloadCommentGet[]> {
+  async getCommentsByPostId(
+    postId: string,
+    userId: string
+  ): Promise<PayloadCommentGet[]> {
     const comments = await this.Model.find(
       { postId, parentComment: undefined },
       '-updatedAt'
@@ -50,6 +53,7 @@ class CommentRepositoryMongo extends CommentRepository {
         // eslint-disable-next-line no-shadow
         postId,
         createdAt,
+        likes,
       }) => ({
         id,
         user: {
@@ -60,11 +64,18 @@ class CommentRepositoryMongo extends CommentRepository {
         content,
         postId,
         createdAt,
+        likesCount: likes.length,
+        isLiked:
+          likes.filter((like: Types.ObjectId) => like.toString() === userId)
+            .length > 0,
       })
     );
   }
 
-  async getReplies(parentComment: string): Promise<ICommentGet[]> {
+  async getReplies(
+    parentComment: string,
+    userId: string
+  ): Promise<ICommentGet[]> {
     const comments = await this.Model.find({ parentComment }, '-updatedAt')
       .populate('userId', 'username profilePhoto')
       .populate({
@@ -79,7 +90,7 @@ class CommentRepositoryMongo extends CommentRepository {
       });
 
     return comments.map(
-      ({ _id: id, userId: user, content, postId, createdAt, replyTo }) =>
+      ({ _id: id, userId: user, content, postId, createdAt, replyTo, likes }) =>
         new CommentGet({
           id,
           user: {
@@ -97,6 +108,10 @@ class CommentRepositoryMongo extends CommentRepository {
             },
           },
           createdAt,
+          likesCount: likes.length,
+          isLiked:
+            likes.filter((like: Types.ObjectId) => like.toString() === userId)
+              .length > 0,
         })
     );
   }

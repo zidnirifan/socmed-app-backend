@@ -27,6 +27,8 @@ export interface PayloadCommentGet {
   replyTo?: ReplyTo;
   replies?: ICommentGet[];
   createdAt: Date;
+  likesCount: number;
+  isLiked: boolean;
 }
 
 class CommentGet implements ICommentGet {
@@ -37,6 +39,8 @@ class CommentGet implements ICommentGet {
   replyTo?: ReplyTo;
   replies?: ICommentGet[];
   createdAt: string;
+  likesCount: number;
+  isLiked: boolean;
 
   constructor(payload: PayloadCommentGet) {
     this.id = payload.id;
@@ -46,6 +50,8 @@ class CommentGet implements ICommentGet {
     this.replyTo = payload.replyTo;
     this.replies = payload.replies;
     this.createdAt = this.timeSince(payload.createdAt);
+    this.likesCount = payload.likesCount;
+    this.isLiked = payload.isLiked;
   }
 
   private timeSince(date: Date) {

@@ -9,8 +9,11 @@ export interface LikeCommentPayload {
 export interface ICommentRepository {
   addComment(payload: IComment): Promise<string>;
   isCommentExist(id: string): Promise<void>;
-  getCommentsByPostId(postId: string): Promise<PayloadCommentGet[]>;
-  getReplies(id: string): Promise<ICommentGet[]>;
+  getCommentsByPostId(
+    postId: string,
+    userId: string
+  ): Promise<PayloadCommentGet[]>;
+  getReplies(id: string, userId: string): Promise<ICommentGet[]>;
   isCommentLiked(payload: LikeCommentPayload): Promise<boolean>;
   likeComment(payload: LikeCommentPayload): Promise<void>;
   unlikeComment(payload: LikeCommentPayload): Promise<void>;
@@ -19,8 +22,11 @@ export interface ICommentRepository {
 abstract class CommentRepository implements ICommentRepository {
   abstract addComment(payload: IComment): Promise<string>;
   abstract isCommentExist(id: string): Promise<void>;
-  abstract getCommentsByPostId(postId: string): Promise<PayloadCommentGet[]>;
-  abstract getReplies(id: string): Promise<ICommentGet[]>;
+  abstract getCommentsByPostId(
+    postId: string,
+    userId: string
+  ): Promise<PayloadCommentGet[]>;
+  abstract getReplies(id: string, userId: string): Promise<ICommentGet[]>;
   abstract isCommentLiked(payload: LikeCommentPayload): Promise<boolean>;
   abstract likeComment(payload: LikeCommentPayload): Promise<void>;
   abstract unlikeComment(payload: LikeCommentPayload): Promise<void>;
