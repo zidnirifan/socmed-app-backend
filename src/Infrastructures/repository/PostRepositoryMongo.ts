@@ -9,15 +9,18 @@ import PostRepository, {
 } from '../../Domains/posts/PostRepository';
 import CommentModel from '../model/Comment';
 import PostModel from '../model/Post';
+import UserModel from '../model/User';
 
 class PostRepositoryMongo extends PostRepository {
   private Model;
   private CommentModel;
+  private UserModel;
 
   constructor() {
     super();
     this.Model = PostModel;
     this.CommentModel = CommentModel;
+    this.UserModel = UserModel;
   }
 
   async addPost(payload: PostPayload): Promise<string> {
@@ -72,38 +75,72 @@ class PostRepositoryMongo extends PostRepository {
     };
   }
 
-  async getHomePosts(userId: string): Promise<PayloadPostGet[]> {
-    const posts = await this.Model.find()
-      .select('_id caption media createdAt likes')
-      .populate('userId', 'username profilePhoto _id');
-
-    const postsMapped = Promise.all(
-      posts.map(
-        async ({ _id, caption, media, createdAt, userId: user, likes }) => {
-          const commentsCount = await this.CommentModel.countDocuments({
-            postId: _id,
-          });
-          return {
-            id: _id.toString(),
-            user: {
-              id: user._id.toString(),
-              username: user.username,
-              profilePhoto: user.profilePhoto,
-            },
-            caption,
-            media,
-            createdAt,
-            likesCount: likes.length,
-            isLiked:
-              likes.filter((like: Types.ObjectId) => like.toString() === userId)
-                .length > 0,
-            commentsCount,
-          };
-        }
-      )
+  async getFollowingPosts(userId: string): Promise<PayloadPostGet[]> {
+    const usersFollowing = await this.UserModel.find(
+      { followers: userId },
+      '_id'
     );
 
-    return postsMapped;
+    const usersIdFollowing = usersFollowing.map((u) => u._id);
+
+    const posts = await this.Model.aggregate([
+      {
+        $match: { userId: { $in: usersIdFollowing } },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      {
+        $lookup: {
+          from: 'comments',
+          localField: '_id',
+          foreignField: 'postId',
+          as: 'comments',
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          id: '$_id',
+          caption: 1,
+          media: 1,
+          createdAt: 1,
+          likesCount: { $size: '$likes' },
+          'user.id': '$user._id',
+          'user.username': 1,
+          'user.profilePhoto': 1,
+          commentsCount: { $size: '$comments' },
+          isLiked: {
+            $filter: {
+              input: '$likes',
+              as: 'likes',
+              cond: { $eq: ['$$likes', new Types.ObjectId(userId)] },
+            },
+          },
+        },
+      },
+      {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+      {
+        $limit: 10,
+      },
+    ]);
+
+    return posts.map((p) => ({
+      ...p,
+      isLiked: !!p.isLiked[0],
+    }));
   }
 
   async getPostMediaByUserId(userId: string): Promise<PostMediaGet[]> {

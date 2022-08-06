@@ -2,7 +2,7 @@ import { NextFunction, Response } from 'express';
 import AddPost from '../../../../Applications/use_case/AddPost';
 import GetExplorePostsMedia from '../../../../Applications/use_case/GetExplorePostsMedia';
 import GetExplorePosts from '../../../../Applications/use_case/GetExplorePosts';
-import GetHomePost from '../../../../Applications/use_case/GetHomePosts';
+import GetFollowingPosts from '../../../../Applications/use_case/GetFollowingPosts';
 import GetPost from '../../../../Applications/use_case/GetPost';
 import ToggleLikePost from '../../../../Applications/use_case/ToggleLikePost';
 import { RequestAuth } from '../../middleware/auth';
@@ -63,11 +63,13 @@ class PostsHandler extends BaseHandler {
     }
   }
 
-  async getHomePosts(req: RequestAuth, res: Response): Promise<Response> {
+  async GetFollowingPosts(req: RequestAuth, res: Response): Promise<Response> {
     /* istanbul ignore next */
     const userId = req.auth?.id;
-    const getHomePosts = this.container.getInstance(GetHomePost.name);
-    const posts = await getHomePosts.execute(userId);
+    const getFollowingPosts = this.container.getInstance(
+      GetFollowingPosts.name
+    );
+    const posts = await getFollowingPosts.execute(userId);
 
     return res.status(200).json({
       status: 'success',

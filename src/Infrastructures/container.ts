@@ -33,7 +33,7 @@ import LogoutUser from '../Applications/use_case/LogoutUser';
 import EditProfilePhoto from '../Applications/use_case/EditProfilePhoto';
 import AddPost from '../Applications/use_case/AddPost';
 import GetPost from '../Applications/use_case/GetPost';
-import GetHomePost from '../Applications/use_case/GetHomePosts';
+import GetFollowingPosts from '../Applications/use_case/GetFollowingPosts';
 import GetUserProfile from '../Applications/use_case/GetUserProfile';
 import ToggleLikePost from '../Applications/use_case/ToggleLikePost';
 import ToggleFollowUser from '../Applications/use_case/ToggleFollowUser';
@@ -271,8 +271,8 @@ container.register([
     },
   },
   {
-    key: GetHomePost.name,
-    Class: GetHomePost,
+    key: GetFollowingPosts.name,
+    Class: GetFollowingPosts,
     parameter: {
       injectType: 'destructuring',
       dependencies: [

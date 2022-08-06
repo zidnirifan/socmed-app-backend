@@ -109,28 +109,38 @@ describe('PostRepositoryMongo', () => {
     });
   });
 
-  describe('getHomePosts function', () => {
+  describe('getFollowingPosts function', () => {
     it('should return array of posts correctly', async () => {
-      const user = new UserModel({
+      const user1 = new UserModel({
         username: 'jhondoe',
         fullName: 'Jhon Doe',
         password: 'password',
-        profilePhoto: 'profile.png',
       });
 
-      const { _id: userId } = await user.save();
+      const { _id: userId1 } = await user1.save();
 
-      const post = {
-        userId,
+      const user2 = new UserModel({
+        username: 'gedang',
+        fullName: 'Gedang Goreng',
+        password: 'password',
+        profilePhoto: 'profile.png',
+        followers: [userId1],
+      });
+
+      const { _id: userId2 } = await user2.save();
+
+      const post = new PostModel({
+        userId: userId2,
         caption: 'hello ges',
         media: ['http://images.com/img.png'],
-        likes: [userId],
-      };
+        likes: [userId1],
+      });
+
+      await post.save();
 
       const postRepositoryMongo = new PostRepositoryMongo();
-      await postRepositoryMongo.addPost(post);
 
-      const posts = await postRepositoryMongo.getHomePosts(userId);
+      const posts = await postRepositoryMongo.getFollowingPosts(userId1);
 
       expect(posts[0]).toHaveProperty('id');
       expect(posts[0]).toHaveProperty('user');

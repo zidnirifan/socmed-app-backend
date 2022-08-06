@@ -92,12 +92,31 @@ describe('/posts endpoint', () => {
     });
   });
 
-  describe('when GET /posts/home', () => {
+  describe('when GET /posts/following', () => {
     it('should response 200 and array of posts object', async () => {
-      const { token } = await testHelper.postPost();
+      const { id: userId1, token } = await testHelper.getToken();
+
+      const user2 = new UserModel({
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+        profilePhoto: 'profile.png',
+        followers: [userId1],
+      });
+
+      const { _id: userId2 } = await user2.save();
+
+      const post = new PostModel({
+        userId: userId2,
+        caption: 'hello ges',
+        media: ['http://images.com/img.png'],
+        likes: [userId1],
+      });
+
+      await post.save();
 
       const { statusCode, body } = await supertest(app)
-        .get('/posts/home')
+        .get('/posts/following')
         .set('Authorization', `Bearer ${token}`);
 
       expect(statusCode).toEqual(200);
@@ -119,7 +138,7 @@ describe('/posts endpoint', () => {
       const { token } = await testHelper.getToken();
 
       const { statusCode, body } = await supertest(app)
-        .get('/posts/home')
+        .get('/posts/following')
         .set('Authorization', `Bearer ${token}`);
 
       expect(statusCode).toEqual(200);
