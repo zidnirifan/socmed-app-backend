@@ -5,7 +5,7 @@ interface Dependency {
   postRepository: IPostRepository;
 }
 
-class GetHomePost {
+class GetFollowingPosts {
   postRepository: IPostRepository;
 
   constructor(dependency: Dependency) {
@@ -13,9 +13,9 @@ class GetHomePost {
   }
 
   async execute(userId: string): Promise<IPostGet[]> {
-    const posts = await this.postRepository.getHomePosts(userId);
+    const posts = await this.postRepository.getFollowingPosts(userId);
     return posts.map((p) => new PostGet(p));
   }
 }
 
-export default GetHomePost;
+export default GetFollowingPosts;
