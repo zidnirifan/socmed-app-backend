@@ -286,4 +286,41 @@ describe('PostRepositoryMongo', () => {
       expect(postUpdated.likes).toHaveLength(0);
     });
   });
+
+  describe('getExplorePosts function', () => {
+    it('should return array of posts correctly', async () => {
+      const user = new UserModel({
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+        profilePhoto: 'profile.png',
+      });
+
+      const { _id: userId } = await user.save();
+
+      const post = {
+        userId,
+        caption: 'hello ges',
+        media: ['http://images.com/img.png'],
+        likes: [userId],
+      };
+
+      const postRepositoryMongo = new PostRepositoryMongo();
+      await postRepositoryMongo.addPost(post);
+
+      const posts = await postRepositoryMongo.getExplorePosts(userId);
+
+      expect(posts[0]).toHaveProperty('id');
+      expect(posts[0]).toHaveProperty('user');
+      expect(posts[0]).toHaveProperty('media');
+      expect(posts[0]).toHaveProperty('caption');
+      expect(posts[0]).toHaveProperty('createdAt');
+      expect(posts[0]).toHaveProperty('likesCount');
+      expect(posts[0]).toHaveProperty('isLiked');
+      expect(posts[0]).toHaveProperty('commentsCount');
+      expect(posts[0].user).toHaveProperty('id');
+      expect(posts[0].user).toHaveProperty('username');
+      expect(posts[0].user).toHaveProperty('profilePhoto');
+    });
+  });
 });

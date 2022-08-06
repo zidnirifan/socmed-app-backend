@@ -135,6 +135,59 @@ class PostRepositoryMongo extends PostRepository {
       { $pull: { likes: payload.userId } }
     );
   }
+
+  async getExplorePosts(userId: string): Promise<PayloadPostGet[]> {
+    const posts = await this.Model.aggregate([
+      {
+        $sample: { size: 6 },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      {
+        $lookup: {
+          from: 'comments',
+          localField: '_id',
+          foreignField: 'postId',
+          as: 'comments',
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          id: '$_id',
+          caption: 1,
+          media: 1,
+          createdAt: 1,
+          likesCount: { $size: '$likes' },
+          'user.id': '$user._id',
+          'user.username': 1,
+          'user.profilePhoto': 1,
+          commentsCount: { $size: '$comments' },
+          isLiked: {
+            $filter: {
+              input: '$likes',
+              as: 'likes',
+              cond: { $eq: ['$$likes', new Types.ObjectId(userId)] },
+            },
+          },
+        },
+      },
+    ]);
+
+    return posts.map((p) => ({
+      ...p,
+      isLiked: !!p.isLiked[0],
+    })) as unknown as PayloadPostGet[];
+  }
 }
 
 export default PostRepositoryMongo;

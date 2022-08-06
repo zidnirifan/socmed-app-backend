@@ -32,6 +32,9 @@ class MockPostRepository extends PostRepository {
   unlikePost(payload: PostLikePayload): Promise<void> {
     throw new Error('Method not implemented.');
   }
+  getExplorePosts(userId: string): Promise<PayloadPostGet[]> {
+    throw new Error('Method not implemented.');
+  }
 }
 
 export default MockPostRepository;
