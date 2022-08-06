@@ -189,4 +189,31 @@ describe('/posts endpoint', () => {
       expect(body.data.posts.length).toEqual(0);
     });
   });
+
+  describe('when GET /posts/explore/media', () => {
+    it('should response 200 and array of post media object', async () => {
+      const { token } = await testHelper.postPost();
+
+      const { statusCode, body } = await supertest(app)
+        .get('/posts/explore/media')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.data.posts[0]).toHaveProperty('id');
+      expect(body.data.posts[0]).toHaveProperty('media');
+    });
+
+    it('should response 200 and blank array if post media not exist', async () => {
+      const { token } = await testHelper.getToken();
+
+      const { statusCode, body } = await supertest(app)
+        .get('/posts/explore/media')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.data.posts.length).toEqual(0);
+    });
+  });
 });

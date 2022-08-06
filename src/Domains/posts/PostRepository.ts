@@ -1,3 +1,4 @@
+import { PostMedia } from '../../Applications/use_case/GetExplorePostsMedia';
 import { PayloadPostGet } from './entities/PostGet';
 
 export interface PostPayload {
@@ -26,6 +27,7 @@ export interface IPostRepository {
   likePost(payload: PostLikePayload): Promise<void>;
   unlikePost(payload: PostLikePayload): Promise<void>;
   getExplorePosts(userId: string): Promise<PayloadPostGet[]>;
+  getExplorePostsMedia(): Promise<PostMedia[]>;
 }
 
 abstract class PostRepository implements IPostRepository {
@@ -38,6 +40,7 @@ abstract class PostRepository implements IPostRepository {
   abstract likePost(payload: PostLikePayload): Promise<void>;
   abstract unlikePost(payload: PostLikePayload): Promise<void>;
   abstract getExplorePosts(userId: string): Promise<PayloadPostGet[]>;
+  abstract getExplorePostsMedia(): Promise<PostMedia[]>;
 }
 
 export default PostRepository;

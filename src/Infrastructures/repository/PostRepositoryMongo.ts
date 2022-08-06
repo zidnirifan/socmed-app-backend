@@ -1,4 +1,5 @@
 import { Types } from 'mongoose';
+import { PostMedia } from '../../Applications/use_case/GetExplorePostsMedia';
 import NotFoundError from '../../Commons/exceptions/NotFoundError';
 import { PayloadPostGet } from '../../Domains/posts/entities/PostGet';
 import PostRepository, {
@@ -187,6 +188,24 @@ class PostRepositoryMongo extends PostRepository {
       ...p,
       isLiked: !!p.isLiked[0],
     })) as unknown as PayloadPostGet[];
+  }
+
+  async getExplorePostsMedia(): Promise<PostMedia[]> {
+    return this.Model.aggregate([
+      {
+        $sample: { size: 15 },
+      },
+      {
+        $project: {
+          _id: 0,
+          id: '$_id',
+          media: 1,
+        },
+      },
+      {
+        $unwind: '$media',
+      },
+    ]);
   }
 }
 

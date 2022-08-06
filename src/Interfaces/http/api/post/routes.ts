@@ -17,6 +17,7 @@ class PostsRoutes extends BaseRouter {
     this.router.get('/id/:id', auth, handler.getPostById);
     this.router.get('/home', auth, handler.getHomePosts);
     this.router.get('/explore', auth, handler.getExplorePosts);
+    this.router.get('/explore/media', auth, handler.getExplorePostsMedia);
     this.router.put('/:id/like', auth, handler.toggleLike);
   }
 }
