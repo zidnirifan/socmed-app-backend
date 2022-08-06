@@ -16,6 +16,7 @@ describe('GetPost use case', () => {
       createdAt: new Date(),
       likesCount: 1,
       isLiked: true,
+      commentsCount: 1,
     };
 
     const expectedPost = new PostGet(postFromRepo);

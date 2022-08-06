@@ -102,6 +102,7 @@ describe('PostRepositoryMongo', () => {
       expect(postGet).toHaveProperty('createdAt');
       expect(postGet).toHaveProperty('likesCount');
       expect(postGet).toHaveProperty('isLiked');
+      expect(postGet).toHaveProperty('commentsCount');
       expect(postGet.user).toHaveProperty('id');
       expect(postGet.user).toHaveProperty('username');
       expect(postGet.user).toHaveProperty('profilePhoto');
@@ -138,6 +139,7 @@ describe('PostRepositoryMongo', () => {
       expect(posts[0]).toHaveProperty('createdAt');
       expect(posts[0]).toHaveProperty('likesCount');
       expect(posts[0]).toHaveProperty('isLiked');
+      expect(posts[0]).toHaveProperty('commentsCount');
       expect(posts[0].user).toHaveProperty('id');
       expect(posts[0].user).toHaveProperty('username');
       expect(posts[0].user).toHaveProperty('profilePhoto');

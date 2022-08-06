@@ -73,6 +73,7 @@ describe('/posts endpoint', () => {
       expect(body.data.post).toHaveProperty('createdAt');
       expect(body.data.post).toHaveProperty('likesCount');
       expect(body.data.post).toHaveProperty('isLiked');
+      expect(body.data.post).toHaveProperty('commentsCount');
       expect(body.data.post.user).toHaveProperty('id');
       expect(body.data.post.user).toHaveProperty('username');
       expect(body.data.post.user).toHaveProperty('profilePhoto');
@@ -108,6 +109,7 @@ describe('/posts endpoint', () => {
       expect(body.data.posts[0]).toHaveProperty('createdAt');
       expect(body.data.posts[0]).toHaveProperty('likesCount');
       expect(body.data.posts[0]).toHaveProperty('isLiked');
+      expect(body.data.posts[0]).toHaveProperty('commentsCount');
       expect(body.data.posts[0].user).toHaveProperty('id');
       expect(body.data.posts[0].user).toHaveProperty('username');
       expect(body.data.posts[0].user).toHaveProperty('profilePhoto');

@@ -6,14 +6,17 @@ import PostRepository, {
   PostMediaGet,
   PostPayload,
 } from '../../Domains/posts/PostRepository';
+import CommentModel from '../model/Comment';
 import PostModel from '../model/Post';
 
 class PostRepositoryMongo extends PostRepository {
   private Model;
+  private CommentModel;
 
   constructor() {
     super();
     this.Model = PostModel;
+    this.CommentModel = CommentModel;
   }
 
   async addPost(payload: PostPayload): Promise<string> {
@@ -46,6 +49,10 @@ class PostRepositoryMongo extends PostRepository {
       .select('_id caption media createdAt likes')
       .populate('userId', 'username profilePhoto _id');
 
+    const commentsCount = await this.CommentModel.countDocuments({
+      postId: id,
+    });
+
     return {
       id: _id.toString(),
       user: {
@@ -60,6 +67,7 @@ class PostRepositoryMongo extends PostRepository {
       isLiked:
         likes.filter((like: Types.ObjectId) => like.toString() === userId)
           .length > 0,
+      commentsCount,
     };
   }
 
@@ -68,23 +76,33 @@ class PostRepositoryMongo extends PostRepository {
       .select('_id caption media createdAt likes')
       .populate('userId', 'username profilePhoto _id');
 
-    return posts.map(
-      ({ _id, caption, media, createdAt, userId: user, likes }) => ({
-        id: _id.toString(),
-        user: {
-          id: user._id.toString(),
-          username: user.username,
-          profilePhoto: user.profilePhoto,
-        },
-        caption,
-        media,
-        createdAt,
-        likesCount: likes.length,
-        isLiked:
-          likes.filter((like: Types.ObjectId) => like.toString() === userId)
-            .length > 0,
-      })
+    const postsMapped = Promise.all(
+      posts.map(
+        async ({ _id, caption, media, createdAt, userId: user, likes }) => {
+          const commentsCount = await this.CommentModel.countDocuments({
+            postId: _id,
+          });
+          return {
+            id: _id.toString(),
+            user: {
+              id: user._id.toString(),
+              username: user.username,
+              profilePhoto: user.profilePhoto,
+            },
+            caption,
+            media,
+            createdAt,
+            likesCount: likes.length,
+            isLiked:
+              likes.filter((like: Types.ObjectId) => like.toString() === userId)
+                .length > 0,
+            commentsCount,
+          };
+        }
+      )
     );
+
+    return postsMapped;
   }
 
   async getPostMediaByUserId(userId: string): Promise<PostMediaGet[]> {
