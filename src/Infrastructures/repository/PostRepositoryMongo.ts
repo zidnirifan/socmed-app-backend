@@ -1,4 +1,5 @@
 import { Types } from 'mongoose';
+import { PostMedia } from '../../Applications/use_case/GetExplorePostsMedia';
 import NotFoundError from '../../Commons/exceptions/NotFoundError';
 import { PayloadPostGet } from '../../Domains/posts/entities/PostGet';
 import PostRepository, {
@@ -6,14 +7,17 @@ import PostRepository, {
   PostMediaGet,
   PostPayload,
 } from '../../Domains/posts/PostRepository';
+import CommentModel from '../model/Comment';
 import PostModel from '../model/Post';
 
 class PostRepositoryMongo extends PostRepository {
   private Model;
+  private CommentModel;
 
   constructor() {
     super();
     this.Model = PostModel;
+    this.CommentModel = CommentModel;
   }
 
   async addPost(payload: PostPayload): Promise<string> {
@@ -46,6 +50,10 @@ class PostRepositoryMongo extends PostRepository {
       .select('_id caption media createdAt likes')
       .populate('userId', 'username profilePhoto _id');
 
+    const commentsCount = await this.CommentModel.countDocuments({
+      postId: id,
+    });
+
     return {
       id: _id.toString(),
       user: {
@@ -60,6 +68,7 @@ class PostRepositoryMongo extends PostRepository {
       isLiked:
         likes.filter((like: Types.ObjectId) => like.toString() === userId)
           .length > 0,
+      commentsCount,
     };
   }
 
@@ -68,23 +77,33 @@ class PostRepositoryMongo extends PostRepository {
       .select('_id caption media createdAt likes')
       .populate('userId', 'username profilePhoto _id');
 
-    return posts.map(
-      ({ _id, caption, media, createdAt, userId: user, likes }) => ({
-        id: _id.toString(),
-        user: {
-          id: user._id.toString(),
-          username: user.username,
-          profilePhoto: user.profilePhoto,
-        },
-        caption,
-        media,
-        createdAt,
-        likesCount: likes.length,
-        isLiked:
-          likes.filter((like: Types.ObjectId) => like.toString() === userId)
-            .length > 0,
-      })
+    const postsMapped = Promise.all(
+      posts.map(
+        async ({ _id, caption, media, createdAt, userId: user, likes }) => {
+          const commentsCount = await this.CommentModel.countDocuments({
+            postId: _id,
+          });
+          return {
+            id: _id.toString(),
+            user: {
+              id: user._id.toString(),
+              username: user.username,
+              profilePhoto: user.profilePhoto,
+            },
+            caption,
+            media,
+            createdAt,
+            likesCount: likes.length,
+            isLiked:
+              likes.filter((like: Types.ObjectId) => like.toString() === userId)
+                .length > 0,
+            commentsCount,
+          };
+        }
+      )
     );
+
+    return postsMapped;
   }
 
   async getPostMediaByUserId(userId: string): Promise<PostMediaGet[]> {
@@ -116,6 +135,77 @@ class PostRepositoryMongo extends PostRepository {
       { _id: payload.postId },
       { $pull: { likes: payload.userId } }
     );
+  }
+
+  async getExplorePosts(userId: string): Promise<PayloadPostGet[]> {
+    const posts = await this.Model.aggregate([
+      {
+        $sample: { size: 6 },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      {
+        $lookup: {
+          from: 'comments',
+          localField: '_id',
+          foreignField: 'postId',
+          as: 'comments',
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          id: '$_id',
+          caption: 1,
+          media: 1,
+          createdAt: 1,
+          likesCount: { $size: '$likes' },
+          'user.id': '$user._id',
+          'user.username': 1,
+          'user.profilePhoto': 1,
+          commentsCount: { $size: '$comments' },
+          isLiked: {
+            $filter: {
+              input: '$likes',
+              as: 'likes',
+              cond: { $eq: ['$$likes', new Types.ObjectId(userId)] },
+            },
+          },
+        },
+      },
+    ]);
+
+    return posts.map((p) => ({
+      ...p,
+      isLiked: !!p.isLiked[0],
+    })) as unknown as PayloadPostGet[];
+  }
+
+  async getExplorePostsMedia(): Promise<PostMedia[]> {
+    return this.Model.aggregate([
+      {
+        $sample: { size: 15 },
+      },
+      {
+        $project: {
+          _id: 0,
+          id: '$_id',
+          media: 1,
+        },
+      },
+      {
+        $unwind: '$media',
+      },
+    ]);
   }
 }
 

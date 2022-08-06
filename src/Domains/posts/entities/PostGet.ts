@@ -12,6 +12,7 @@ export interface PayloadPostGet {
   createdAt: Date;
   likesCount: number;
   isLiked: boolean;
+  commentsCount: number;
 }
 
 export interface IPostGet {
@@ -22,6 +23,7 @@ export interface IPostGet {
   createdAt: string;
   likesCount: number;
   isLiked: boolean;
+  commentsCount: number;
 }
 
 class PostGet implements IPostGet {
@@ -32,6 +34,7 @@ class PostGet implements IPostGet {
   createdAt: string;
   likesCount: number;
   isLiked: boolean;
+  commentsCount: number;
 
   constructor(payload: PayloadPostGet) {
     this.id = payload.id;
@@ -41,6 +44,7 @@ class PostGet implements IPostGet {
     this.likesCount = payload.likesCount;
     this.createdAt = this.timeSince(payload.createdAt);
     this.isLiked = payload.isLiked;
+    this.commentsCount = payload.commentsCount;
   }
 
   private timeSince(date: Date) {

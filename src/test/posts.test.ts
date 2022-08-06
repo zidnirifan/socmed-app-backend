@@ -73,6 +73,7 @@ describe('/posts endpoint', () => {
       expect(body.data.post).toHaveProperty('createdAt');
       expect(body.data.post).toHaveProperty('likesCount');
       expect(body.data.post).toHaveProperty('isLiked');
+      expect(body.data.post).toHaveProperty('commentsCount');
       expect(body.data.post.user).toHaveProperty('id');
       expect(body.data.post.user).toHaveProperty('username');
       expect(body.data.post.user).toHaveProperty('profilePhoto');
@@ -108,6 +109,7 @@ describe('/posts endpoint', () => {
       expect(body.data.posts[0]).toHaveProperty('createdAt');
       expect(body.data.posts[0]).toHaveProperty('likesCount');
       expect(body.data.posts[0]).toHaveProperty('isLiked');
+      expect(body.data.posts[0]).toHaveProperty('commentsCount');
       expect(body.data.posts[0].user).toHaveProperty('id');
       expect(body.data.posts[0].user).toHaveProperty('username');
       expect(body.data.posts[0].user).toHaveProperty('profilePhoto');
@@ -149,6 +151,69 @@ describe('/posts endpoint', () => {
       expect(statusCode).toEqual(404);
       expect(body.status).toEqual('fail');
       expect(body.message).toBeDefined();
+    });
+  });
+
+  describe('when GET /posts/explore', () => {
+    it('should response 200 and array of posts object', async () => {
+      const { token } = await testHelper.postPost();
+
+      const { statusCode, body } = await supertest(app)
+        .get('/posts/explore')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.data.posts[0]).toHaveProperty('id');
+      expect(body.data.posts[0]).toHaveProperty('user');
+      expect(body.data.posts[0]).toHaveProperty('caption');
+      expect(body.data.posts[0]).toHaveProperty('media');
+      expect(body.data.posts[0]).toHaveProperty('createdAt');
+      expect(body.data.posts[0]).toHaveProperty('likesCount');
+      expect(body.data.posts[0]).toHaveProperty('isLiked');
+      expect(body.data.posts[0]).toHaveProperty('commentsCount');
+      expect(body.data.posts[0].user).toHaveProperty('id');
+      expect(body.data.posts[0].user).toHaveProperty('username');
+      expect(body.data.posts[0].user).toHaveProperty('profilePhoto');
+    });
+
+    it('should response 200 and blank array if posts not exists', async () => {
+      const { token } = await testHelper.getToken();
+
+      const { statusCode, body } = await supertest(app)
+        .get('/posts/explore')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.data.posts.length).toEqual(0);
+    });
+  });
+
+  describe('when GET /posts/explore/media', () => {
+    it('should response 200 and array of post media object', async () => {
+      const { token } = await testHelper.postPost();
+
+      const { statusCode, body } = await supertest(app)
+        .get('/posts/explore/media')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.data.posts[0]).toHaveProperty('id');
+      expect(body.data.posts[0]).toHaveProperty('media');
+    });
+
+    it('should response 200 and blank array if post media not exist', async () => {
+      const { token } = await testHelper.getToken();
+
+      const { statusCode, body } = await supertest(app)
+        .get('/posts/explore/media')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(statusCode).toEqual(200);
+      expect(body.status).toEqual('success');
+      expect(body.data.posts.length).toEqual(0);
     });
   });
 });

@@ -1,5 +1,7 @@
 import { NextFunction, Response } from 'express';
 import AddPost from '../../../../Applications/use_case/AddPost';
+import GetExplorePostsMedia from '../../../../Applications/use_case/GetExplorePostsMedia';
+import GetExplorePosts from '../../../../Applications/use_case/GetExplorePosts';
 import GetHomePost from '../../../../Applications/use_case/GetHomePosts';
 import GetPost from '../../../../Applications/use_case/GetPost';
 import ToggleLikePost from '../../../../Applications/use_case/ToggleLikePost';
@@ -93,6 +95,33 @@ class PostsHandler extends BaseHandler {
     } catch (error) {
       return next(error);
     }
+  }
+
+  async getExplorePosts(req: RequestAuth, res: Response): Promise<Response> {
+    /* istanbul ignore next */
+    const userId = req.auth?.id;
+    const getExplorePosts = this.container.getInstance(GetExplorePosts.name);
+    const posts = await getExplorePosts.execute(userId);
+
+    return res.status(200).json({
+      status: 'success',
+      data: { posts },
+    });
+  }
+
+  async getExplorePostsMedia(
+    req: RequestAuth,
+    res: Response
+  ): Promise<Response> {
+    const getExplorePostsMedia = this.container.getInstance(
+      GetExplorePostsMedia.name
+    );
+    const posts = await getExplorePostsMedia.execute();
+
+    return res.status(200).json({
+      status: 'success',
+      data: { posts },
+    });
   }
 }
 

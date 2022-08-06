@@ -46,6 +46,8 @@ import CommentRepository from '../Domains/comments/CommentRepository';
 import CommentRepositoryMongo from './repository/CommentRepositoryMongo';
 import GetPostComments from '../Applications/use_case/GetPostComments';
 import ToggleLikeComment from '../Applications/use_case/ToggleLikeComment';
+import GetExplorePosts from '../Applications/use_case/GetExplorePosts';
+import GetExplorePostsMedia from '../Applications/use_case/GetExplorePostsMedia';
 
 const container = createContainer();
 
@@ -401,6 +403,32 @@ container.register([
         {
           name: 'commentRepository',
           internal: CommentRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: GetExplorePosts.name,
+    Class: GetExplorePosts,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'postRepository',
+          internal: PostRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: GetExplorePostsMedia.name,
+    Class: GetExplorePostsMedia,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'postRepository',
+          internal: PostRepository.name,
         },
       ],
     },

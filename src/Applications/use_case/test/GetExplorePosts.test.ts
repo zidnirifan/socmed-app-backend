@@ -1,9 +1,9 @@
-import GetPost from '../GetPost';
+import GetExplorePosts from '../GetExplorePosts';
 import MockPostRepository from '../../../Domains/posts/test/PostRepositoryTestHelper';
 import PostGet from '../../../Domains/posts/entities/PostGet';
 
-describe('GetPost use case', () => {
-  it('should orchestrating get post action correctly', async () => {
+describe('GetExplorePosts use case', () => {
+  it('should orchestrating get home posts action correctly', async () => {
     // Arrange
     const id = 'post-123';
     const userId = 'user-123';
@@ -24,23 +24,21 @@ describe('GetPost use case', () => {
     const mockPostRepository = new MockPostRepository();
 
     // Mocking
-    mockPostRepository.isPostExist = jest.fn(() => Promise.resolve());
-    mockPostRepository.getPostById = jest.fn(() =>
-      Promise.resolve(postFromRepo)
+    mockPostRepository.getExplorePosts = jest.fn(() =>
+      Promise.resolve([postFromRepo])
     );
 
     // Create use case instancea
-    const getPost = new GetPost({
+    const getExplorePosts = new GetExplorePosts({
       postRepository: mockPostRepository,
     });
 
     // Action
-    const post = await getPost.execute(id, userId);
+    const posts = await getExplorePosts.execute(userId);
 
     // Assert
-    expect(post).toBeInstanceOf(PostGet);
-    expect(post).toEqual(expectedPost);
-    expect(mockPostRepository.isPostExist).toBeCalledWith(id);
-    expect(mockPostRepository.getPostById).toBeCalledWith(id, userId);
+    expect(posts[0]).toBeInstanceOf(PostGet);
+    expect(posts[0]).toEqual(expectedPost);
+    expect(mockPostRepository.getExplorePosts).toBeCalledWith(userId);
   });
 });

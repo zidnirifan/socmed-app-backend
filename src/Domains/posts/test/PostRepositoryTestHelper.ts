@@ -1,5 +1,6 @@
 /* istanbul ignore file */
 
+import { PostMedia } from '../../../Applications/use_case/GetExplorePostsMedia';
 import { PayloadPostGet } from '../entities/PostGet';
 import PostRepository, {
   PostLikePayload,
@@ -30,6 +31,12 @@ class MockPostRepository extends PostRepository {
     throw new Error('Method not implemented.');
   }
   unlikePost(payload: PostLikePayload): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  getExplorePosts(userId: string): Promise<PayloadPostGet[]> {
+    throw new Error('Method not implemented.');
+  }
+  getExplorePostsMedia(): Promise<PostMedia[]> {
     throw new Error('Method not implemented.');
   }
 }

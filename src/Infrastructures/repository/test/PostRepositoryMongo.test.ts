@@ -102,6 +102,7 @@ describe('PostRepositoryMongo', () => {
       expect(postGet).toHaveProperty('createdAt');
       expect(postGet).toHaveProperty('likesCount');
       expect(postGet).toHaveProperty('isLiked');
+      expect(postGet).toHaveProperty('commentsCount');
       expect(postGet.user).toHaveProperty('id');
       expect(postGet.user).toHaveProperty('username');
       expect(postGet.user).toHaveProperty('profilePhoto');
@@ -138,6 +139,7 @@ describe('PostRepositoryMongo', () => {
       expect(posts[0]).toHaveProperty('createdAt');
       expect(posts[0]).toHaveProperty('likesCount');
       expect(posts[0]).toHaveProperty('isLiked');
+      expect(posts[0]).toHaveProperty('commentsCount');
       expect(posts[0].user).toHaveProperty('id');
       expect(posts[0].user).toHaveProperty('username');
       expect(posts[0].user).toHaveProperty('profilePhoto');
@@ -282,6 +284,63 @@ describe('PostRepositoryMongo', () => {
       const postUpdated = await PostModel.findOne({ _id: postId });
 
       expect(postUpdated.likes).toHaveLength(0);
+    });
+  });
+
+  describe('getExplorePosts function', () => {
+    it('should return array of posts correctly', async () => {
+      const user = new UserModel({
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+        profilePhoto: 'profile.png',
+      });
+
+      const { _id: userId } = await user.save();
+
+      const post = {
+        userId,
+        caption: 'hello ges',
+        media: ['http://images.com/img.png'],
+        likes: [userId],
+      };
+
+      const postRepositoryMongo = new PostRepositoryMongo();
+      await postRepositoryMongo.addPost(post);
+
+      const posts = await postRepositoryMongo.getExplorePosts(userId);
+
+      expect(posts[0]).toHaveProperty('id');
+      expect(posts[0]).toHaveProperty('user');
+      expect(posts[0]).toHaveProperty('media');
+      expect(posts[0]).toHaveProperty('caption');
+      expect(posts[0]).toHaveProperty('createdAt');
+      expect(posts[0]).toHaveProperty('likesCount');
+      expect(posts[0]).toHaveProperty('isLiked');
+      expect(posts[0]).toHaveProperty('commentsCount');
+      expect(posts[0].user).toHaveProperty('id');
+      expect(posts[0].user).toHaveProperty('username');
+      expect(posts[0].user).toHaveProperty('profilePhoto');
+    });
+  });
+
+  describe('getExplorePostsMedia function', () => {
+    it('should return array of posts media correctly', async () => {
+      const post = new PostModel({
+        userId: '62c7d7fd94e126a4d919c437',
+        caption: 'hello ges',
+        media: ['http://images.com/img.png'],
+      });
+
+      const { _id: postId } = await post.save();
+
+      const postRepositoryMongo = new PostRepositoryMongo();
+
+      const posts = await postRepositoryMongo.getExplorePostsMedia();
+
+      expect(posts[0]).toHaveProperty('id');
+      expect(posts[0]).toHaveProperty('media');
+      expect(posts[0]).toEqual({ id: postId, media: post.media[0] });
     });
   });
 });

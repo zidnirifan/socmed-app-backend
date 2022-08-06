@@ -14,6 +14,7 @@ describe('PostGet entity', () => {
       createdAt: new Date(),
       likesCount: 1,
       isLiked: true,
+      commentsCount: 1,
     };
 
     const { id, caption, user, media, createdAt, isLiked } = new PostGet(
@@ -44,6 +45,7 @@ describe('PostGet entity', () => {
       createdAt: new Date(Date.now() - yearInMs),
       likesCount: 1,
       isLiked: true,
+      commentsCount: 1,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);
@@ -71,6 +73,7 @@ describe('PostGet entity', () => {
       createdAt: new Date(Date.now() - yearInMs),
       likesCount: 1,
       isLiked: true,
+      commentsCount: 1,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);
@@ -98,6 +101,7 @@ describe('PostGet entity', () => {
       createdAt: new Date(Date.now() - monthInMs),
       likesCount: 1,
       isLiked: true,
+      commentsCount: 1,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);
@@ -125,6 +129,7 @@ describe('PostGet entity', () => {
       likesCount: 1,
       createdAt: new Date(Date.now() - weekInMs),
       isLiked: true,
+      commentsCount: 1,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);
@@ -152,6 +157,7 @@ describe('PostGet entity', () => {
       createdAt: new Date(Date.now() - dayInMs),
       likesCount: 1,
       isLiked: true,
+      commentsCount: 1,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);
@@ -179,6 +185,7 @@ describe('PostGet entity', () => {
       createdAt: new Date(Date.now() - hourInMs),
       likesCount: 1,
       isLiked: true,
+      commentsCount: 1,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);
@@ -206,6 +213,7 @@ describe('PostGet entity', () => {
       likesCount: 1,
       createdAt: new Date(Date.now() - minuteInMs),
       isLiked: true,
+      commentsCount: 1,
     };
 
     const { id, caption, user, media, createdAt } = new PostGet(payload);
