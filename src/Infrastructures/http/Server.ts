@@ -9,6 +9,7 @@ import ClientError from '../../Commons/exceptions/ClientError';
 import { IContainer } from '../container';
 import AuthRoutes from '../../Interfaces/http/api/auth/routes';
 import PostsRoutes from '../../Interfaces/http/api/post/routes';
+import CommentsRoutes from '../../Interfaces/http/api/comments/routes';
 
 class Server {
   app: Application;
@@ -35,10 +36,12 @@ class Server {
     const usersRoutes = new UsersRoutes(this.container).router;
     const authRoutes = new AuthRoutes(this.container).router;
     const postsRoutes = new PostsRoutes(this.container).router;
+    const commentsRoutes = new CommentsRoutes(this.container).router;
 
     this.app.use('/users', usersRoutes);
     this.app.use('/auth', authRoutes);
     this.app.use('/posts', postsRoutes);
+    this.app.use('/posts', commentsRoutes);
   }
 
   private errorHandler() {
