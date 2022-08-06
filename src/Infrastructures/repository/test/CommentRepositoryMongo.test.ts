@@ -94,13 +94,17 @@ describe('CommentRepositoryMongo', () => {
         userId,
         content: 'comment',
         postId,
+        likes: [userId],
       });
 
       const { _id } = await comment.save();
 
       const commentRepositoryMongo = new CommentRepositoryMongo();
 
-      const comments = await commentRepositoryMongo.getCommentsByPostId(postId);
+      const comments = await commentRepositoryMongo.getCommentsByPostId(
+        postId,
+        userId
+      );
 
       expect(comments[0].id).toEqual(_id);
       expect(comments[0].user).toEqual({
@@ -142,13 +146,17 @@ describe('CommentRepositoryMongo', () => {
         postId,
         replyTo: commentId,
         parentComment: commentId,
+        likes: [userId],
       });
 
       const { _id: replyId } = await reply.save();
 
       const commentRepositoryMongo = new CommentRepositoryMongo();
 
-      const replies = await commentRepositoryMongo.getReplies(commentId);
+      const replies = await commentRepositoryMongo.getReplies(
+        commentId,
+        userId
+      );
 
       expect(replies[0].id).toEqual(replyId);
       expect(replies[0].user).toEqual({

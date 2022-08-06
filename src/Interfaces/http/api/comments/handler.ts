@@ -41,10 +41,12 @@ class CommentsHandler extends BaseHandler {
     next: NextFunction
   ): Promise<Response | void> {
     try {
+      /* istanbul ignore next */
+      const userId = req.auth?.id;
       const { postId } = req.params;
 
       const getPostComments = this.container.getInstance(GetPostComments.name);
-      const comments = await getPostComments.execute(postId);
+      const comments = await getPostComments.execute(postId, userId);
 
       return res.status(200).json({
         status: 'success',

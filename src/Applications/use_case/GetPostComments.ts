@@ -18,14 +18,17 @@ class GetPostComments {
     this.postRepository = dependency.postRepository;
   }
 
-  async execute(postId: string): Promise<ICommentGet[]> {
+  async execute(postId: string, userId: string): Promise<ICommentGet[]> {
     await this.postRepository.isPostExist(postId);
 
-    const comments = await this.commentRepository.getCommentsByPostId(postId);
+    const comments = await this.commentRepository.getCommentsByPostId(
+      postId,
+      userId
+    );
 
     const commentsWithReplies = await Promise.all(
       comments.map(async (c) => {
-        const replies = await this.commentRepository.getReplies(c.id);
+        const replies = await this.commentRepository.getReplies(c.id, userId);
         return { ...c, replies };
       })
     );
