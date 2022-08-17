@@ -7,6 +7,7 @@ const config = {
   accessTokenKey: process.env.ACCESS_TOKEN_KEY,
   refreshTokenKey: process.env.REFRESH_TOKEN_KEY,
   tokenExpiration: parseInt(process.env.TOKEN_EXPIRATION as string, 10),
+  mongoUrl: process.env.MONGO_URL as string,
 };
 
 export default config;
