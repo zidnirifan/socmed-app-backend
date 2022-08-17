@@ -362,6 +362,7 @@ describe('UserRepositoryMongo', () => {
 
       const userEdit = {
         id: _id,
+        username: 'paijo',
         fullName: 'Paijo',
         bio: 'engineer',
       };
@@ -402,6 +403,24 @@ describe('UserRepositoryMongo', () => {
       const users = await userRepositoryMongo.searchUsers('jhon');
 
       expect(users).toHaveLength(0);
+    });
+  });
+
+  describe('getUsernameById function', () => {
+    it('should return username correctly', async () => {
+      const user = new UserModel({
+        username: 'jhondoe',
+        fullName: 'Jhon Doe',
+        password: 'password',
+      });
+
+      const { _id } = await user.save();
+
+      const userRepositoryMongo = new UserRepositoryMongo();
+
+      const username = await userRepositoryMongo.getUsernameById(_id);
+
+      expect(username).toEqual('jhondoe');
     });
   });
 });

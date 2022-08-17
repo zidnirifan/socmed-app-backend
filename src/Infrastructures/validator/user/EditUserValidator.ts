@@ -8,6 +8,11 @@ class EditUserValidator extends Validator<IUserEdit> {
 
     return Joi.object({
       id: Joi.string().required(),
+      username: Joi.string()
+        .min(5)
+        .max(50)
+        .regex(/^[\w]+$/)
+        .required(),
       fullName: Joi.string().required(),
       bio: Joi.string().allow(''),
     });
