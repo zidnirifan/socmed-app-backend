@@ -76,6 +76,8 @@ class PostRepositoryMongo extends PostRepository {
   }
 
   async getFollowingPosts(userId: string): Promise<PayloadPostGet[]> {
+    // const weekInMs = 604800000;
+
     const usersFollowing = await this.UserModel.find(
       { followers: userId },
       '_id'
@@ -85,7 +87,13 @@ class PostRepositoryMongo extends PostRepository {
 
     const posts = await this.Model.aggregate([
       {
-        $match: { userId: { $in: usersIdFollowing } },
+        $match: {
+          userId: { $in: usersIdFollowing },
+          // createdAt: {
+          //   $lt: new Date(),
+          //   $gt: new Date(new Date().valueOf() - weekInMs),
+          // },
+        },
       },
       {
         $lookup: {
@@ -133,7 +141,7 @@ class PostRepositoryMongo extends PostRepository {
         },
       },
       {
-        $limit: 10,
+        $limit: 5,
       },
     ]);
 
@@ -144,7 +152,9 @@ class PostRepositoryMongo extends PostRepository {
   }
 
   async getPostMediaByUserId(userId: string): Promise<PostMediaGet[]> {
-    const posts = await this.Model.find({ userId }, '_id media');
+    const posts = await this.Model.find({ userId }, '_id media').sort({
+      createdAt: -1,
+    });
 
     return posts.map(({ _id, media }) => ({
       id: _id.toString(),
@@ -177,7 +187,7 @@ class PostRepositoryMongo extends PostRepository {
   async getExplorePosts(userId: string): Promise<PayloadPostGet[]> {
     const posts = await this.Model.aggregate([
       {
-        $sample: { size: 6 },
+        $sample: { size: 3 },
       },
       {
         $lookup: {
@@ -230,13 +240,13 @@ class PostRepositoryMongo extends PostRepository {
   async getExplorePostsMedia(): Promise<PostMedia[]> {
     return this.Model.aggregate([
       {
-        $sample: { size: 15 },
+        $sample: { size: 9 },
       },
       {
         $project: {
           _id: 0,
           id: '$_id',
-          media: 1,
+          media: { $slice: ['$media', 1] },
         },
       },
       {
