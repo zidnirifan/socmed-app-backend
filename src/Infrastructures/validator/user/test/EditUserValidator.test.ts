@@ -20,6 +20,7 @@ describe('EditUserValidator', () => {
   it('should not throw InvariantError when payload meet data specification', () => {
     const payload = {
       id: 'user-123',
+      username: 'jhondoe',
       fullName: 'Jhon',
       bio: 'wadidaw',
     };
