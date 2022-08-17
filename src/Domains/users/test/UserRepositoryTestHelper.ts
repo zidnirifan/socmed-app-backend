@@ -53,6 +53,9 @@ class MockUserRepository extends UserRepository {
   searchUsers(text: string): Promise<IUserSearch[]> {
     throw new Error('Method not implemented.');
   }
+  getUsernameById(id: string): Promise<string> {
+    throw new Error('Method not implemented.');
+  }
 }
 
 export default MockUserRepository;

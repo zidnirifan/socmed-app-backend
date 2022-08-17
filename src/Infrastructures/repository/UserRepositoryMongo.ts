@@ -106,8 +106,8 @@ class UserRepositoryMongo extends UserRepository {
     );
   }
 
-  async editUser({ id, fullName, bio }: UserEdit): Promise<void> {
-    await this.Model.updateOne({ _id: id }, { fullName, bio });
+  async editUser({ id, username, fullName, bio }: UserEdit): Promise<void> {
+    await this.Model.updateOne({ _id: id }, { username, fullName, bio });
   }
 
   async searchUsers(text: string): Promise<IUserSearch[]> {
@@ -116,7 +116,12 @@ class UserRepositoryMongo extends UserRepository {
         { username: { $regex: text, $options: 'i' } },
         { fullName: { $regex: text, $options: 'i' } },
       ],
-    });
+    }).limit(7);
+  }
+
+  async getUsernameById(id: string): Promise<string> {
+    const { username } = await this.Model.findOne({ _id: id }, 'username');
+    return username;
   }
 }
 

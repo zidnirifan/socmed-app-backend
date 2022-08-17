@@ -28,6 +28,7 @@ export interface IUserRepository {
   unfollowUser(payload: PayloadFollowUser): Promise<void>;
   editUser(payload: UserEdit): Promise<void>;
   searchUsers(text: string): Promise<IUserSearch[]>;
+  getUsernameById(id: string): Promise<string>;
 }
 
 abstract class UserRepository implements IUserRepository {
@@ -59,6 +60,8 @@ abstract class UserRepository implements IUserRepository {
   abstract editUser(payload: UserEdit): Promise<void>;
 
   abstract searchUsers(text: string): Promise<IUserSearch[]>;
+
+  abstract getUsernameById(id: string): Promise<string>;
 }
 
 export default UserRepository;
