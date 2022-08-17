@@ -240,7 +240,7 @@ class PostRepositoryMongo extends PostRepository {
   async getExplorePostsMedia(): Promise<PostMedia[]> {
     return this.Model.aggregate([
       {
-        $sample: { size: 9 },
+        $sample: { size: 15 },
       },
       {
         $project: {
