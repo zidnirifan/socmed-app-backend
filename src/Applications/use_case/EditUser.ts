@@ -21,6 +21,12 @@ class EditUser {
 
     await this.userRepository.isUserExistById(payload.id);
 
+    const oldUsername = await this.userRepository.getUsernameById(payload.id);
+
+    if (payload.username !== oldUsername) {
+      await this.userRepository.verifyAvailableUsername(payload.username);
+    }
+
     const user = new UserEdit(payload);
     return this.userRepository.editUser(user);
   }
