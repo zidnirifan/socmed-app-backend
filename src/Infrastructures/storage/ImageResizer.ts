@@ -15,6 +15,7 @@ class ImageResizer extends ImageResizerAbstract {
   ): Promise<Uint8Array> {
     const { data } = await this.sharp(srcPath)
       .resize(size)
+      .withMetadata()
       .toBuffer({ resolveWithObject: true });
     return new Uint8Array(data.buffer);
   }
