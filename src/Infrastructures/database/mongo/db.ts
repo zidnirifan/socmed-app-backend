@@ -3,11 +3,20 @@
 import mongoose from 'mongoose';
 import config from '../../../Commons/config';
 
-// const mongoUrl = `mongodb://${config.mongoHost}:${config.mongoPort}/${
-//   process.env.NODE_ENV === 'test' ? config.testDB : config.mongoDB
-// }`;
+let mongoUrl: string;
+switch (process.env.NODE_ENV) {
+  case 'test':
+    mongoUrl = config.mongoUrlTest;
+    break;
+  case 'dev':
+    mongoUrl = config.mongoUrlDev;
+    break;
+  default:
+    mongoUrl = config.mongoUrl;
+    break;
+}
 
-mongoose.connect(config.mongoUrl);
+mongoose.connect(mongoUrl);
 
 const db = mongoose.connection;
 

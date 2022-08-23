@@ -303,6 +303,7 @@ describe('/users endpoint', () => {
       const payload = {
         fullName: 'Paijo',
         bio: 'an engineer',
+        username: 'jhondoe',
       };
 
       const { statusCode, body } = await supertest(app)
