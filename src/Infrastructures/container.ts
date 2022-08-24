@@ -48,6 +48,10 @@ import GetPostComments from '../Applications/use_case/GetPostComments';
 import ToggleLikeComment from '../Applications/use_case/ToggleLikeComment';
 import GetExplorePosts from '../Applications/use_case/GetExplorePosts';
 import GetExplorePostsMedia from '../Applications/use_case/GetExplorePostsMedia';
+import ChatRepository from '../Domains/chats/ChatRepository';
+import ChatRepositoryMongo from './repository/ChatRepositoryMongo';
+import ChatValidator from './validator/chat/ChatValidator';
+import AddChat from '../Applications/use_case/AddChat';
 
 const container = createContainer();
 
@@ -115,6 +119,14 @@ container.register([
   {
     key: CommentRepository.name,
     Class: CommentRepositoryMongo,
+  },
+  {
+    key: ChatValidator.name,
+    Class: ChatValidator,
+  },
+  {
+    key: ChatRepository.name,
+    Class: ChatRepositoryMongo,
   },
 ]);
 
@@ -429,6 +441,23 @@ container.register([
         {
           name: 'postRepository',
           internal: PostRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: AddChat.name,
+    Class: AddChat,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'chatRepository',
+          internal: ChatRepository.name,
+        },
+        {
+          name: 'validator',
+          internal: ChatValidator.name,
         },
       ],
     },
