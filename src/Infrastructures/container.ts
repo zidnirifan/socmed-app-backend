@@ -52,6 +52,7 @@ import ChatRepository from '../Domains/chats/ChatRepository';
 import ChatRepositoryMongo from './repository/ChatRepositoryMongo';
 import ChatValidator from './validator/chat/ChatValidator';
 import AddChat from '../Applications/use_case/AddChat';
+import GetLatestChat from '../Applications/use_case/GetLatestChat';
 
 const container = createContainer();
 
@@ -458,6 +459,19 @@ container.register([
         {
           name: 'validator',
           internal: ChatValidator.name,
+        },
+      ],
+    },
+  },
+  {
+    key: GetLatestChat.name,
+    Class: GetLatestChat,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'chatRepository',
+          internal: ChatRepository.name,
         },
       ],
     },

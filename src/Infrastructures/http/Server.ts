@@ -10,6 +10,7 @@ import { IContainer } from '../container';
 import AuthRoutes from '../../Interfaces/http/api/auth/routes';
 import PostsRoutes from '../../Interfaces/http/api/post/routes';
 import CommentsRoutes from '../../Interfaces/http/api/comments/routes';
+import ChatsRoutes from '../../Interfaces/http/api/chats/routes';
 
 class Server {
   app: Application;
@@ -37,11 +38,13 @@ class Server {
     const authRoutes = new AuthRoutes(this.container).router;
     const postsRoutes = new PostsRoutes(this.container).router;
     const commentsRoutes = new CommentsRoutes(this.container).router;
+    const chatsRoutes = new ChatsRoutes(this.container).router;
 
     this.app.use('/users', usersRoutes);
     this.app.use('/auth', authRoutes);
     this.app.use('/posts', postsRoutes);
     this.app.use('/posts', commentsRoutes);
+    this.app.use('/chats', chatsRoutes);
   }
 
   private errorHandler() {
