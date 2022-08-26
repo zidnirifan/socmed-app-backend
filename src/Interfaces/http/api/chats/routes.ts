@@ -7,6 +7,7 @@ class ChatsRoutes extends BaseRouter {
     const handler = new ChatsHandler(this.container);
 
     this.router.get('/latest', auth, handler.getLatestChats);
+    this.router.get('/conversation/:userId', auth, handler.getConversation);
   }
 }
 

@@ -91,4 +91,42 @@ describe('ChatRepositoryMongo', () => {
       expect(chats[0].to.profilePhoto).toEqual(user2.profilePhoto);
     });
   });
+
+  describe('getConversation function', () => {
+    it('should get conversation', async () => {
+      const user1 = '62bbec0108243e15bde1c27e';
+      const user2 = '62b55fb7f96df4d764f67265';
+
+      const chat = {
+        from: user1,
+        to: user2,
+        chat: 'hello',
+      };
+
+      const { _id: chatId } = await new ChatModel(chat).save();
+
+      const chat2 = new ChatModel({
+        from: '62b55fb7f96df4d764f67277',
+        to: '62b55fb7f96df4d764f67233',
+        chat: 'woe',
+      });
+
+      await chat2.save();
+
+      const chatRepositoryMongo = new ChatRepositoryMongo();
+
+      const chats = await chatRepositoryMongo.getConversation(user1, user2);
+
+      expect(chats).toHaveLength(1);
+      expect(chats[0]).toHaveProperty('id');
+      expect(chats[0]).toHaveProperty('from');
+      expect(chats[0]).toHaveProperty('to');
+      expect(chats[0]).toHaveProperty('chat');
+      expect(chats[0]).toHaveProperty('createdAt');
+      expect(chats[0].id).toEqual(chatId);
+      expect(chats[0].from.toString()).toEqual(user1);
+      expect(chats[0].to.toString()).toEqual(user2);
+      expect(chats[0].chat).toEqual(chat.chat);
+    });
+  });
 });

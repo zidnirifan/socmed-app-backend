@@ -1,6 +1,7 @@
 import { Types } from 'mongoose';
 import ChatRepository from '../../Domains/chats/ChatRepository';
 import { IChat } from '../../Domains/chats/entities/Chat';
+import ChatGet from '../../Domains/chats/entities/ChatGet';
 import { ILatestChat } from '../../Domains/chats/entities/LatestChat';
 import ChatModel from '../model/Chat';
 
@@ -103,6 +104,61 @@ class ChatRepositoryMongo extends ChatRepository {
     ].reverse();
 
     return unique;
+  }
+
+  async getConversation(
+    ownUserId: string,
+    foreignUserId: string
+  ): Promise<ChatGet[]> {
+    const chats = await ChatModel.aggregate([
+      {
+        $match: {
+          $or: [
+            {
+              $and: [
+                {
+                  to: { $eq: new Types.ObjectId(ownUserId) },
+                },
+                {
+                  from: {
+                    $eq: new Types.ObjectId(foreignUserId),
+                  },
+                },
+              ],
+            },
+            {
+              $and: [
+                {
+                  from: { $eq: new Types.ObjectId(ownUserId) },
+                },
+                {
+                  to: {
+                    $eq: new Types.ObjectId(foreignUserId),
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          id: '$_id',
+          chat: 1,
+          from: 1,
+          to: 1,
+          createdAt: 1,
+        },
+      },
+      {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+    ]);
+
+    return chats;
   }
 }
 
