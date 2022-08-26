@@ -2,14 +2,14 @@
 
 import ChatRepository from '../ChatRepository';
 import { IChat } from '../entities/Chat';
-import ChatGet from '../entities/ChatGet';
+import { PayloadChatGet } from '../entities/ChatGet';
 import { ILatestChat } from '../entities/LatestChat';
 
 class MockChatRepository extends ChatRepository {
   getConversation(
     ownUserId: string,
     foreignUserId: string
-  ): Promise<ChatGet[]> {
+  ): Promise<PayloadChatGet[]> {
     throw new Error('Method not implemented.');
   }
   getLatestChat(userId: string): Promise<ILatestChat[]> {

@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 import ChatRepository from '../../Domains/chats/ChatRepository';
 import { IChat } from '../../Domains/chats/entities/Chat';
-import ChatGet from '../../Domains/chats/entities/ChatGet';
+import { PayloadChatGet } from '../../Domains/chats/entities/ChatGet';
 import { ILatestChat } from '../../Domains/chats/entities/LatestChat';
 import ChatModel from '../model/Chat';
 
@@ -22,25 +22,30 @@ class ChatRepositoryMongo extends ChatRepository {
   async getLatestChat(userId: string): Promise<ILatestChat[]> {
     const chats = await ChatModel.aggregate([
       {
+        $match: {
+          $or: [
+            {
+              to: { $eq: new Types.ObjectId(userId) },
+            },
+            {
+              from: {
+                $eq: new Types.ObjectId(userId),
+              },
+            },
+          ],
+        },
+      },
+      {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+      {
         $group: {
           _id: { from: '$from', to: '$to' },
           createdAt: { $max: '$createdAt' },
           id: { $first: '$_id' },
           chat: { $first: '$chat' },
-        },
-      },
-      {
-        $match: {
-          $or: [
-            {
-              '_id.to': { $eq: new Types.ObjectId(userId) },
-            },
-            {
-              '_id.from': {
-                $eq: new Types.ObjectId(userId),
-              },
-            },
-          ],
         },
       },
       {
@@ -100,8 +105,8 @@ class ChatRepositoryMongo extends ChatRepository {
         // filter unique values by foreign
         chats.map((item) => [item.foreign.toString(), item])
       ).values(),
-      // reverse to sort from latest
-    ].reverse();
+      // sort from latest
+    ].sort((a, b) => b.createdAt - a.createdAt);
 
     return unique;
   }
@@ -109,7 +114,7 @@ class ChatRepositoryMongo extends ChatRepository {
   async getConversation(
     ownUserId: string,
     foreignUserId: string
-  ): Promise<ChatGet[]> {
+  ): Promise<PayloadChatGet[]> {
     const chats = await ChatModel.aggregate([
       {
         $match: {
@@ -153,7 +158,7 @@ class ChatRepositoryMongo extends ChatRepository {
       },
       {
         $sort: {
-          createdAt: -1,
+          createdAt: 1,
         },
       },
     ]);

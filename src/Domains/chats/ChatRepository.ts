@@ -1,11 +1,14 @@
 import { IChat } from './entities/Chat';
-import ChatGet from './entities/ChatGet';
+import { PayloadChatGet } from './entities/ChatGet';
 import { ILatestChat } from './entities/LatestChat';
 
 export interface IChatRepository {
   addChat(payload: IChat): Promise<string>;
   getLatestChat(userId: string): Promise<ILatestChat[]>;
-  getConversation(ownUserId: string, foreignUserId: string): Promise<ChatGet[]>;
+  getConversation(
+    ownUserId: string,
+    foreignUserId: string
+  ): Promise<PayloadChatGet[]>;
 }
 
 abstract class ChatRepository implements IChatRepository {
@@ -14,7 +17,7 @@ abstract class ChatRepository implements IChatRepository {
   abstract getConversation(
     ownUserId: string,
     foreignUserId: string
-  ): Promise<ChatGet[]>;
+  ): Promise<PayloadChatGet[]>;
 }
 
 export default ChatRepository;
