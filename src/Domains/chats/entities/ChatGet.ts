@@ -36,28 +36,41 @@ class ChatGet implements IChatGet {
   }
 
   private formatDate(date: Date) {
+    const now = new Date();
+    const chat = new Date(date);
+
+    const dateNow = now.toDateString();
+    const dayNow = now.getDate();
+    const monthYearNow = now.toLocaleDateString('en-ID', {
+      year: 'numeric',
+      month: 'numeric',
+    });
+
+    const dateChat = chat.toDateString();
+    const dayChat = chat.getDate();
+    const monthYearChat = chat.toLocaleDateString('en-ID', {
+      year: 'numeric',
+      month: 'numeric',
+    });
+
     const secondInMs = 1000;
 
     const seconds = Math.floor(
       (new Date().valueOf() - date.valueOf()) / secondInMs
     );
 
-    const minutesInSeconds = 60;
-    const hourInSeconds = 60 * minutesInSeconds;
-    const dayInSeconds = 24 * hourInSeconds;
-    const weekInSeconds = 7 * dayInSeconds;
+    const weekInSeconds = 7 * 24 * 60 * 60;
 
-    let interval = seconds / dayInSeconds;
-    if (interval <= 1) return 'Today';
+    if (dateNow === dateChat) return 'Today';
 
-    interval = seconds / dayInSeconds;
-    if (interval <= 2) return 'Yesterday';
+    if (dayNow - 1 === dayChat && monthYearNow === monthYearChat)
+      return 'Yesterday';
 
-    interval = seconds / weekInSeconds;
+    const interval = seconds / weekInSeconds;
     if (interval <= 1)
       return new Date(date).toLocaleDateString('en-ID', { weekday: 'long' });
 
-    return new Date(date).toDateString();
+    return dateChat;
   }
 }
 
