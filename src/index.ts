@@ -11,6 +11,7 @@ import container from './Infrastructures/container';
 import db from './Infrastructures/database/mongo/db';
 import config from './Commons/config';
 import chatsSocket from './Interfaces/socket/chats';
+import roomSocket from './Interfaces/socket/rooms';
 
 const port = config.serverPort;
 
@@ -24,6 +25,7 @@ const io = new Server(httpServer, {
 db.on('open', () => {});
 
 io.on('connection', (socket: Socket) => {
+  roomSocket(socket);
   chatsSocket(socket, container);
 });
 
