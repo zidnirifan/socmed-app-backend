@@ -89,6 +89,7 @@ describe('ChatRepositoryMongo', () => {
       expect(chats[0].to.id).toEqual(userId2);
       expect(chats[0].to.fullName).toEqual(user2.fullName);
       expect(chats[0].to.profilePhoto).toEqual(user2.profilePhoto);
+      expect(chats[0].isRead).toEqual(false);
     });
   });
 

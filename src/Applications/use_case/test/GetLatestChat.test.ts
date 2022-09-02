@@ -21,6 +21,7 @@ describe('GetLatestChat use case', () => {
       to: user2,
       chat: 'hello',
       createdAt: new Date(),
+      isRead: false,
     };
 
     const expectedChat = new LatestChat(chat);

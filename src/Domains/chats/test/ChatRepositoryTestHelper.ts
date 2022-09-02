@@ -3,7 +3,7 @@
 import ChatRepository from '../ChatRepository';
 import { IChat } from '../entities/Chat';
 import { PayloadChatGet } from '../entities/ChatGet';
-import { ILatestChat } from '../entities/LatestChat';
+import { PayloadLatestChat } from '../entities/LatestChat';
 
 class MockChatRepository extends ChatRepository {
   getConversation(
@@ -12,7 +12,7 @@ class MockChatRepository extends ChatRepository {
   ): Promise<PayloadChatGet[]> {
     throw new Error('Method not implemented.');
   }
-  getLatestChat(userId: string): Promise<ILatestChat[]> {
+  getLatestChat(userId: string): Promise<PayloadLatestChat[]> {
     throw new Error('Method not implemented.');
   }
   addChat(payload: IChat): Promise<string> {

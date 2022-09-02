@@ -17,7 +17,7 @@ class ChatsHandler extends BaseHandler {
       const getLatestChats = this.container.getInstance(GetLatestChat.name);
       const chats = await getLatestChats.execute(userId);
 
-      return res.status(201).json({
+      return res.status(200).json({
         status: 'success',
         data: { chats },
       });

@@ -2,7 +2,7 @@ import { Types } from 'mongoose';
 import ChatRepository from '../../Domains/chats/ChatRepository';
 import { IChat } from '../../Domains/chats/entities/Chat';
 import { PayloadChatGet } from '../../Domains/chats/entities/ChatGet';
-import { ILatestChat } from '../../Domains/chats/entities/LatestChat';
+import { PayloadLatestChat } from '../../Domains/chats/entities/LatestChat';
 import ChatModel from '../model/Chat';
 
 class ChatRepositoryMongo extends ChatRepository {
@@ -19,7 +19,7 @@ class ChatRepositoryMongo extends ChatRepository {
     return result._id.toString();
   }
 
-  async getLatestChat(userId: string): Promise<ILatestChat[]> {
+  async getLatestChat(userId: string): Promise<PayloadLatestChat[]> {
     const chats = await ChatModel.aggregate([
       {
         $match: {
@@ -46,6 +46,7 @@ class ChatRepositoryMongo extends ChatRepository {
           createdAt: { $max: '$createdAt' },
           id: { $first: '$_id' },
           chat: { $first: '$chat' },
+          isRead: { $first: '$isRead' },
         },
       },
       {
@@ -82,6 +83,7 @@ class ChatRepositoryMongo extends ChatRepository {
           'to.fullName': 1,
           'to.profilePhoto': 1,
           createdAt: 1,
+          isRead: 1,
           // for filter unique
           foreign: {
             $cond: {
