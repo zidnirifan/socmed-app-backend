@@ -5,7 +5,10 @@ const notifSchema = new Schema(
     userId: { type: Types.ObjectId, ref: 'User' },
     to: { type: Types.ObjectId, ref: 'User' },
     text: { type: String },
-    type: { type: String, enum: ['follow', 'like-post', 'comment'] },
+    type: {
+      type: String,
+      enum: ['follow', 'like-post', 'comment', 'like-comment', 'reply-comment'],
+    },
     postId: {
       type: Types.ObjectId,
       ref: 'Post',

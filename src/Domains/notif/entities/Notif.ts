@@ -1,4 +1,9 @@
-export type ITypeNotif = 'follow' | 'like-post' | 'comment';
+export type ITypeNotif =
+  | 'follow'
+  | 'like-post'
+  | 'comment'
+  | 'like-comment'
+  | 'reply-comment';
 
 export interface PayloadNotif {
   userId: string;
@@ -39,6 +44,8 @@ class Notif implements INotif {
     if (type === 'follow') return 'started following you';
     if (type === 'like-post') return 'liked your post';
     if (type === 'comment') return `commented: ${comment}`;
+    if (type === 'like-comment') return 'liked your comment';
+    if (type === 'reply-comment') return `replied your comment: ${comment}`;
     return '';
   }
 }

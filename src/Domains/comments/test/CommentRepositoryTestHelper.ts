@@ -5,6 +5,9 @@ import { IComment } from '../entities/Comment';
 import { ICommentGet, PayloadCommentGet } from '../entities/CommentGet';
 
 class MockCommentRepository extends CommentRepository {
+  getUserIdComment(id: string): Promise<string> {
+    throw new Error('Method not implemented.');
+  }
   addComment(payload: IComment): Promise<string> {
     throw new Error('Method not implemented.');
   }

@@ -444,6 +444,10 @@ container.register([
           name: 'commentRepository',
           internal: CommentRepository.name,
         },
+        {
+          name: 'socketClient',
+          internal: SocketClient.name,
+        },
       ],
     },
   },
