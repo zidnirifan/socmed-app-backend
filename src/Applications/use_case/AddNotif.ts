@@ -37,6 +37,7 @@ class AddNotif {
     this.commentRepository = dependency.commentRepository;
   }
 
+  // eslint-disable-next-line consistent-return
   async execute({
     userId,
     to,
