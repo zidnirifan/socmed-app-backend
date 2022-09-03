@@ -55,6 +55,11 @@ import AddChat from '../Applications/use_case/AddChat';
 import GetLatestChat from '../Applications/use_case/GetLatestChat';
 import GetConversation from '../Applications/use_case/GetConversation';
 import ReadChat from '../Applications/use_case/ReadChat';
+import SocketClient from '../Applications/socketClient/SocketClient';
+import SocketIOClient from './socketClient/SocketIOClient';
+import AddNotif from '../Applications/use_case/AddNotif';
+import NotifRepository from '../Domains/notif/NotifRepository';
+import NotifRepositoryMongo from './repository/NotifRepositoryMongo';
 
 const container = createContainer();
 
@@ -130,6 +135,14 @@ container.register([
   {
     key: ChatRepository.name,
     Class: ChatRepositoryMongo,
+  },
+  {
+    key: SocketClient.name,
+    Class: SocketIOClient,
+  },
+  {
+    key: NotifRepository.name,
+    Class: NotifRepositoryMongo,
   },
 ]);
 
@@ -338,6 +351,10 @@ container.register([
           name: 'userRepository',
           internal: UserRepository.name,
         },
+        {
+          name: 'socketClient',
+          internal: SocketClient.name,
+        },
       ],
     },
   },
@@ -500,6 +517,31 @@ container.register([
         {
           name: 'chatRepository',
           internal: ChatRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: AddNotif.name,
+    Class: AddNotif,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'notifRepository',
+          internal: NotifRepository.name,
+        },
+        {
+          name: 'userRepository',
+          internal: UserRepository.name,
+        },
+        {
+          name: 'postRepository',
+          internal: PostRepository.name,
+        },
+        {
+          name: 'commentRepository',
+          internal: CommentRepository.name,
         },
       ],
     },
