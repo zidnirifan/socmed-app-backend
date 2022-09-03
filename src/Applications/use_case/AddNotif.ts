@@ -55,6 +55,7 @@ class AddNotif {
       const username = await this.userRepository.getUsernameById(userId);
       return { ...notif, username };
     }
+
     if (type === 'like-post') {
       const userIdPost = await this.postRepository.getUserIdPost(postId || '');
 
@@ -62,6 +63,23 @@ class AddNotif {
         userId,
         to: userIdPost,
         type,
+      });
+      this.notifRepository.addNotif(notif);
+
+      const username = await this.userRepository.getUsernameById(userId);
+
+      return { ...notif, username };
+    }
+
+    if (type === 'comment') {
+      const userIdPost = await this.postRepository.getUserIdPost(postId || '');
+
+      const notif = new Notif({
+        userId,
+        to: userIdPost,
+        type,
+        comment,
+        commentId,
       });
       this.notifRepository.addNotif(notif);
 
