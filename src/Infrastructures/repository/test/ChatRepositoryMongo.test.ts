@@ -130,4 +130,36 @@ describe('ChatRepositoryMongo', () => {
       expect(chats[0].chat).toEqual(chat.chat);
     });
   });
+
+  describe('readChat function', () => {
+    it('should update isRead to true', async () => {
+      const user1 = '62bbec0108243e15bde1c27e';
+      const user2 = '62b55fb7f96df4d764f67265';
+
+      const chat = {
+        from: user1,
+        to: user2,
+        chat: 'hello',
+      };
+
+      const { _id: chatId } = await new ChatModel(chat).save();
+
+      const chat2 = new ChatModel({
+        from: user2,
+        to: user1,
+        chat: 'woe',
+      });
+
+      const { _id: chatId2 } = await chat2.save();
+
+      const chatRepositoryMongo = new ChatRepositoryMongo();
+
+      await chatRepositoryMongo.readChat(user1, user2);
+      const chat1Updated = await ChatModel.findById(chatId);
+      const chat2Updated = await ChatModel.findById(chatId2);
+
+      expect(chat1Updated.isRead).toEqual(false);
+      expect(chat2Updated.isRead).toEqual(true);
+    });
+  });
 });

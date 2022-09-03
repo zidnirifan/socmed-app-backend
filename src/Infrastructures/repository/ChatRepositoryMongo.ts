@@ -167,6 +167,19 @@ class ChatRepositoryMongo extends ChatRepository {
 
     return chats;
   }
+
+  async readChat(ownUserId: string, foreignUserId: string): Promise<void> {
+    await this.Model.updateMany(
+      {
+        $and: [
+          { from: { $eq: new Types.ObjectId(foreignUserId) } },
+          { to: { $eq: new Types.ObjectId(ownUserId) } },
+          { isRead: false },
+        ],
+      },
+      { isRead: true }
+    );
+  }
 }
 
 export default ChatRepositoryMongo;

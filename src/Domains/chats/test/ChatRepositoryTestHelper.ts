@@ -6,6 +6,9 @@ import { PayloadChatGet } from '../entities/ChatGet';
 import { PayloadLatestChat } from '../entities/LatestChat';
 
 class MockChatRepository extends ChatRepository {
+  readChat(ownUserId: string, foreignUserId: string): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
   getConversation(
     ownUserId: string,
     foreignUserId: string

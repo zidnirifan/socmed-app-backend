@@ -1,6 +1,7 @@
 import { NextFunction, Response } from 'express';
 import GetConversation from '../../../../Applications/use_case/GetConversation';
 import GetLatestChat from '../../../../Applications/use_case/GetLatestChat';
+import ReadChat from '../../../../Applications/use_case/ReadChat';
 import { RequestAuth } from '../../middleware/auth';
 import BaseHandler from '../BaseHandler';
 
@@ -42,6 +43,28 @@ class ChatsHandler extends BaseHandler {
       return res.status(200).json({
         status: 'success',
         data: { chats },
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  async readChat(
+    req: RequestAuth,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      /* istanbul ignore next */
+      const userId = req.auth?.id;
+      const foreignUserId = req.params.userId;
+
+      const readChat = this.container.getInstance(ReadChat.name);
+      await readChat.execute(userId, foreignUserId);
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'chat readed',
       });
     } catch (error) {
       return next(error);

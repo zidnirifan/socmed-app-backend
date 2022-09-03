@@ -54,6 +54,7 @@ import ChatValidator from './validator/chat/ChatValidator';
 import AddChat from '../Applications/use_case/AddChat';
 import GetLatestChat from '../Applications/use_case/GetLatestChat';
 import GetConversation from '../Applications/use_case/GetConversation';
+import ReadChat from '../Applications/use_case/ReadChat';
 
 const container = createContainer();
 
@@ -480,6 +481,19 @@ container.register([
   {
     key: GetConversation.name,
     Class: GetConversation,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'chatRepository',
+          internal: ChatRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: ReadChat.name,
+    Class: ReadChat,
     parameter: {
       injectType: 'destructuring',
       dependencies: [

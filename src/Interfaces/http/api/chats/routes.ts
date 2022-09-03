@@ -8,6 +8,7 @@ class ChatsRoutes extends BaseRouter {
 
     this.router.get('/latest', auth, handler.getLatestChats);
     this.router.get('/conversation/:userId', auth, handler.getConversation);
+    this.router.put('/conversation/:userId/read', auth, handler.readChat);
   }
 }
 
