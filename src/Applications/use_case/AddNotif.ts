@@ -105,6 +105,25 @@ class AddNotif {
 
       return { ...notif, username };
     }
+
+    if (type === 'reply-comment') {
+      const userIdComment = await this.commentRepository.getUserIdComment(
+        commentId || ''
+      );
+
+      const notif = new Notif({
+        userId,
+        to: userIdComment,
+        type,
+        commentId,
+        comment,
+      });
+      this.notifRepository.addNotif(notif);
+
+      const username = await this.userRepository.getUsernameById(userId);
+
+      return { ...notif, username };
+    }
   }
 }
 

@@ -38,9 +38,9 @@ class AddComment {
     this.socketClient.sendNotif({
       userId: payload.userId,
       postId: payload.postId,
-      type: 'comment',
+      type: payload.replyTo ? 'reply-comment' : 'comment',
       comment: comment.content,
-      commentId,
+      commentId: payload.replyTo ? payload.replyTo : commentId,
     });
 
     return commentId;
