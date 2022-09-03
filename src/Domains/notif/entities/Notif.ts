@@ -1,8 +1,8 @@
-export type ITypeNotif = 'follow' | 'like' | 'comment';
+export type ITypeNotif = 'follow' | 'like-post' | 'comment';
 
 export interface PayloadNotif {
   userId: string;
-  to: string;
+  to?: string;
   type: ITypeNotif;
   postId?: string;
   commentId?: string;
@@ -28,7 +28,7 @@ class Notif implements INotif {
 
   constructor(payload: PayloadNotif) {
     this.userId = payload.userId;
-    this.to = payload.to;
+    this.to = payload.to || '';
     this.text = this.translateText(payload.type, payload.comment || '');
     this.type = payload.type;
     this.postId = payload.postId;
@@ -37,7 +37,7 @@ class Notif implements INotif {
 
   private translateText(type: ITypeNotif, comment: string): string {
     if (type === 'follow') return 'started following you';
-    if (type === 'like') return 'like your post';
+    if (type === 'like-post') return 'liked your post';
     if (type === 'comment') return `commented: ${comment}`;
     return '';
   }

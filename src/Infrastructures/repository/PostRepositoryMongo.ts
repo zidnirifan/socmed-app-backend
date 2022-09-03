@@ -254,6 +254,11 @@ class PostRepositoryMongo extends PostRepository {
       },
     ]);
   }
+
+  async getUserIdPost(id: string): Promise<string> {
+    const result = await this.Model.findById(id).populate('userId', '_id');
+    return result.userId._id.toString();
+  }
 }
 
 export default PostRepositoryMongo;

@@ -338,6 +338,10 @@ container.register([
           name: 'postRepository',
           internal: PostRepository.name,
         },
+        {
+          name: 'socketClient',
+          internal: SocketClient.name,
+        },
       ],
     },
   },
