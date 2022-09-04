@@ -149,6 +149,35 @@ class UserRepositoryMongo extends UserRepository {
           .length > 0,
     }));
   }
+
+  async getSuggested(id: string): Promise<IUserGet[]> {
+    const users = await this.Model.aggregate([
+      {
+        $sample: { size: 7 },
+      },
+      {
+        $project: {
+          _id: 0,
+          id: '$_id',
+          username: 1,
+          fullName: 1,
+          profilePhoto: 1,
+          isFollowed: {
+            $filter: {
+              input: '$followers',
+              as: 'followers',
+              cond: { $eq: ['$$followers', new Types.ObjectId(id)] },
+            },
+          },
+        },
+      },
+    ]);
+
+    return users.map((u) => ({
+      ...u,
+      isFollowed: !!u.isFollowed[0],
+    })) as unknown as IUserGet[];
+  }
 }
 
 export default UserRepositoryMongo;

@@ -22,6 +22,7 @@ class UsersRoutes extends BaseRouter {
     this.router.get('/search', auth, handler.searchUsers);
     this.router.get('/:id/followers', auth, handler.getFollowers);
     this.router.get('/:id/following', auth, handler.getFollowing);
+    this.router.get('/suggested', auth, handler.getSuggested);
   }
 }
 

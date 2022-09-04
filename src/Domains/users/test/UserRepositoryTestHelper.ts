@@ -55,6 +55,9 @@ class MockUserRepository extends UserRepository {
   getFollowing(id: string): Promise<IUserGet[]> {
     throw new Error('Method not implemented.');
   }
+  getSuggested(id: string): Promise<IUserGet[]> {
+    throw new Error('Method not implemented.');
+  }
 }
 
 export default MockUserRepository;

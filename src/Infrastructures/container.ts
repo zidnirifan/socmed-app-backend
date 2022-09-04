@@ -65,6 +65,7 @@ import GetCountNotifChat from '../Applications/use_case/GetCountNotifChat';
 import ReadNotif from '../Applications/use_case/ReadNotif';
 import GetFollowers from '../Applications/use_case/GetFollowers';
 import GetFollowing from '../Applications/use_case/GetFollowing';
+import GetSuggestedUsers from '../Applications/use_case/GetSuggestedUsers';
 
 const container = createContainer();
 
@@ -622,6 +623,19 @@ container.register([
   {
     key: GetFollowing.name,
     Class: GetFollowing,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'userRepository',
+          internal: UserRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: GetSuggestedUsers.name,
+    Class: GetSuggestedUsers,
     parameter: {
       injectType: 'destructuring',
       dependencies: [

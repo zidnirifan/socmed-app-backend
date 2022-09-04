@@ -9,6 +9,7 @@ import EditUser from '../../../../Applications/use_case/EditUser';
 import SearchUsers from '../../../../Applications/use_case/SearchUsers';
 import GetFollowers from '../../../../Applications/use_case/GetFollowers';
 import GetFollowing from '../../../../Applications/use_case/GetFollowing';
+import GetSuggestedUsers from '../../../../Applications/use_case/GetSuggestedUsers';
 
 class UsersHandler extends BaseHandler {
   async postUserHandler(
@@ -184,6 +185,26 @@ class UsersHandler extends BaseHandler {
     const getFollowing = this.container.getInstance(GetFollowing.name);
 
     const users = await getFollowing.execute(id);
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        users,
+      },
+    });
+  }
+
+  async getSuggested(
+    req: RequestAuth,
+    res: Response
+  ): Promise<Response | void> {
+    const userId = req.auth?.id;
+
+    const getSuggestedUsers = this.container.getInstance(
+      GetSuggestedUsers.name
+    );
+
+    const users = await getSuggestedUsers.execute(userId);
 
     return res.status(200).json({
       status: 'success',
