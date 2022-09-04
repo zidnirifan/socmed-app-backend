@@ -1,17 +1,17 @@
-export interface IUserSearch {
+export interface IUserGet {
   id: string;
   username: string;
   fullName: string;
   profilePhoto: string;
 }
 
-class UserSearch implements IUserSearch {
+class UserGet implements IUserGet {
   id: string;
   username: string;
   fullName: string;
   profilePhoto: string;
 
-  constructor(payload: IUserSearch) {
+  constructor(payload: IUserGet) {
     this.id = payload.id;
     this.username = payload.username;
     this.fullName = payload.fullName;
@@ -19,4 +19,4 @@ class UserSearch implements IUserSearch {
   }
 }
 
-export default UserSearch;
+export default UserGet;

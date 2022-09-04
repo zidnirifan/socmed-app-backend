@@ -1,6 +1,4 @@
-import UserSearch, {
-  IUserSearch,
-} from '../../Domains/users/entities/UserSearch';
+import UserGet, { IUserGet } from '../../Domains/users/entities/UserGet';
 import { IUserRepository } from '../../Domains/users/UserRepository';
 
 interface Dependency {
@@ -14,10 +12,10 @@ class SearchUsers {
     this.userRepository = dependency.userRepository;
   }
 
-  async execute(text: string): Promise<IUserSearch[]> {
+  async execute(text: string): Promise<IUserGet[]> {
     const users = await this.userRepository.searchUsers(text);
 
-    return users.map((u) => new UserSearch(u));
+    return users.map((u) => new UserGet(u));
   }
 }
 

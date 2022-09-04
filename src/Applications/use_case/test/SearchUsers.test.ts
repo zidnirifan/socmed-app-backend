@@ -1,6 +1,6 @@
 import SearchUsers from '../SearchUsers';
 import MockUserRepository from '../../../Domains/users/test/UserRepositoryTestHelper';
-import UserSearch from '../../../Domains/users/entities/UserSearch';
+import UserGet from '../../../Domains/users/entities/UserGet';
 
 describe('SearchUsers use case', () => {
   it('should orchestrating search users action correctly', async () => {
@@ -32,7 +32,7 @@ describe('SearchUsers use case', () => {
     const users = await searchUsers.execute(text);
 
     // Assert
-    expect(users[0]).toBeInstanceOf(UserSearch);
+    expect(users[0]).toBeInstanceOf(UserGet);
     expect(users).toHaveLength(1);
     expect(mockUserRepository.searchUsers).toBeCalledWith(text);
   });
