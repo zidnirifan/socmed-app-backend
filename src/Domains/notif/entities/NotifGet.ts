@@ -14,6 +14,7 @@ export interface PayloadNotifGet {
   postId?: string;
   commentId?: string;
   createdAt: Date;
+  isRead: boolean;
 }
 
 export interface INotifGet {
@@ -25,6 +26,7 @@ export interface INotifGet {
   postId?: string;
   commentId?: string;
   createdAt: string;
+  isRead: boolean;
 }
 
 class NotifGet implements INotifGet {
@@ -36,6 +38,7 @@ class NotifGet implements INotifGet {
   postId?: string;
   commentId?: string;
   createdAt: string;
+  isRead: boolean;
 
   constructor(payload: PayloadNotifGet) {
     this.id = payload.id;
@@ -46,6 +49,7 @@ class NotifGet implements INotifGet {
     this.postId = payload.postId;
     this.commentId = payload.postId;
     this.createdAt = this.timeSince(payload.createdAt);
+    this.isRead = payload.isRead;
   }
 
   private timeSince(date: Date) {

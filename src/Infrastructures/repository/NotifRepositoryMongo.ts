@@ -44,6 +44,7 @@ class NotifRepositoryMongo extends NotifRepository {
       postId: n.postId,
       commentId: n.commentId,
       createdAt: n.createdAt,
+      isRead: n.isRead,
     }));
   }
 }
