@@ -124,7 +124,7 @@ class UserRepositoryMongo extends UserRepository {
     return username;
   }
 
-  async getFollowers(id: string): Promise<IUserGet[]> {
+  async getFollowers(ownId: string, id: string): Promise<IUserGet[]> {
     const user = await this.Model.findById(id).populate('followers');
     return user.followers.map((u: any) => ({
       id: u._id,
@@ -132,12 +132,13 @@ class UserRepositoryMongo extends UserRepository {
       profilePhoto: u.profilePhoto,
       fullName: u.fullName,
       isFollowed:
-        u.followers.filter((follow: Types.ObjectId) => follow.toString() === id)
-          .length > 0,
+        u.followers.filter(
+          (follow: Types.ObjectId) => follow.toString() === ownId
+        ).length > 0,
     }));
   }
 
-  async getFollowing(id: string): Promise<IUserGet[]> {
+  async getFollowing(ownId: string, id: string): Promise<IUserGet[]> {
     const users = await this.Model.find({ followers: id });
     return users.map((u: any) => ({
       id: u._id,
@@ -145,8 +146,9 @@ class UserRepositoryMongo extends UserRepository {
       profilePhoto: u.profilePhoto,
       fullName: u.fullName,
       isFollowed:
-        u.followers.filter((follow: Types.ObjectId) => follow.toString() === id)
-          .length > 0,
+        u.followers.filter(
+          (follow: Types.ObjectId) => follow.toString() === ownId
+        ).length > 0,
     }));
   }
 

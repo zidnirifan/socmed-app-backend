@@ -163,10 +163,10 @@ class UsersHandler extends BaseHandler {
     res: Response
   ): Promise<Response | void> {
     const { id } = req.params;
+    const ownUserId = req.auth?.id;
 
     const getFollowers = this.container.getInstance(GetFollowers.name);
-
-    const users = await getFollowers.execute(id);
+    const users = await getFollowers.execute(ownUserId, id);
 
     return res.status(200).json({
       status: 'success',
@@ -181,10 +181,10 @@ class UsersHandler extends BaseHandler {
     res: Response
   ): Promise<Response | void> {
     const { id } = req.params;
+    const ownUserId = req.auth?.id;
 
     const getFollowing = this.container.getInstance(GetFollowing.name);
-
-    const users = await getFollowing.execute(id);
+    const users = await getFollowing.execute(ownUserId, id);
 
     return res.status(200).json({
       status: 'success',
@@ -203,7 +203,6 @@ class UsersHandler extends BaseHandler {
     const getSuggestedUsers = this.container.getInstance(
       GetSuggestedUsers.name
     );
-
     const users = await getSuggestedUsers.execute(userId);
 
     return res.status(200).json({

@@ -12,8 +12,8 @@ class GetFollowers {
     this.userRepository = dependency.userRepository;
   }
 
-  async execute(userId: string): Promise<IUserGet[]> {
-    const users = await this.userRepository.getFollowers(userId);
+  async execute(ownUserId: string, userId: string): Promise<IUserGet[]> {
+    const users = await this.userRepository.getFollowers(ownUserId, userId);
 
     return users.map((u) => new UserGet(u));
   }
