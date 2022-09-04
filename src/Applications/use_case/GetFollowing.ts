@@ -5,18 +5,18 @@ interface Dependency {
   userRepository: IUserRepository;
 }
 
-class SearchUsers {
+class GetFollowing {
   private userRepository: IUserRepository;
 
   constructor(dependency: Dependency) {
     this.userRepository = dependency.userRepository;
   }
 
-  async execute(text: string): Promise<IUserGet[]> {
-    const users = await this.userRepository.searchUsers(text);
+  async execute(userId: string): Promise<IUserGet[]> {
+    const users = await this.userRepository.getFollowing(userId);
 
     return users.map((u) => new UserGet(u));
   }
 }
 
-export default SearchUsers;
+export default GetFollowing;

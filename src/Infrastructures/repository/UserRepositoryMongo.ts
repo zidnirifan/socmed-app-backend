@@ -6,7 +6,7 @@ import UserModel from '../model/User';
 import NotFoundError from '../../Commons/exceptions/NotFoundError';
 import { PayloadFollowUser } from '../../Applications/use_case/ToggleFollowUser';
 import UserEdit from '../../Domains/users/entities/UserEdit';
-import { IUserSearch } from '../../Domains/users/entities/UserSearch';
+import { IUserGet } from '../../Domains/users/entities/UserGet';
 
 class UserRepositoryMongo extends UserRepository {
   private Model;
@@ -110,7 +110,7 @@ class UserRepositoryMongo extends UserRepository {
     await this.Model.updateOne({ _id: id }, { username, fullName, bio });
   }
 
-  async searchUsers(text: string): Promise<IUserSearch[]> {
+  async searchUsers(text: string): Promise<IUserGet[]> {
     return this.Model.find({
       $or: [
         { username: { $regex: text, $options: 'i' } },
@@ -122,6 +122,32 @@ class UserRepositoryMongo extends UserRepository {
   async getUsernameById(id: string): Promise<string> {
     const { username } = await this.Model.findOne({ _id: id }, 'username');
     return username;
+  }
+
+  async getFollowers(id: string): Promise<IUserGet[]> {
+    const user = await this.Model.findById(id).populate('followers');
+    return user.followers.map((u: any) => ({
+      id: u._id,
+      username: u.username,
+      profilePhoto: u.profilePhoto,
+      fullName: u.fullName,
+      isFollowed:
+        u.followers.filter((follow: Types.ObjectId) => follow.toString() === id)
+          .length > 0,
+    }));
+  }
+
+  async getFollowing(id: string): Promise<IUserGet[]> {
+    const users = await this.Model.find({ followers: id });
+    return users.map((u: any) => ({
+      id: u._id,
+      username: u.username,
+      profilePhoto: u.profilePhoto,
+      fullName: u.fullName,
+      isFollowed:
+        u.followers.filter((follow: Types.ObjectId) => follow.toString() === id)
+          .length > 0,
+    }));
   }
 }
 

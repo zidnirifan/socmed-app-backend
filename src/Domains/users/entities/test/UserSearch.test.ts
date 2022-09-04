@@ -1,6 +1,6 @@
-import UserSearch from '../UserSearch';
+import UserGet from '../UserGet';
 
-describe('a UserSearch entities', () => {
+describe('a UserGet entities', () => {
   it('should create user object correctly', () => {
     const payload = {
       id: 'user-123',
@@ -9,7 +9,7 @@ describe('a UserSearch entities', () => {
       profilePhoto: 'img.jpg',
     };
 
-    const { id, username, fullName, profilePhoto } = new UserSearch(payload);
+    const { id, username, fullName, profilePhoto } = new UserGet(payload);
 
     expect(id).toEqual(payload.id);
     expect(fullName).toEqual(payload.fullName);

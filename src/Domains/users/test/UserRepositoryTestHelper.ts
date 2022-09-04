@@ -3,38 +3,31 @@
 import { PayloadFollowUser } from '../../../Applications/use_case/ToggleFollowUser';
 import { IUser } from '../entities/User';
 import UserEdit from '../entities/UserEdit';
-import { IUserSearch } from '../entities/UserSearch';
+import { IUserGet } from '../entities/UserGet';
 import UserRepository, { UserGet } from '../UserRepository';
 
 class MockUserRepository extends UserRepository {
   verifyAvailableUsername(username: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
-
   addUser(payload: IUser): Promise<string> {
     throw new Error('Method not implemented.');
   }
-
   isUsernameExist(username: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
-
   isUserExistById(id: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
-
   getPasswordByUsername(username: string): Promise<string> {
     throw new Error('Method not implemented.');
   }
-
   getIdByUsername(username: string): Promise<string> {
     throw new Error('Method not implemented.');
   }
-
   editProfilePhotoById(id: string, profilePhoto: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
-
   getUserById(id: string, userId: string): Promise<UserGet> {
     throw new Error('Method not implemented.');
   }
@@ -50,10 +43,16 @@ class MockUserRepository extends UserRepository {
   editUser(payload: UserEdit): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  searchUsers(text: string): Promise<IUserSearch[]> {
+  searchUsers(text: string): Promise<IUserGet[]> {
     throw new Error('Method not implemented.');
   }
   getUsernameById(id: string): Promise<string> {
+    throw new Error('Method not implemented.');
+  }
+  getFollowers(id: string): Promise<IUserGet[]> {
+    throw new Error('Method not implemented.');
+  }
+  getFollowing(id: string): Promise<IUserGet[]> {
     throw new Error('Method not implemented.');
   }
 }
