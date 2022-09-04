@@ -11,6 +11,7 @@ import AuthRoutes from '../../Interfaces/http/api/auth/routes';
 import PostsRoutes from '../../Interfaces/http/api/post/routes';
 import CommentsRoutes from '../../Interfaces/http/api/comments/routes';
 import ChatsRoutes from '../../Interfaces/http/api/chats/routes';
+import NotifsRoutes from '../../Interfaces/http/api/notifs/routes';
 
 class Server {
   app: Application;
@@ -39,12 +40,14 @@ class Server {
     const postsRoutes = new PostsRoutes(this.container).router;
     const commentsRoutes = new CommentsRoutes(this.container).router;
     const chatsRoutes = new ChatsRoutes(this.container).router;
+    const notifsRoutes = new NotifsRoutes(this.container).router;
 
     this.app.use('/users', usersRoutes);
     this.app.use('/auth', authRoutes);
     this.app.use('/posts', postsRoutes);
     this.app.use('/posts', commentsRoutes);
     this.app.use('/chats', chatsRoutes);
+    this.app.use('/notifications', notifsRoutes);
   }
 
   private errorHandler() {

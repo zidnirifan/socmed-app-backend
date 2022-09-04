@@ -12,6 +12,7 @@ import db from './Infrastructures/database/mongo/db';
 import config from './Commons/config';
 import chatsSocket from './Interfaces/socket/chats';
 import roomSocket from './Interfaces/socket/rooms';
+import notifSocket from './Interfaces/socket/notif';
 
 const port = config.serverPort;
 
@@ -27,6 +28,7 @@ db.on('open', () => {});
 io.on('connection', (socket: Socket) => {
   roomSocket(socket);
   chatsSocket(socket, container);
+  notifSocket(socket, container);
 });
 
 httpServer.listen(port);

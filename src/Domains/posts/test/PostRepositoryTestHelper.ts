@@ -9,6 +9,9 @@ import PostRepository, {
 } from '../PostRepository';
 
 class MockPostRepository extends PostRepository {
+  getUserIdPost(id: string): Promise<string> {
+    throw new Error('Method not implemented.');
+  }
   addPost(payload: PostPayload): Promise<string> {
     throw new Error('Method not implemented.');
   }

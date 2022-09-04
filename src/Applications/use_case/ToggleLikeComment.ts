@@ -1,7 +1,9 @@
 import { ICommentRepository } from '../../Domains/comments/CommentRepository';
+import { ISocketClient } from '../socketClient/SocketClient';
 
 interface Dependency {
   commentRepository: ICommentRepository;
+  socketClient: ISocketClient;
 }
 
 interface Payload {
@@ -13,9 +15,11 @@ type likeUnlike = 'liked' | 'unliked';
 
 class ToggleLikeComment {
   private commentRepository: ICommentRepository;
+  private socketClient: ISocketClient;
 
   constructor(dependency: Dependency) {
     this.commentRepository = dependency.commentRepository;
+    this.socketClient = dependency.socketClient;
   }
 
   async execute(payload: Payload): Promise<likeUnlike> {
@@ -28,6 +32,14 @@ class ToggleLikeComment {
     }
 
     await this.commentRepository.likeComment(payload);
+
+    // send notif
+    this.socketClient.sendNotif({
+      userId: payload.userId,
+      commentId: payload.commentId,
+      type: 'like-comment',
+    });
+
     return 'liked';
   }
 }

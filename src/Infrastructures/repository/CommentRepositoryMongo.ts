@@ -137,6 +137,11 @@ class CommentRepositoryMongo extends CommentRepository {
       { $pull: { likes: payload.userId } }
     );
   }
+
+  async getUserIdComment(id: string): Promise<string> {
+    const result = await this.Model.findById(id).populate('userId', '_id');
+    return result.userId._id.toString();
+  }
 }
 
 export default CommentRepositoryMongo;

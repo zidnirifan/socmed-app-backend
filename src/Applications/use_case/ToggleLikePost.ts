@@ -1,7 +1,9 @@
 import { IPostRepository } from '../../Domains/posts/PostRepository';
+import { ISocketClient } from '../socketClient/SocketClient';
 
 interface Dependency {
   postRepository: IPostRepository;
+  socketClient: ISocketClient;
 }
 
 interface Payload {
@@ -13,9 +15,11 @@ type likeUnlike = 'liked' | 'unliked';
 
 class ToggleLikePost {
   private postRepository: IPostRepository;
+  private socketClient: ISocketClient;
 
   constructor(dependency: Dependency) {
     this.postRepository = dependency.postRepository;
+    this.socketClient = dependency.socketClient;
   }
 
   async execute(payload: Payload): Promise<likeUnlike> {
@@ -28,6 +32,14 @@ class ToggleLikePost {
     }
 
     await this.postRepository.likePost(payload);
+
+    // send notif
+    this.socketClient.sendNotif({
+      userId: payload.userId,
+      postId: payload.postId,
+      type: 'like-post',
+    });
+
     return 'liked';
   }
 }

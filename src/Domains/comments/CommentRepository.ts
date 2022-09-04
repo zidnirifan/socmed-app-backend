@@ -17,6 +17,7 @@ export interface ICommentRepository {
   isCommentLiked(payload: LikeCommentPayload): Promise<boolean>;
   likeComment(payload: LikeCommentPayload): Promise<void>;
   unlikeComment(payload: LikeCommentPayload): Promise<void>;
+  getUserIdComment(id: string): Promise<string>;
 }
 
 abstract class CommentRepository implements ICommentRepository {
@@ -30,6 +31,7 @@ abstract class CommentRepository implements ICommentRepository {
   abstract isCommentLiked(payload: LikeCommentPayload): Promise<boolean>;
   abstract likeComment(payload: LikeCommentPayload): Promise<void>;
   abstract unlikeComment(payload: LikeCommentPayload): Promise<void>;
+  abstract getUserIdComment(id: string): Promise<string>;
 }
 
 export default CommentRepository;
