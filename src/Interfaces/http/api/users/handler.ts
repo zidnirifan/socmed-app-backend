@@ -9,6 +9,7 @@ import EditUser from '../../../../Applications/use_case/EditUser';
 import SearchUsers from '../../../../Applications/use_case/SearchUsers';
 import GetFollowers from '../../../../Applications/use_case/GetFollowers';
 import GetFollowing from '../../../../Applications/use_case/GetFollowing';
+import GetSuggestedUsers from '../../../../Applications/use_case/GetSuggestedUsers';
 
 class UsersHandler extends BaseHandler {
   async postUserHandler(
@@ -162,10 +163,10 @@ class UsersHandler extends BaseHandler {
     res: Response
   ): Promise<Response | void> {
     const { id } = req.params;
+    const ownUserId = req.auth?.id;
 
     const getFollowers = this.container.getInstance(GetFollowers.name);
-
-    const users = await getFollowers.execute(id);
+    const users = await getFollowers.execute(ownUserId, id);
 
     return res.status(200).json({
       status: 'success',
@@ -180,10 +181,29 @@ class UsersHandler extends BaseHandler {
     res: Response
   ): Promise<Response | void> {
     const { id } = req.params;
+    const ownUserId = req.auth?.id;
 
     const getFollowing = this.container.getInstance(GetFollowing.name);
+    const users = await getFollowing.execute(ownUserId, id);
 
-    const users = await getFollowing.execute(id);
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        users,
+      },
+    });
+  }
+
+  async getSuggested(
+    req: RequestAuth,
+    res: Response
+  ): Promise<Response | void> {
+    const userId = req.auth?.id;
+
+    const getSuggestedUsers = this.container.getInstance(
+      GetSuggestedUsers.name
+    );
+    const users = await getSuggestedUsers.execute(userId);
 
     return res.status(200).json({
       status: 'success',

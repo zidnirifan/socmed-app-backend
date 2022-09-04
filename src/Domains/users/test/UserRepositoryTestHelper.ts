@@ -49,10 +49,13 @@ class MockUserRepository extends UserRepository {
   getUsernameById(id: string): Promise<string> {
     throw new Error('Method not implemented.');
   }
-  getFollowers(id: string): Promise<IUserGet[]> {
+  getFollowers(ownId: string, id: string): Promise<IUserGet[]> {
     throw new Error('Method not implemented.');
   }
-  getFollowing(id: string): Promise<IUserGet[]> {
+  getFollowing(ownId: string, id: string): Promise<IUserGet[]> {
+    throw new Error('Method not implemented.');
+  }
+  getSuggested(id: string): Promise<IUserGet[]> {
     throw new Error('Method not implemented.');
   }
 }
