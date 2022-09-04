@@ -180,6 +180,12 @@ class ChatRepositoryMongo extends ChatRepository {
       { isRead: true }
     );
   }
+
+  async countChats(userId: string): Promise<number> {
+    return this.Model.countDocuments({
+      $and: [{ to: { $eq: new Types.ObjectId(userId) } }, { isRead: false }],
+    });
+  }
 }
 
 export default ChatRepositoryMongo;

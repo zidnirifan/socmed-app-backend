@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { INotif } from '../../Domains/notif/entities/Notif';
 import {
   INotifGet,
@@ -46,6 +47,12 @@ class NotifRepositoryMongo extends NotifRepository {
       createdAt: n.createdAt,
       isRead: n.isRead,
     }));
+  }
+
+  async countNotifs(userId: string): Promise<number> {
+    return this.Model.countDocuments({
+      $and: [{ to: { $eq: new Types.ObjectId(userId) } }, { isRead: false }],
+    });
   }
 }
 

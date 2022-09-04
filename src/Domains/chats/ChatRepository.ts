@@ -10,6 +10,7 @@ export interface IChatRepository {
     foreignUserId: string
   ): Promise<PayloadChatGet[]>;
   readChat(ownUserId: string, foreignUserId: string): Promise<void>;
+  countChats(userId: string): Promise<number>;
 }
 
 abstract class ChatRepository implements IChatRepository {
@@ -20,6 +21,7 @@ abstract class ChatRepository implements IChatRepository {
     foreignUserId: string
   ): Promise<PayloadChatGet[]>;
   abstract readChat(ownUserId: string, foreignUserId: string): Promise<void>;
+  abstract countChats(userId: string): Promise<number>;
 }
 
 export default ChatRepository;
