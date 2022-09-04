@@ -60,6 +60,7 @@ import SocketIOClient from './socketClient/SocketIOClient';
 import AddNotif from '../Applications/use_case/AddNotif';
 import NotifRepository from '../Domains/notif/NotifRepository';
 import NotifRepositoryMongo from './repository/NotifRepositoryMongo';
+import GetNotifs from '../Applications/use_case/GetNotifs';
 
 const container = createContainer();
 
@@ -554,6 +555,19 @@ container.register([
         {
           name: 'commentRepository',
           internal: CommentRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: GetNotifs.name,
+    Class: GetNotifs,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'notifRepository',
+          internal: NotifRepository.name,
         },
       ],
     },
