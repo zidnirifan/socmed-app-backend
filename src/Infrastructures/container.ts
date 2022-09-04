@@ -62,6 +62,7 @@ import NotifRepository from '../Domains/notif/NotifRepository';
 import NotifRepositoryMongo from './repository/NotifRepositoryMongo';
 import GetNotifs from '../Applications/use_case/GetNotifs';
 import GetCountNotifChat from '../Applications/use_case/GetCountNotifChat';
+import ReadNotif from '../Applications/use_case/ReadNotif';
 
 const container = createContainer();
 
@@ -586,6 +587,19 @@ container.register([
         {
           name: 'chatRepository',
           internal: ChatRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: ReadNotif.name,
+    Class: ReadNotif,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'notifRepository',
+          internal: NotifRepository.name,
         },
       ],
     },

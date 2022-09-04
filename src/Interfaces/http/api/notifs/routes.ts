@@ -8,6 +8,7 @@ class NotifsRoutes extends BaseRouter {
 
     this.router.get('/', auth, handler.getNotifs);
     this.router.get('/count', auth, handler.getCountNotifChat);
+    this.router.put('/read', auth, handler.readNotif);
   }
 }
 

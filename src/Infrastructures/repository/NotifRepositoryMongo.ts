@@ -54,6 +54,15 @@ class NotifRepositoryMongo extends NotifRepository {
       $and: [{ to: { $eq: new Types.ObjectId(userId) } }, { isRead: false }],
     });
   }
+
+  async readNotif(userId: string): Promise<void> {
+    await this.Model.updateMany(
+      {
+        $and: [{ to: { $eq: new Types.ObjectId(userId) } }, { isRead: false }],
+      },
+      { isRead: true }
+    );
+  }
 }
 
 export default NotifRepositoryMongo;
