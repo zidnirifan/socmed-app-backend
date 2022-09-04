@@ -7,6 +7,8 @@ import GetUserProfile from '../../../../Applications/use_case/GetUserProfile';
 import ToggleFollowUser from '../../../../Applications/use_case/ToggleFollowUser';
 import EditUser from '../../../../Applications/use_case/EditUser';
 import SearchUsers from '../../../../Applications/use_case/SearchUsers';
+import GetFollowers from '../../../../Applications/use_case/GetFollowers';
+import GetFollowing from '../../../../Applications/use_case/GetFollowing';
 
 class UsersHandler extends BaseHandler {
   async postUserHandler(
@@ -139,12 +141,49 @@ class UsersHandler extends BaseHandler {
       return next(error);
     }
   }
+
   async searchUsers(req: RequestAuth, res: Response): Promise<Response | void> {
     const { text } = req.query;
 
     const searchUsers = this.container.getInstance(SearchUsers.name);
 
     const users = await searchUsers.execute(text);
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        users,
+      },
+    });
+  }
+
+  async getFollowers(
+    req: RequestAuth,
+    res: Response
+  ): Promise<Response | void> {
+    const { id } = req.params;
+
+    const getFollowers = this.container.getInstance(GetFollowers.name);
+
+    const users = await getFollowers.execute(id);
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        users,
+      },
+    });
+  }
+
+  async getFollowing(
+    req: RequestAuth,
+    res: Response
+  ): Promise<Response | void> {
+    const { id } = req.params;
+
+    const getFollowing = this.container.getInstance(GetFollowing.name);
+
+    const users = await getFollowing.execute(id);
 
     return res.status(200).json({
       status: 'success',

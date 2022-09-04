@@ -123,6 +123,15 @@ class UserRepositoryMongo extends UserRepository {
     const { username } = await this.Model.findOne({ _id: id }, 'username');
     return username;
   }
+
+  async getFollowers(id: string): Promise<UserGet[]> {
+    const user = await this.Model.findById(id).populate('followers');
+    return user.followers;
+  }
+
+  async getFollowing(id: string): Promise<UserGet[]> {
+    return this.Model.find({ followers: id });
+  }
 }
 
 export default UserRepositoryMongo;

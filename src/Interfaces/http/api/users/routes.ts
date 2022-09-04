@@ -20,6 +20,8 @@ class UsersRoutes extends BaseRouter {
     this.router.put('/:id/follow', auth, handler.toggleFollowUser);
     this.router.put('/', auth, handler.putUser);
     this.router.get('/search', auth, handler.searchUsers);
+    this.router.get('/:id/followers', auth, handler.getFollowers);
+    this.router.get('/:id/following', auth, handler.getFollowing);
   }
 }
 
