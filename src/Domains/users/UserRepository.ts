@@ -29,8 +29,8 @@ export interface IUserRepository {
   editUser(payload: UserEdit): Promise<void>;
   searchUsers(text: string): Promise<IUserGet[]>;
   getUsernameById(id: string): Promise<string>;
-  getFollowers(id: string): Promise<UserGet[]>;
-  getFollowing(id: string): Promise<UserGet[]>;
+  getFollowers(id: string): Promise<IUserGet[]>;
+  getFollowing(id: string): Promise<IUserGet[]>;
 }
 
 abstract class UserRepository implements IUserRepository {
@@ -51,8 +51,8 @@ abstract class UserRepository implements IUserRepository {
   abstract editUser(payload: UserEdit): Promise<void>;
   abstract searchUsers(text: string): Promise<IUserGet[]>;
   abstract getUsernameById(id: string): Promise<string>;
-  abstract getFollowers(id: string): Promise<UserGet[]>;
-  abstract getFollowing(id: string): Promise<UserGet[]>;
+  abstract getFollowers(id: string): Promise<IUserGet[]>;
+  abstract getFollowing(id: string): Promise<IUserGet[]>;
 }
 
 export default UserRepository;

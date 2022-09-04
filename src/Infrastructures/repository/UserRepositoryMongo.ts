@@ -124,13 +124,30 @@ class UserRepositoryMongo extends UserRepository {
     return username;
   }
 
-  async getFollowers(id: string): Promise<UserGet[]> {
+  async getFollowers(id: string): Promise<IUserGet[]> {
     const user = await this.Model.findById(id).populate('followers');
-    return user.followers;
+    return user.followers.map((u: any) => ({
+      id: u._id,
+      username: u.username,
+      profilePhoto: u.profilePhoto,
+      fullName: u.fullName,
+      isFollowed:
+        u.followers.filter((follow: Types.ObjectId) => follow.toString() === id)
+          .length > 0,
+    }));
   }
 
-  async getFollowing(id: string): Promise<UserGet[]> {
-    return this.Model.find({ followers: id });
+  async getFollowing(id: string): Promise<IUserGet[]> {
+    const users = await this.Model.find({ followers: id });
+    return users.map((u: any) => ({
+      id: u._id,
+      username: u.username,
+      profilePhoto: u.profilePhoto,
+      fullName: u.fullName,
+      isFollowed:
+        u.followers.filter((follow: Types.ObjectId) => follow.toString() === id)
+          .length > 0,
+    }));
   }
 }
 
