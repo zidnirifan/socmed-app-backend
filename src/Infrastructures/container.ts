@@ -66,6 +66,7 @@ import ReadNotif from '../Applications/use_case/ReadNotif';
 import GetFollowers from '../Applications/use_case/GetFollowers';
 import GetFollowing from '../Applications/use_case/GetFollowing';
 import GetSuggestedUsers from '../Applications/use_case/GetSuggestedUsers';
+import GetUserById from '../Applications/use_case/GetUserById';
 
 const container = createContainer();
 
@@ -636,6 +637,19 @@ container.register([
   {
     key: GetSuggestedUsers.name,
     Class: GetSuggestedUsers,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'userRepository',
+          internal: UserRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: GetUserById.name,
+    Class: GetUserById,
     parameter: {
       injectType: 'destructuring',
       dependencies: [

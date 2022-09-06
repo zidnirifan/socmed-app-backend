@@ -63,7 +63,7 @@ class UserRepositoryMongo extends UserRepository {
     await this.Model.updateOne({ _id: id }, { profilePhoto });
   }
 
-  async getUserById(id: string, userId: string): Promise<UserGet> {
+  async getUserProfileById(id: string, userId: string): Promise<UserGet> {
     const { _id, username, fullName, profilePhoto, bio, followers } =
       await this.Model.findOne({ _id: id }, '-password');
 
@@ -155,7 +155,7 @@ class UserRepositoryMongo extends UserRepository {
   async getSuggested(id: string): Promise<IUserGet[]> {
     const users = await this.Model.aggregate([
       {
-        $sample: { size: 7 },
+        $sample: { size: 10 },
       },
       {
         $project: {
@@ -179,6 +179,20 @@ class UserRepositoryMongo extends UserRepository {
       ...u,
       isFollowed: !!u.isFollowed[0],
     })) as unknown as IUserGet[];
+  }
+
+  async getUserById(ownId: string, id: string): Promise<IUserGet> {
+    const user = await this.Model.findById(id);
+    return {
+      id: user._id,
+      username: user.username,
+      profilePhoto: user.profilePhoto,
+      fullName: user.fullName,
+      isFollowed:
+        user.followers.filter(
+          (follow: Types.ObjectId) => follow.toString() === ownId
+        ).length > 0,
+    };
   }
 }
 
