@@ -64,6 +64,7 @@ class AddNotif {
         userId,
         to: userIdPost,
         type,
+        postId,
       });
       this.notifRepository.addNotif(notif);
 
@@ -81,6 +82,7 @@ class AddNotif {
         type,
         comment,
         commentId,
+        postId,
       });
       this.notifRepository.addNotif(notif);
 
@@ -117,6 +119,7 @@ class AddNotif {
         to: userIdComment,
         type,
         commentId,
+        postId,
         comment,
       });
       this.notifRepository.addNotif(notif);

@@ -37,7 +37,7 @@ class Notif implements INotif {
     this.text = this.translateText(payload.type, payload.comment || '');
     this.type = payload.type;
     this.postId = payload.postId;
-    this.commentId = payload.postId;
+    this.commentId = payload.commentId;
   }
 
   private translateText(type: ITypeNotif, comment: string): string {

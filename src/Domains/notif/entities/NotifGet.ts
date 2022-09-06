@@ -3,6 +3,7 @@ type ITypeNotif = 'follow' | 'like' | 'comment';
 interface UserNotif {
   id: string;
   username: string;
+  profilePhoto: string;
 }
 
 export interface PayloadNotifGet {
@@ -47,7 +48,7 @@ class NotifGet implements INotifGet {
     this.text = payload.text;
     this.type = payload.type;
     this.postId = payload.postId;
-    this.commentId = payload.postId;
+    this.commentId = payload.commentId;
     this.createdAt = this.timeSince(payload.createdAt);
     this.isRead = payload.isRead;
   }
