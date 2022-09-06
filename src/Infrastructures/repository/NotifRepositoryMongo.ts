@@ -31,7 +31,7 @@ class NotifRepositoryMongo extends NotifRepository {
 
   async getNotifs(userId: string): Promise<PayloadNotifGet[]> {
     const result = await this.Model.find({ to: userId })
-      .populate('userId', 'username _id')
+      .populate('userId', 'username _id profilePhoto followers')
       .sort({
         createdAt: -1,
       });
@@ -39,7 +39,15 @@ class NotifRepositoryMongo extends NotifRepository {
     return result.map((n) => ({
       id: n._id,
       to: n.to,
-      user: { id: n.userId._id, username: n.userId.username },
+      user: {
+        id: n.userId._id,
+        username: n.userId.username,
+        profilePhoto: n.userId.profilePhoto,
+        isFollowed:
+          n.userId.followers.filter(
+            (follow: Types.ObjectId) => follow.toString() === userId
+          ).length > 0,
+      },
       text: n.text,
       type: n.type,
       postId: n.postId,
