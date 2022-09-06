@@ -197,7 +197,7 @@ describe('UserRepositoryMongo', () => {
     });
   });
 
-  describe('getUserById', () => {
+  describe('getUserProfileById', () => {
     it('should return user correctly', async () => {
       const userFollow = new UserModel({
         username: 'gedang',
@@ -220,7 +220,10 @@ describe('UserRepositoryMongo', () => {
 
       const userRepositoryMongo = new UserRepositoryMongo();
 
-      const resultUser = await userRepositoryMongo.getUserById(_id, 'user-123');
+      const resultUser = await userRepositoryMongo.getUserProfileById(
+        _id,
+        'user-123'
+      );
 
       expect(resultUser.id).toEqual(_id.toString());
       expect(resultUser.username).toEqual(user.username);

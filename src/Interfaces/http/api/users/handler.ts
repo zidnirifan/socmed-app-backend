@@ -10,6 +10,7 @@ import SearchUsers from '../../../../Applications/use_case/SearchUsers';
 import GetFollowers from '../../../../Applications/use_case/GetFollowers';
 import GetFollowing from '../../../../Applications/use_case/GetFollowing';
 import GetSuggestedUsers from '../../../../Applications/use_case/GetSuggestedUsers';
+import GetUserById from '../../../../Applications/use_case/GetUserById';
 
 class UsersHandler extends BaseHandler {
   async postUserHandler(
@@ -209,6 +210,21 @@ class UsersHandler extends BaseHandler {
       status: 'success',
       data: {
         users,
+      },
+    });
+  }
+
+  async getUserById(req: RequestAuth, res: Response): Promise<Response | void> {
+    const { id } = req.params;
+    const ownUserId = req.auth?.id;
+
+    const getUserById = this.container.getInstance(GetUserById.name);
+    const user = await getUserById.execute(ownUserId, id || ownUserId);
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        user,
       },
     });
   }

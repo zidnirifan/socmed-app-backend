@@ -7,6 +7,9 @@ import { IUserGet } from '../entities/UserGet';
 import UserRepository, { UserGet } from '../UserRepository';
 
 class MockUserRepository extends UserRepository {
+  getUserById(ownId: string, id: string): Promise<IUserGet> {
+    throw new Error('Method not implemented.');
+  }
   verifyAvailableUsername(username: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
@@ -28,7 +31,7 @@ class MockUserRepository extends UserRepository {
   editProfilePhotoById(id: string, profilePhoto: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  getUserById(id: string, userId: string): Promise<UserGet> {
+  getUserProfileById(id: string, userId: string): Promise<UserGet> {
     throw new Error('Method not implemented.');
   }
   isUserFollowed(payload: PayloadFollowUser): Promise<boolean> {

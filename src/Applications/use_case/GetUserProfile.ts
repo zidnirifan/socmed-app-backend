@@ -21,7 +21,7 @@ class GetUserProfile {
   async execute(id: string, userId: string): Promise<IUserProfile> {
     await this.userRepository.isUserExistById(id);
 
-    const user = await this.userRepository.getUserById(id, userId);
+    const user = await this.userRepository.getUserProfileById(id, userId);
     const postMedia = await this.postRepository.getPostMediaByUserId(id);
 
     return new UserProfile({

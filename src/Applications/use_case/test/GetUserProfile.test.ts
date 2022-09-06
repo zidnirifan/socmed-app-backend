@@ -33,7 +33,9 @@ describe('GetUserProfile use case', () => {
     const mockPostRepository = new MockPostRepository();
 
     mockUserRepository.isUserExistById = jest.fn(() => Promise.resolve());
-    mockUserRepository.getUserById = jest.fn(() => Promise.resolve(user));
+    mockUserRepository.getUserProfileById = jest.fn(() =>
+      Promise.resolve(user)
+    );
     mockPostRepository.getPostMediaByUserId = jest.fn(() =>
       Promise.resolve(posts)
     );
@@ -48,7 +50,7 @@ describe('GetUserProfile use case', () => {
     expect(userProfile).toBeInstanceOf(UserProfile);
     expect(userProfile).toEqual(expectedUserProfile);
     expect(mockUserRepository.isUserExistById).toBeCalledWith(id);
-    expect(mockUserRepository.getUserById).toBeCalledWith(id, userId);
+    expect(mockUserRepository.getUserProfileById).toBeCalledWith(id, userId);
     expect(mockPostRepository.getPostMediaByUserId).toBeCalledWith(id);
   });
 });
