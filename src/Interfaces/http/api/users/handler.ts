@@ -11,6 +11,7 @@ import GetFollowers from '../../../../Applications/use_case/GetFollowers';
 import GetFollowing from '../../../../Applications/use_case/GetFollowing';
 import GetSuggestedUsers from '../../../../Applications/use_case/GetSuggestedUsers';
 import GetUserById from '../../../../Applications/use_case/GetUserById';
+import EditUserBio from '../../../../Applications/use_case/EditUserBio';
 
 class UsersHandler extends BaseHandler {
   async postUserHandler(
@@ -241,6 +242,27 @@ class UsersHandler extends BaseHandler {
         data: {
           user,
         },
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  async editUserBio(
+    req: RequestAuth,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      const userId = req.auth?.id;
+      const { bio } = req.body;
+
+      const editUserBio = this.container.getInstance(EditUserBio.name);
+      await editUserBio.execute(userId, bio);
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'bio updated successfully',
       });
     } catch (error) {
       return next(error);

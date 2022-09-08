@@ -194,6 +194,10 @@ class UserRepositoryMongo extends UserRepository {
         ).length > 0,
     };
   }
+
+  async editUserBio(id: string, bio: string): Promise<void> {
+    await this.Model.updateOne({ _id: id }, { bio });
+  }
 }
 
 export default UserRepositoryMongo;

@@ -33,6 +33,7 @@ export interface IUserRepository {
   getFollowing(ownId: string, id: string): Promise<IUserGet[]>;
   getSuggested(id: string): Promise<IUserGet[]>;
   getUserById(ownId: string, id: string): Promise<IUserGet>;
+  editUserBio(id: string, bio: string): Promise<void>;
 }
 
 abstract class UserRepository implements IUserRepository {
@@ -57,6 +58,7 @@ abstract class UserRepository implements IUserRepository {
   abstract getFollowing(ownId: string, id: string): Promise<IUserGet[]>;
   abstract getSuggested(id: string): Promise<IUserGet[]>;
   abstract getUserById(ownId: string, id: string): Promise<IUserGet>;
+  abstract editUserBio(id: string, bio: string): Promise<void>;
 }
 
 export default UserRepository;

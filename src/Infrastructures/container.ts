@@ -67,6 +67,7 @@ import GetFollowers from '../Applications/use_case/GetFollowers';
 import GetFollowing from '../Applications/use_case/GetFollowing';
 import GetSuggestedUsers from '../Applications/use_case/GetSuggestedUsers';
 import GetUserById from '../Applications/use_case/GetUserById';
+import EditUserBio from '../Applications/use_case/EditUserBio';
 
 const container = createContainer();
 
@@ -650,6 +651,19 @@ container.register([
   {
     key: GetUserById.name,
     Class: GetUserById,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'userRepository',
+          internal: UserRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: EditUserBio.name,
+    Class: EditUserBio,
     parameter: {
       injectType: 'destructuring',
       dependencies: [
