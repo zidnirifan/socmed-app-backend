@@ -20,10 +20,12 @@ const { app } = new ExpressServer(container);
 const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
-  cors: { origin: ['http://localhost:3000', 'https://insapgan.netlify.app'] },
+  cors: { origin: config.cors_origin },
 });
 
-db.on('open', () => {});
+db.on('open', () => {
+  console.log('database connected');
+});
 
 io.on('connection', (socket: Socket) => {
   roomSocket(socket);

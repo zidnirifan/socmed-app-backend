@@ -11,6 +11,7 @@ import GetFollowers from '../../../../Applications/use_case/GetFollowers';
 import GetFollowing from '../../../../Applications/use_case/GetFollowing';
 import GetSuggestedUsers from '../../../../Applications/use_case/GetSuggestedUsers';
 import GetUserById from '../../../../Applications/use_case/GetUserById';
+import EditUserBio from '../../../../Applications/use_case/EditUserBio';
 
 class UsersHandler extends BaseHandler {
   async postUserHandler(
@@ -161,38 +162,48 @@ class UsersHandler extends BaseHandler {
 
   async getFollowers(
     req: RequestAuth,
-    res: Response
+    res: Response,
+    next: NextFunction
   ): Promise<Response | void> {
-    const { id } = req.params;
-    const ownUserId = req.auth?.id;
+    try {
+      const { id } = req.params;
+      const ownUserId = req.auth?.id;
 
-    const getFollowers = this.container.getInstance(GetFollowers.name);
-    const users = await getFollowers.execute(ownUserId, id);
+      const getFollowers = this.container.getInstance(GetFollowers.name);
+      const users = await getFollowers.execute(ownUserId, id);
 
-    return res.status(200).json({
-      status: 'success',
-      data: {
-        users,
-      },
-    });
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          users,
+        },
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 
   async getFollowing(
     req: RequestAuth,
-    res: Response
+    res: Response,
+    next: NextFunction
   ): Promise<Response | void> {
-    const { id } = req.params;
-    const ownUserId = req.auth?.id;
+    try {
+      const { id } = req.params;
+      const ownUserId = req.auth?.id;
 
-    const getFollowing = this.container.getInstance(GetFollowing.name);
-    const users = await getFollowing.execute(ownUserId, id);
+      const getFollowing = this.container.getInstance(GetFollowing.name);
+      const users = await getFollowing.execute(ownUserId, id);
 
-    return res.status(200).json({
-      status: 'success',
-      data: {
-        users,
-      },
-    });
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          users,
+        },
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 
   async getSuggested(
@@ -214,19 +225,48 @@ class UsersHandler extends BaseHandler {
     });
   }
 
-  async getUserById(req: RequestAuth, res: Response): Promise<Response | void> {
-    const { id } = req.params;
-    const ownUserId = req.auth?.id;
+  async getUserById(
+    req: RequestAuth,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      const { id } = req.params;
+      const ownUserId = req.auth?.id;
 
-    const getUserById = this.container.getInstance(GetUserById.name);
-    const user = await getUserById.execute(ownUserId, id || ownUserId);
+      const getUserById = this.container.getInstance(GetUserById.name);
+      const user = await getUserById.execute(ownUserId, id || ownUserId);
 
-    return res.status(200).json({
-      status: 'success',
-      data: {
-        user,
-      },
-    });
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          user,
+        },
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  async editUserBio(
+    req: RequestAuth,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      const userId = req.auth?.id;
+      const { bio } = req.body;
+
+      const editUserBio = this.container.getInstance(EditUserBio.name);
+      await editUserBio.execute(userId, bio);
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'bio updated successfully',
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 }
 

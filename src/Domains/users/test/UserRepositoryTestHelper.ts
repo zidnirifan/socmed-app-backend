@@ -7,6 +7,9 @@ import { IUserGet } from '../entities/UserGet';
 import UserRepository, { UserGet } from '../UserRepository';
 
 class MockUserRepository extends UserRepository {
+  editUserBio(id: string, bio: string): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
   getUserById(ownId: string, id: string): Promise<IUserGet> {
     throw new Error('Method not implemented.');
   }

@@ -12,6 +12,7 @@ import PostsRoutes from '../../Interfaces/http/api/post/routes';
 import CommentsRoutes from '../../Interfaces/http/api/comments/routes';
 import ChatsRoutes from '../../Interfaces/http/api/chats/routes';
 import NotifsRoutes from '../../Interfaces/http/api/notifs/routes';
+import config from '../../Commons/config';
 
 class Server {
   app: Application;
@@ -30,7 +31,7 @@ class Server {
     this.app.use(bodyParser.json());
     this.app.use(morgan('dev'));
     this.app.use(compression());
-    this.app.use(cors());
+    this.app.use(cors({ origin: config.cors_origin }));
     this.app.use(express.static(path.join(__dirname, '../../../public')));
   }
 

@@ -25,6 +25,7 @@ class UsersRoutes extends BaseRouter {
     this.router.get('/suggested', auth, handler.getSuggested);
     this.router.get('/:id', auth, handler.getUserById);
     this.router.get('/', auth, handler.getUserById);
+    this.router.put('/bio', auth, handler.editUserBio);
   }
 }
 
