@@ -116,10 +116,11 @@ class PostsHandler extends BaseHandler {
     req: RequestAuth,
     res: Response
   ): Promise<Response> {
+    const { exceptPosts } = req.body;
     const getExplorePostsMedia = this.container.getInstance(
       GetExplorePostsMedia.name
     );
-    const posts = await getExplorePostsMedia.execute();
+    const posts = await getExplorePostsMedia.execute(exceptPosts || []);
 
     return res.status(200).json({
       status: 'success',

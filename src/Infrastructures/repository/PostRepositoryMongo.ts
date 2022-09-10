@@ -245,8 +245,13 @@ class PostRepositoryMongo extends PostRepository {
     })) as unknown as PayloadPostGet[];
   }
 
-  async getExplorePostsMedia(): Promise<PostMedia[]> {
+  async getExplorePostsMedia(exceptPosts: string[]): Promise<PostMedia[]> {
+    const exceptPostsMapped = exceptPosts.map((e) => new Types.ObjectId(e));
     return this.Model.aggregate([
+      {
+        // avoid duplicate posts
+        $match: { _id: { $nin: exceptPostsMapped } },
+      },
       {
         $sample: { size: 15 },
       },

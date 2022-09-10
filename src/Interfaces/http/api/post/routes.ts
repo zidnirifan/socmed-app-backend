@@ -19,7 +19,7 @@ class PostsRoutes extends BaseRouter {
     // post method to send body but this route not save data
     this.router.post('/explore', auth, handler.getExplorePosts);
     // post method to send body but this route not save data
-    this.router.get('/explore/media', auth, handler.getExplorePostsMedia);
+    this.router.post('/explore/media', auth, handler.getExplorePostsMedia);
     this.router.put('/:id/like', auth, handler.toggleLike);
   }
 }

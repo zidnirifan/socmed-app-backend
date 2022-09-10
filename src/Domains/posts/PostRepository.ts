@@ -30,7 +30,7 @@ export interface IPostRepository {
     userId: string,
     exceptPosts?: string[]
   ): Promise<PayloadPostGet[]>;
-  getExplorePostsMedia(): Promise<PostMedia[]>;
+  getExplorePostsMedia(exceptPosts: string[]): Promise<PostMedia[]>;
   getUserIdPost(id: string): Promise<string>;
 }
 
@@ -47,7 +47,7 @@ abstract class PostRepository implements IPostRepository {
     userId: string,
     exceptPosts?: string[]
   ): Promise<PayloadPostGet[]>;
-  abstract getExplorePostsMedia(): Promise<PostMedia[]>;
+  abstract getExplorePostsMedia(exceptPosts: string[]): Promise<PostMedia[]>;
   abstract getUserIdPost(id: string): Promise<string>;
 }
 
