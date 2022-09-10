@@ -26,7 +26,10 @@ export interface IPostRepository {
   isPostLiked(payload: PostLikePayload): Promise<boolean>;
   likePost(payload: PostLikePayload): Promise<void>;
   unlikePost(payload: PostLikePayload): Promise<void>;
-  getExplorePosts(userId: string): Promise<PayloadPostGet[]>;
+  getExplorePosts(
+    userId: string,
+    exceptPosts?: string[]
+  ): Promise<PayloadPostGet[]>;
   getExplorePostsMedia(): Promise<PostMedia[]>;
   getUserIdPost(id: string): Promise<string>;
 }
@@ -40,7 +43,10 @@ abstract class PostRepository implements IPostRepository {
   abstract isPostLiked(payload: PostLikePayload): Promise<boolean>;
   abstract likePost(payload: PostLikePayload): Promise<void>;
   abstract unlikePost(payload: PostLikePayload): Promise<void>;
-  abstract getExplorePosts(userId: string): Promise<PayloadPostGet[]>;
+  abstract getExplorePosts(
+    userId: string,
+    exceptPosts?: string[]
+  ): Promise<PayloadPostGet[]>;
   abstract getExplorePostsMedia(): Promise<PostMedia[]>;
   abstract getUserIdPost(id: string): Promise<string>;
 }

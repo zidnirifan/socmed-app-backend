@@ -12,8 +12,13 @@ class GetExplorePosts {
     this.postRepository = dependency.postRepository;
   }
 
-  async execute(userId: string): Promise<IPostGet[]> {
-    const posts = await this.postRepository.getExplorePosts(userId);
+  async execute(userId: string, exceptPosts: string[]): Promise<IPostGet[]> {
+    // exceptPosts for posts not duplicate
+    const posts = await this.postRepository.getExplorePosts(
+      userId,
+      exceptPosts
+    );
+
     return posts.map((p) => new PostGet(p));
   }
 }
