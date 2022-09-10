@@ -102,8 +102,9 @@ class PostsHandler extends BaseHandler {
   async getExplorePosts(req: RequestAuth, res: Response): Promise<Response> {
     /* istanbul ignore next */
     const userId = req.auth?.id;
+    const { exceptPosts } = req.body;
     const getExplorePosts = this.container.getInstance(GetExplorePosts.name);
-    const posts = await getExplorePosts.execute(userId);
+    const posts = await getExplorePosts.execute(userId, exceptPosts || []);
 
     return res.status(200).json({
       status: 'success',
@@ -115,10 +116,11 @@ class PostsHandler extends BaseHandler {
     req: RequestAuth,
     res: Response
   ): Promise<Response> {
+    const { exceptPosts } = req.body;
     const getExplorePostsMedia = this.container.getInstance(
       GetExplorePostsMedia.name
     );
-    const posts = await getExplorePostsMedia.execute();
+    const posts = await getExplorePostsMedia.execute(exceptPosts || []);
 
     return res.status(200).json({
       status: 'success',

@@ -16,8 +16,8 @@ class GetExplorePostsMedia {
     this.postRepository = dependency.postRepository;
   }
 
-  async execute(): Promise<PostMedia[]> {
-    return this.postRepository.getExplorePostsMedia();
+  async execute(exceptPosts: string[]): Promise<PostMedia[]> {
+    return this.postRepository.getExplorePostsMedia(exceptPosts);
   }
 }
 
