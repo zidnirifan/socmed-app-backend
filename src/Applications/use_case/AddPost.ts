@@ -27,7 +27,7 @@ class AddPost {
   async execute(payload: IPost): Promise<string> {
     this.validator.validate(payload);
     const post = new Post(payload);
-    const imgWidth = 400;
+    const imgWidth = 700;
 
     const buffers = await Promise.all(
       post.media.map(async (e) => {
