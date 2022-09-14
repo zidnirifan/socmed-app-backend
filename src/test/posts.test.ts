@@ -178,7 +178,7 @@ describe('/posts endpoint', () => {
       const { token } = await testHelper.postPost();
 
       const { statusCode, body } = await supertest(app)
-        .get('/posts/explore')
+        .post('/posts/explore')
         .set('Authorization', `Bearer ${token}`);
 
       expect(statusCode).toEqual(200);
@@ -200,7 +200,7 @@ describe('/posts endpoint', () => {
       const { token } = await testHelper.getToken();
 
       const { statusCode, body } = await supertest(app)
-        .get('/posts/explore')
+        .post('/posts/explore')
         .set('Authorization', `Bearer ${token}`);
 
       expect(statusCode).toEqual(200);
@@ -214,7 +214,7 @@ describe('/posts endpoint', () => {
       const { token } = await testHelper.postPost();
 
       const { statusCode, body } = await supertest(app)
-        .get('/posts/explore/media')
+        .post('/posts/explore/media')
         .set('Authorization', `Bearer ${token}`);
 
       expect(statusCode).toEqual(200);
@@ -227,7 +227,7 @@ describe('/posts endpoint', () => {
       const { token } = await testHelper.getToken();
 
       const { statusCode, body } = await supertest(app)
-        .get('/posts/explore/media')
+        .post('/posts/explore/media')
         .set('Authorization', `Bearer ${token}`);
 
       expect(statusCode).toEqual(200);
