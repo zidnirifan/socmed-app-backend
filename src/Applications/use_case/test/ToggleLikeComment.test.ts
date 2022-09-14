@@ -1,4 +1,5 @@
 import MockCommentRepository from '../../../Domains/comments/test/CommentRepositoryTestHelper';
+import MockSocketClient from '../../socketClient/test/SocketClientTestHelper';
 import ToggleLikeComment from '../ToggleLikeComment';
 
 describe('ToggleLikeComment use case', () => {
@@ -10,6 +11,7 @@ describe('ToggleLikeComment use case', () => {
     };
 
     const mockCommentRepository = new MockCommentRepository();
+    const mockSocketClient = new MockSocketClient();
 
     // Mocking
     mockCommentRepository.isCommentExist = jest.fn(() => Promise.resolve());
@@ -18,10 +20,12 @@ describe('ToggleLikeComment use case', () => {
     );
     mockCommentRepository.likeComment = jest.fn(() => Promise.resolve());
     mockCommentRepository.unlikeComment = jest.fn(() => Promise.resolve());
+    mockSocketClient.sendNotif = jest.fn(() => Promise.resolve());
 
     // Create use case instancea
     const toggleLike = new ToggleLikeComment({
       commentRepository: mockCommentRepository,
+      socketClient: mockSocketClient,
     });
 
     // Action
@@ -45,16 +49,19 @@ describe('ToggleLikeComment use case', () => {
     };
 
     const mockCommentRepository = new MockCommentRepository();
+    const mockSocketClient = new MockSocketClient();
 
     // Mocking
     mockCommentRepository.isCommentExist = jest.fn(() => Promise.resolve());
     mockCommentRepository.isCommentLiked = jest.fn(() => Promise.resolve(true));
     mockCommentRepository.unlikeComment = jest.fn(() => Promise.resolve());
     mockCommentRepository.likeComment = jest.fn(() => Promise.resolve());
+    mockSocketClient.sendNotif = jest.fn(() => Promise.resolve());
 
     // Create use case instancea
     const toggleLike = new ToggleLikeComment({
       commentRepository: mockCommentRepository,
+      socketClient: mockSocketClient,
     });
 
     // Action

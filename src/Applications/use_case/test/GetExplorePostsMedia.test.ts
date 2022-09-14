@@ -8,6 +8,7 @@ describe('GetExplorePostsMedia use case', () => {
       id: 'post-123',
       media: 'http://img.com/img.jpg',
     };
+    const exceptPosts = ['post-321'];
 
     const mockPostRepository = new MockPostRepository();
 
@@ -22,10 +23,10 @@ describe('GetExplorePostsMedia use case', () => {
     });
 
     // Action
-    const posts = await getExplorePostsMedia.execute();
+    const posts = await getExplorePostsMedia.execute(['post-321']);
 
     // Assert
     expect(posts[0]).toEqual(postMedia);
-    expect(mockPostRepository.getExplorePostsMedia).toBeCalled();
+    expect(mockPostRepository.getExplorePostsMedia).toBeCalledWith(exceptPosts);
   });
 });

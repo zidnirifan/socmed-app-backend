@@ -1,4 +1,5 @@
 import MockUserRepository from '../../../Domains/users/test/UserRepositoryTestHelper';
+import MockSocketClient from '../../socketClient/test/SocketClientTestHelper';
 import ToggleFollowUser from '../ToggleFollowUser';
 
 describe('ToggleFollowUser use case', () => {
@@ -10,16 +11,19 @@ describe('ToggleFollowUser use case', () => {
     };
 
     const mockUserRepository = new MockUserRepository();
+    const mockSocketClient = new MockSocketClient();
 
     // Mocking
     mockUserRepository.isUserExistById = jest.fn(() => Promise.resolve());
     mockUserRepository.isUserFollowed = jest.fn(() => Promise.resolve(false));
     mockUserRepository.followUser = jest.fn(() => Promise.resolve());
     mockUserRepository.unfollowUser = jest.fn(() => Promise.resolve());
+    mockSocketClient.sendNotif = jest.fn(() => Promise.resolve());
 
     // Create use case instancea
     const toggleFollow = new ToggleFollowUser({
       userRepository: mockUserRepository,
+      socketClient: mockSocketClient,
     });
 
     // Action
@@ -43,16 +47,19 @@ describe('ToggleFollowUser use case', () => {
     };
 
     const mockUserRepository = new MockUserRepository();
+    const mockSocketClient = new MockSocketClient();
 
     // Mocking
     mockUserRepository.isUserExistById = jest.fn(() => Promise.resolve());
     mockUserRepository.isUserFollowed = jest.fn(() => Promise.resolve(true));
     mockUserRepository.unfollowUser = jest.fn(() => Promise.resolve());
     mockUserRepository.followUser = jest.fn(() => Promise.resolve());
+    mockSocketClient.sendNotif = jest.fn(() => Promise.resolve());
 
     // Create use case instancea
     const toggleFollow = new ToggleFollowUser({
       userRepository: mockUserRepository,
+      socketClient: mockSocketClient,
     });
 
     // Action

@@ -3,6 +3,7 @@ import MockCommentRepository from '../../../Domains/comments/test/CommentReposit
 import MockValidator from '../../validator/test/ValidatorTestHelper';
 import MockPostRepository from '../../../Domains/posts/test/PostRepositoryTestHelper';
 import AddComment from '../AddComment';
+import MockSocketClient from '../../socketClient/test/SocketClientTestHelper';
 
 describe('AddComment use case', () => {
   it('should orchestrating the add comment action correctly', async () => {
@@ -16,16 +17,19 @@ describe('AddComment use case', () => {
     const mockCommentRepository = new MockCommentRepository();
     const mockValidator = new MockValidator();
     const mockPostRepository = new MockPostRepository();
+    const mockSocketClient = new MockSocketClient();
 
     mockCommentRepository.addComment = jest.fn(() => Promise.resolve(id));
     mockCommentRepository.isCommentExist = jest.fn(() => Promise.resolve());
     mockValidator.validate = jest.fn(() => {});
     mockPostRepository.isPostExist = jest.fn(() => Promise.resolve());
+    mockSocketClient.sendNotif = jest.fn(() => Promise.resolve());
 
     const addCommentUseCase = new AddComment({
       commentRepository: mockCommentRepository,
       postRepository: mockPostRepository,
       validator: mockValidator,
+      socketClient: mockSocketClient,
     });
 
     const commentId = await addCommentUseCase.execute(useCasePayload);
@@ -53,16 +57,19 @@ describe('AddComment use case', () => {
     const mockCommentRepository = new MockCommentRepository();
     const mockValidator = new MockValidator();
     const mockPostRepository = new MockPostRepository();
+    const mockSocketClient = new MockSocketClient();
 
     mockCommentRepository.addComment = jest.fn(() => Promise.resolve(id));
     mockCommentRepository.isCommentExist = jest.fn(() => Promise.resolve());
     mockValidator.validate = jest.fn(() => {});
     mockPostRepository.isPostExist = jest.fn(() => Promise.resolve());
+    mockSocketClient.sendNotif = jest.fn(() => Promise.resolve());
 
     const addCommentUseCase = new AddComment({
       commentRepository: mockCommentRepository,
       postRepository: mockPostRepository,
       validator: mockValidator,
+      socketClient: mockSocketClient,
     });
 
     const commentId = await addCommentUseCase.execute(useCasePayload);
