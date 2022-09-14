@@ -346,7 +346,9 @@ describe('PostRepositoryMongo', () => {
 
       const postRepositoryMongo = new PostRepositoryMongo();
 
-      const posts = await postRepositoryMongo.getExplorePostsMedia();
+      const posts = await postRepositoryMongo.getExplorePostsMedia([
+        '62b55fb7f96df4d764f67233',
+      ]);
 
       expect(posts[0]).toHaveProperty('id');
       expect(posts[0]).toHaveProperty('media');
