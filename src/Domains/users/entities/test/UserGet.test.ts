@@ -7,6 +7,7 @@ describe('a UserGet entities', () => {
       username: 'jhondoe',
       fullName: 'Jhon Doe',
       profilePhoto: 'img.jpg',
+      isFollowed: false,
     };
 
     const { id, username, fullName, profilePhoto } = new UserGet(payload);
