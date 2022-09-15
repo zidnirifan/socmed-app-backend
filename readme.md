@@ -77,8 +77,8 @@ $ npm run test:watch
 │  │  ├─ security/  →  Concrete object/implementation of tools and helpers in terms of security
 │  │  ├─ container.js →  Container all instances of the service usedaplikasi
 │  ├─  Interfaces/  →  Interface  Adapter.  Here contains routes and handlers
+│  ├─  tests/  →  Functional test and test helpers
 │  ├─ index.ts →  Entry point app
-│  ├─ tests/  →  Functional test and test helpers
 ├─  .env →  Environment variable
 ├─  package.json →  Project  Manifest
 ```
