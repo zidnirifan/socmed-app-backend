@@ -1,4 +1,5 @@
 import MockPostRepository from '../../../Domains/posts/test/PostRepositoryTestHelper';
+import MockSocketClient from '../../socketClient/test/SocketClientTestHelper';
 import ToggleLikePost from '../ToggleLikePost';
 
 describe('ToggleLikePost use case', () => {
@@ -10,16 +11,19 @@ describe('ToggleLikePost use case', () => {
     };
 
     const mockPostRepository = new MockPostRepository();
+    const mockSocketClient = new MockSocketClient();
 
     // Mocking
     mockPostRepository.isPostExist = jest.fn(() => Promise.resolve());
     mockPostRepository.isPostLiked = jest.fn(() => Promise.resolve(false));
     mockPostRepository.likePost = jest.fn(() => Promise.resolve());
     mockPostRepository.unlikePost = jest.fn(() => Promise.resolve());
+    mockSocketClient.sendNotif = jest.fn(() => Promise.resolve());
 
     // Create use case instancea
     const toggleLike = new ToggleLikePost({
       postRepository: mockPostRepository,
+      socketClient: mockSocketClient,
     });
 
     // Action
@@ -41,16 +45,19 @@ describe('ToggleLikePost use case', () => {
     };
 
     const mockPostRepository = new MockPostRepository();
+    const mockSocketClient = new MockSocketClient();
 
     // Mocking
     mockPostRepository.isPostExist = jest.fn(() => Promise.resolve());
     mockPostRepository.isPostLiked = jest.fn(() => Promise.resolve(true));
     mockPostRepository.unlikePost = jest.fn(() => Promise.resolve());
     mockPostRepository.likePost = jest.fn(() => Promise.resolve());
+    mockSocketClient.sendNotif = jest.fn(() => Promise.resolve());
 
     // Create use case instancea
     const toggleLike = new ToggleLikePost({
       postRepository: mockPostRepository,
+      socketClient: mockSocketClient,
     });
 
     // Action

@@ -52,7 +52,7 @@ describe('AddPost use case', () => {
     expect(mockValidator.validate).toBeCalledWith(payload);
     expect(mockImageResizer.resizeImageToBuffer).toBeCalledWith(
       payload.media[0].path,
-      400
+      700
     );
     expect(mockStorage.writeFileFromBuffer).toBeCalled();
     expect(mockPostRepository.addPost).toBeCalledWith({

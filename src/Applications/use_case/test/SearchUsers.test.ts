@@ -12,6 +12,7 @@ describe('SearchUsers use case', () => {
       username: 'jhondoe',
       fullName: 'Jhon Doe',
       profilePhoto: 'img.jpg',
+      isFollowed: false,
     };
 
     const text = 'jhon';

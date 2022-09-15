@@ -7,6 +7,7 @@ describe('GetExplorePosts use case', () => {
     // Arrange
     const id = 'post-123';
     const userId = 'user-123';
+    const exceptPosts = ['post-321'];
 
     const postFromRepo = {
       id,
@@ -34,11 +35,14 @@ describe('GetExplorePosts use case', () => {
     });
 
     // Action
-    const posts = await getExplorePosts.execute(userId);
+    const posts = await getExplorePosts.execute(userId, exceptPosts);
 
     // Assert
     expect(posts[0]).toBeInstanceOf(PostGet);
     expect(posts[0]).toEqual(expectedPost);
-    expect(mockPostRepository.getExplorePosts).toBeCalledWith(userId);
+    expect(mockPostRepository.getExplorePosts).toBeCalledWith(
+      userId,
+      exceptPosts
+    );
   });
 });
