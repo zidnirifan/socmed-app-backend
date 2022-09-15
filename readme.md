@@ -1,6 +1,7 @@
 # API Social Media App (Instagram Clone)
 
 API for social media app
+API Documentation: https://documenter.getpostman.com/view/11078261/2s7YfGGJEP
 Source code frontend: https://github.com/zidnirifan/socmed-app-frontend
 
 ## Technologies
@@ -75,7 +76,7 @@ $ npm run test:watch
 │  │  ├─ container.js →  Container all instances of the service usedaplikasi
 │  ├─  Interfaces/  →  Interface  Adapter.  Here contains routes and handlers
 │  ├─ index.ts →  Entry point app
-├─ tests/  →  Functional test and test helpers
+│  ├─ tests/  →  Functional test and test helpers
 ├─  .env →  Environment variable
 ├─  package.json →  Project  Manifest
 ```
