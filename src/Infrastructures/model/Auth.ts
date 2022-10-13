@@ -1,12 +1,16 @@
-import { model, Schema } from 'mongoose';
+import { Document, model, Schema } from 'mongoose';
 
-const authSchema = new Schema({
+export interface Auth extends Document {
+  refreshToken: string;
+}
+
+const authSchema = new Schema<Auth>({
   refreshToken: {
     type: String,
     required: true,
   },
 });
 
-const AuthModel = model('Auth', authSchema);
+const AuthModel = model<Auth>('Auth', authSchema);
 
 export default AuthModel;

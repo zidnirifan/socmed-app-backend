@@ -23,11 +23,11 @@ describe('AuthRepositoryMongo', () => {
       const authRepositoryMongo = new AuthRepositoryMongo();
       await authRepositoryMongo.addRefreshToken(refreshToken);
 
-      const { refreshToken: tokenSaved } = await AuthModel.findOne({
+      const token = await AuthModel.findOne({
         refreshToken,
       });
 
-      expect(tokenSaved).toEqual(refreshToken);
+      expect(token?.refreshToken).toEqual(refreshToken);
     });
   });
 
