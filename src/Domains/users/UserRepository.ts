@@ -3,7 +3,7 @@ import { IUser } from './entities/User';
 import UserEdit from './entities/UserEdit';
 import { IUserGet } from './entities/UserGet';
 
-export interface UserGet {
+export interface UserProfileGet {
   id: string;
   username: string;
   fullName: string;
@@ -22,12 +22,12 @@ export interface IUserRepository {
   getPasswordByUsername(username: string): Promise<string>;
   getIdByUsername(username: string): Promise<string>;
   editProfilePhotoById(id: string, profilePhoto: string): Promise<void>;
-  getUserProfileById(id: string, userId: string): Promise<UserGet>;
+  getUserProfileById(id: string, userId: string): Promise<UserProfileGet>;
   isUserFollowed(payload: PayloadFollowUser): Promise<boolean>;
   followUser(payload: PayloadFollowUser): Promise<void>;
   unfollowUser(payload: PayloadFollowUser): Promise<void>;
   editUser(payload: UserEdit): Promise<void>;
-  searchUsers(text: string): Promise<IUserGet[]>;
+  searchUsers(text: string, userId: string): Promise<IUserGet[]>;
   getUsernameById(id: string): Promise<string>;
   getFollowers(ownId: string, id: string): Promise<IUserGet[]>;
   getFollowing(ownId: string, id: string): Promise<IUserGet[]>;
@@ -47,12 +47,15 @@ abstract class UserRepository implements IUserRepository {
     id: string,
     profilePhoto: string
   ): Promise<void>;
-  abstract getUserProfileById(id: string, userId: string): Promise<UserGet>;
+  abstract getUserProfileById(
+    id: string,
+    userId: string
+  ): Promise<UserProfileGet>;
   abstract isUserFollowed(payload: PayloadFollowUser): Promise<boolean>;
   abstract followUser(payload: PayloadFollowUser): Promise<void>;
   abstract unfollowUser(payload: PayloadFollowUser): Promise<void>;
   abstract editUser(payload: UserEdit): Promise<void>;
-  abstract searchUsers(text: string): Promise<IUserGet[]>;
+  abstract searchUsers(text: string, userId: string): Promise<IUserGet[]>;
   abstract getUsernameById(id: string): Promise<string>;
   abstract getFollowers(ownId: string, id: string): Promise<IUserGet[]>;
   abstract getFollowing(ownId: string, id: string): Promise<IUserGet[]>;

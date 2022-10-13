@@ -1,8 +1,10 @@
 import { Types } from 'mongoose';
 import { IUser } from '../../Domains/users/entities/User';
-import UserRepository, { UserGet } from '../../Domains/users/UserRepository';
+import UserRepository, {
+  UserProfileGet,
+} from '../../Domains/users/UserRepository';
 import InvariantError from '../../Commons/exceptions/InvariantError';
-import UserModel from '../model/User';
+import UserModel, { IUser as IUserModel } from '../model/User';
 import NotFoundError from '../../Commons/exceptions/NotFoundError';
 import { PayloadFollowUser } from '../../Applications/use_case/ToggleFollowUser';
 import UserEdit from '../../Domains/users/entities/UserEdit';
@@ -43,31 +45,39 @@ class UserRepositoryMongo extends UserRepository {
       throw new NotFoundError('user not found');
     }
 
-    const result = await this.Model.findById(id);
+    const result = await this.Model.countDocuments({ _id: id });
     if (!result) {
       throw new NotFoundError('user not found');
     }
   }
 
   async getPasswordByUsername(username: string): Promise<string> {
-    const { password } = await this.Model.findOne({ username }, 'password');
-    return password;
+    const result = await this.Model.findOne({ username }, 'password');
+    if (!result) throw new NotFoundError('user not found');
+    return result?.password;
   }
 
   async getIdByUsername(username: string): Promise<string> {
-    const { _id } = await this.Model.findOne({ username }, '_id');
-    return _id.toString();
+    const result = await this.Model.findOne({ username }, '_id');
+    if (!result) throw new NotFoundError('user not found');
+    return result?._id.toString();
   }
 
   async editProfilePhotoById(id: string, profilePhoto: string): Promise<void> {
     await this.Model.updateOne({ _id: id }, { profilePhoto });
   }
 
-  async getUserProfileById(id: string, userId: string): Promise<UserGet> {
-    const { _id, username, fullName, profilePhoto, bio, followers } =
-      await this.Model.findOne({ _id: id }, '-password');
+  async getUserProfileById(
+    id: string,
+    userId: string
+  ): Promise<UserProfileGet> {
+    const result = await this.Model.findOne({ _id: id }, '-password');
+
+    if (!result) throw new NotFoundError('user not found');
 
     const followingCount = await this.Model.countDocuments({ followers: id });
+
+    const { _id, username, fullName, profilePhoto, bio, followers } = result;
 
     return {
       id: _id.toString(),
@@ -78,9 +88,7 @@ class UserRepositoryMongo extends UserRepository {
       followersCount: followers.length,
       followingCount,
       isFollowed:
-        followers.filter(
-          (follow: Types.ObjectId) => follow.toString() === userId
-        ).length > 0,
+        followers.filter((follow) => follow.toString() === userId).length > 0,
     };
   }
 
@@ -110,45 +118,58 @@ class UserRepositoryMongo extends UserRepository {
     await this.Model.updateOne({ _id: id }, { username, fullName, bio });
   }
 
-  async searchUsers(text: string): Promise<IUserGet[]> {
-    return this.Model.find({
+  async searchUsers(text: string, userId: string): Promise<IUserGet[]> {
+    const result = await this.Model.find({
       $or: [
         { username: { $regex: text, $options: 'i' } },
         { fullName: { $regex: text, $options: 'i' } },
       ],
     }).limit(7);
+
+    return result.map(
+      ({ _id, username, fullName, profilePhoto, followers }) => ({
+        id: _id.toString(),
+        username,
+        fullName,
+        profilePhoto,
+        isFollowed:
+          followers.filter((follow) => follow.toString() === userId).length > 0,
+      })
+    );
   }
 
   async getUsernameById(id: string): Promise<string> {
-    const { username } = await this.Model.findOne({ _id: id }, 'username');
-    return username;
+    const result = await this.Model.findOne({ _id: id }, 'username');
+    if (!result) throw new NotFoundError('user not found');
+    return result?.username;
   }
 
   async getFollowers(ownId: string, id: string): Promise<IUserGet[]> {
-    const user = await this.Model.findById(id).populate('followers');
-    return user.followers.map((u: any) => ({
+    const user = await this.Model.findById(id).populate<{
+      followers: IUserModel[];
+    }>('followers');
+
+    if (!user) throw new NotFoundError('user not found');
+
+    return user?.followers.map((u) => ({
       id: u._id,
       username: u.username,
       profilePhoto: u.profilePhoto,
       fullName: u.fullName,
       isFollowed:
-        u.followers.filter(
-          (follow: Types.ObjectId) => follow.toString() === ownId
-        ).length > 0,
+        u.followers.filter((follow) => follow.toString() === ownId).length > 0,
     }));
   }
 
   async getFollowing(ownId: string, id: string): Promise<IUserGet[]> {
     const users = await this.Model.find({ followers: id });
-    return users.map((u: any) => ({
+    return users.map((u) => ({
       id: u._id,
       username: u.username,
       profilePhoto: u.profilePhoto,
       fullName: u.fullName,
       isFollowed:
-        u.followers.filter(
-          (follow: Types.ObjectId) => follow.toString() === ownId
-        ).length > 0,
+        u.followers.filter((follow) => follow.toString() === ownId).length > 0,
     }));
   }
 
@@ -183,15 +204,17 @@ class UserRepositoryMongo extends UserRepository {
 
   async getUserById(ownId: string, id: string): Promise<IUserGet> {
     const user = await this.Model.findById(id);
+
+    if (!user) throw new NotFoundError('user not found');
+
     return {
       id: user._id,
       username: user.username,
       profilePhoto: user.profilePhoto,
       fullName: user.fullName,
       isFollowed:
-        user.followers.filter(
-          (follow: Types.ObjectId) => follow.toString() === ownId
-        ).length > 0,
+        user.followers.filter((follow) => follow.toString() === ownId).length >
+        0,
     };
   }
 
