@@ -1,7 +1,7 @@
-import { model, ObjectId, Schema, Types } from 'mongoose';
+import { Document, model, ObjectId, Schema, Types } from 'mongoose';
 import { ITypeNotif } from '../../Domains/notif/entities/Notif';
 
-export interface INotifModel {
+export interface INotifModel extends Document {
   userId: ObjectId;
   to: ObjectId;
   text: string;
