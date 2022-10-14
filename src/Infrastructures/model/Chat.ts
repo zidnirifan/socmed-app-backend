@@ -1,6 +1,15 @@
-import { model, Schema, Types } from 'mongoose';
+import { model, ObjectId, Schema, Types } from 'mongoose';
 
-const chatSchema = new Schema(
+export interface IChatModel {
+  from: ObjectId;
+  to: ObjectId;
+  chat: string;
+  isRead: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const chatSchema = new Schema<IChatModel>(
   {
     from: { type: Types.ObjectId, ref: 'User' },
     to: { type: Types.ObjectId, ref: 'User' },
@@ -13,6 +22,6 @@ const chatSchema = new Schema(
   { timestamps: true }
 );
 
-const ChatModel = model('Chat', chatSchema);
+const ChatModel = model<IChatModel>('Chat', chatSchema);
 
 export default ChatModel;
