@@ -1,6 +1,6 @@
-import { model, ObjectId, Schema, Types } from 'mongoose';
+import { Document, model, ObjectId, Schema, Types } from 'mongoose';
 
-export interface IChatModel {
+export interface IChatModel extends Document {
   from: ObjectId;
   to: ObjectId;
   chat: string;

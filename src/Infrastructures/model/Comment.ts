@@ -1,6 +1,6 @@
-import { model, ObjectId, Schema, Types } from 'mongoose';
+import { Document, model, ObjectId, Schema, Types } from 'mongoose';
 
-export interface ICommentModel {
+export interface ICommentModel extends Document {
   userId: ObjectId;
   content: string;
   postId: ObjectId;

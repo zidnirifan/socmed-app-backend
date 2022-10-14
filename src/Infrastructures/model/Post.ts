@@ -1,6 +1,6 @@
-import { model, ObjectId, Schema, Types } from 'mongoose';
+import { Document, model, ObjectId, Schema, Types } from 'mongoose';
 
-interface IPostModel {
+interface IPostModel extends Document {
   userId: ObjectId;
   caption: string;
   media: string[];
