@@ -31,9 +31,9 @@ describe('PostRepositoryMongo', () => {
 
       const postSaved = await PostModel.findById(id);
 
-      expect(postSaved.userId.toString()).toEqual(post.userId);
-      expect(postSaved.caption).toEqual(post.caption);
-      expect(postSaved.media).toEqual(post.media);
+      expect(postSaved?.userId.toString()).toEqual(post.userId);
+      expect(postSaved?.caption).toEqual(post.caption);
+      expect(postSaved?.media).toEqual(post.media);
     });
   });
 
@@ -67,7 +67,7 @@ describe('PostRepositoryMongo', () => {
       const postRepositoryMongo = new PostRepositoryMongo();
 
       await expect(
-        postRepositoryMongo.isPostExist(_id)
+        postRepositoryMongo.isPostExist(_id as unknown as string)
       ).resolves.not.toThrowError(NotFoundError);
     });
   });
@@ -206,7 +206,10 @@ describe('PostRepositoryMongo', () => {
       const postInstanse = new PostModel(post);
       const { _id: postId } = await postInstanse.save();
 
-      const isLiked = await postRepositoryMongo.isPostLiked({ userId, postId });
+      const isLiked = await postRepositoryMongo.isPostLiked({
+        userId,
+        postId: postId as unknown as string,
+      });
 
       expect(isLiked).toEqual(true);
     });
@@ -231,7 +234,10 @@ describe('PostRepositoryMongo', () => {
       const postInstanse = new PostModel(post);
       const { _id: postId } = await postInstanse.save();
 
-      const isLiked = await postRepositoryMongo.isPostLiked({ userId, postId });
+      const isLiked = await postRepositoryMongo.isPostLiked({
+        userId,
+        postId: postId as unknown as string,
+      });
 
       expect(isLiked).toEqual(false);
     });
@@ -258,12 +264,15 @@ describe('PostRepositoryMongo', () => {
       const postInstanse = new PostModel(post);
       const { _id: postId } = await postInstanse.save();
 
-      await postRepositoryMongo.likePost({ userId, postId });
+      await postRepositoryMongo.likePost({
+        userId,
+        postId: postId as unknown as string,
+      });
 
       const postUpdated = await PostModel.findOne({ _id: postId });
 
-      expect(postUpdated.likes).toHaveLength(1);
-      expect(postUpdated.likes[0]).toEqual(userId);
+      expect(postUpdated?.likes).toHaveLength(1);
+      expect(postUpdated?.likes[0]).toEqual(userId);
     });
   });
 
@@ -289,11 +298,14 @@ describe('PostRepositoryMongo', () => {
       const postInstanse = new PostModel(post);
       const { _id: postId } = await postInstanse.save();
 
-      await postRepositoryMongo.unlikePost({ userId, postId });
+      await postRepositoryMongo.unlikePost({
+        userId,
+        postId: postId as unknown as string,
+      });
 
       const postUpdated = await PostModel.findOne({ _id: postId });
 
-      expect(postUpdated.likes).toHaveLength(0);
+      expect(postUpdated?.likes).toHaveLength(0);
     });
   });
 

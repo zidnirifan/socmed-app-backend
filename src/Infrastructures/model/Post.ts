@@ -1,6 +1,15 @@
-import { model, Schema, Types } from 'mongoose';
+import { model, ObjectId, Schema, Types } from 'mongoose';
 
-const postSchema = new Schema(
+interface IPostModel {
+  userId: ObjectId;
+  caption: string;
+  media: string[];
+  likes: ObjectId[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const postSchema = new Schema<IPostModel>(
   {
     userId: {
       type: Types.ObjectId,
@@ -16,6 +25,6 @@ const postSchema = new Schema(
   { timestamps: true }
 );
 
-const PostModel = model('Post', postSchema);
+const PostModel = model<IPostModel>('Post', postSchema);
 
 export default PostModel;

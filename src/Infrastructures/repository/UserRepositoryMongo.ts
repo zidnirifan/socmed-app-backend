@@ -4,7 +4,7 @@ import UserRepository, {
   UserProfileGet,
 } from '../../Domains/users/UserRepository';
 import InvariantError from '../../Commons/exceptions/InvariantError';
-import UserModel, { IUser as IUserModel } from '../model/User';
+import UserModel, { IUserModel } from '../model/User';
 import NotFoundError from '../../Commons/exceptions/NotFoundError';
 import { PayloadFollowUser } from '../../Applications/use_case/ToggleFollowUser';
 import UserEdit from '../../Domains/users/entities/UserEdit';

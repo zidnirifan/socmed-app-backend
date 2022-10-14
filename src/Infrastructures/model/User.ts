@@ -1,6 +1,6 @@
 import { Schema, model, Types, Document, ObjectId } from 'mongoose';
 
-export interface IUser extends Document {
+export interface IUserModel extends Document {
   username: string;
   password: string;
   fullName: string;
@@ -9,7 +9,7 @@ export interface IUser extends Document {
   followers: ObjectId[];
 }
 
-const userSchema = new Schema<IUser>({
+const userSchema = new Schema<IUserModel>({
   username: {
     type: String,
     required: true,
@@ -33,6 +33,6 @@ const userSchema = new Schema<IUser>({
   followers: [{ type: Types.ObjectId, ref: 'User' }],
 });
 
-const User = model<IUser>('User', userSchema);
+const User = model<IUserModel>('User', userSchema);
 
 export default User;
