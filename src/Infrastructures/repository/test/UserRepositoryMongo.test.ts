@@ -59,10 +59,10 @@ describe('UserRepositoryMongo', () => {
       const userId = await userRepositoryMongo.addUser(user);
 
       const userSaved = await UserModel.findById(userId);
-      expect(userSaved._id.toString()).toEqual(userId);
-      expect(userSaved.username).toEqual(user.username);
-      expect(userSaved.password).toEqual(user.password);
-      expect(userSaved.fullName).toEqual(user.fullName);
+      expect(userSaved?._id.toString()).toEqual(userId);
+      expect(userSaved?.username).toEqual(user.username);
+      expect(userSaved?.password).toEqual(user.password);
+      expect(userSaved?.fullName).toEqual(user.fullName);
     });
   });
 
@@ -169,10 +169,10 @@ describe('UserRepositoryMongo', () => {
 
       const id = await userRepositoryMongo.getIdByUsername(username);
 
-      const { _id: expectedId } = await UserModel.findOne({ username });
+      const userSaved = await UserModel.findOne({ username });
 
       expect(typeof id).toEqual('string');
-      expect(id).toEqual(expectedId.toString());
+      expect(id).toEqual(userSaved?._id.toString());
     });
   });
 
@@ -193,7 +193,7 @@ describe('UserRepositoryMongo', () => {
       await userRepositoryMongo.editProfilePhotoById(_id, profilePhoto);
 
       const result = await UserModel.findOne({ _id });
-      expect(profilePhoto).toEqual(result.profilePhoto);
+      expect(profilePhoto).toEqual(result?.profilePhoto);
     });
   });
 
@@ -318,8 +318,8 @@ describe('UserRepositoryMongo', () => {
 
       const userUpdated = await UserModel.findOne({ _id: userFollow });
 
-      expect(userUpdated.followers).toHaveLength(1);
-      expect(userUpdated.followers[0]).toEqual(userId);
+      expect(userUpdated?.followers).toHaveLength(1);
+      expect(userUpdated?.followers[0]).toEqual(userId);
     });
   });
 
@@ -349,7 +349,7 @@ describe('UserRepositoryMongo', () => {
 
       const userUpdated = await UserModel.findOne({ _id: userFollow });
 
-      expect(userUpdated.followers).toHaveLength(0);
+      expect(userUpdated?.followers).toHaveLength(0);
     });
   });
 
@@ -375,8 +375,8 @@ describe('UserRepositoryMongo', () => {
       await userRepositoryMongo.editUser(userEdit);
 
       const result = await UserModel.findOne({ _id });
-      expect(userEdit.fullName).toEqual(result.fullName);
-      expect(userEdit.bio).toEqual(result.bio);
+      expect(userEdit.fullName).toEqual(result?.fullName);
+      expect(userEdit.bio).toEqual(result?.bio);
     });
   });
 
@@ -392,7 +392,7 @@ describe('UserRepositoryMongo', () => {
 
       const userRepositoryMongo = new UserRepositoryMongo();
 
-      const users = await userRepositoryMongo.searchUsers('jhon');
+      const users = await userRepositoryMongo.searchUsers('jhon', '');
 
       expect(users).toHaveLength(1);
       expect(users[0].id).toEqual(_id.toString());
@@ -403,7 +403,7 @@ describe('UserRepositoryMongo', () => {
     it('should return blank array when user not found', async () => {
       const userRepositoryMongo = new UserRepositoryMongo();
 
-      const users = await userRepositoryMongo.searchUsers('jhon');
+      const users = await userRepositoryMongo.searchUsers('jhon', '');
 
       expect(users).toHaveLength(0);
     });

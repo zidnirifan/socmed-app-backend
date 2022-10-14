@@ -12,8 +12,8 @@ class SearchUsers {
     this.userRepository = dependency.userRepository;
   }
 
-  async execute(text: string): Promise<IUserGet[]> {
-    const users = await this.userRepository.searchUsers(text);
+  async execute(text: string, userId: string): Promise<IUserGet[]> {
+    const users = await this.userRepository.searchUsers(text, userId);
 
     return users.map((u) => new UserGet(u));
   }

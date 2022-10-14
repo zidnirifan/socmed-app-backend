@@ -4,7 +4,7 @@ import { PayloadFollowUser } from '../../../Applications/use_case/ToggleFollowUs
 import { IUser } from '../entities/User';
 import UserEdit from '../entities/UserEdit';
 import { IUserGet } from '../entities/UserGet';
-import UserRepository, { UserGet } from '../UserRepository';
+import UserRepository, { UserProfileGet } from '../UserRepository';
 
 class MockUserRepository extends UserRepository {
   editUserBio(id: string, bio: string): Promise<void> {
@@ -34,7 +34,7 @@ class MockUserRepository extends UserRepository {
   editProfilePhotoById(id: string, profilePhoto: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  getUserProfileById(id: string, userId: string): Promise<UserGet> {
+  getUserProfileById(id: string, userId: string): Promise<UserProfileGet> {
     throw new Error('Method not implemented.');
   }
   isUserFollowed(payload: PayloadFollowUser): Promise<boolean> {

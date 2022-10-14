@@ -31,9 +31,9 @@ describe('CommentRepositoryMongo', () => {
 
       const commentSaved = await CommentModel.findById(id);
 
-      expect(commentSaved.userId.toString()).toEqual(comment.userId);
-      expect(commentSaved.content).toEqual(comment.content);
-      expect(commentSaved.postId.toString()).toEqual(comment.postId);
+      expect(commentSaved?.userId.toString()).toEqual(comment.userId);
+      expect(commentSaved?.content).toEqual(comment.content);
+      expect(commentSaved?.postId.toString()).toEqual(comment.postId);
       expect(commentSaved).toHaveProperty('createdAt');
       expect(commentSaved).toHaveProperty('updatedAt');
     });
@@ -71,7 +71,7 @@ describe('CommentRepositoryMongo', () => {
       const commentRepositoryMongo = new CommentRepositoryMongo();
 
       await expect(
-        commentRepositoryMongo.isCommentExist(_id)
+        commentRepositoryMongo.isCommentExist(_id.toString())
       ).resolves.not.toThrowError(NotFoundError);
     });
   });
@@ -106,7 +106,7 @@ describe('CommentRepositoryMongo', () => {
         userId
       );
 
-      expect(comments[0].id).toEqual(_id);
+      expect(comments[0].id).toEqual(_id.toString());
       expect(comments[0].user).toEqual({
         id: userId,
         username: user.username,
@@ -154,11 +154,11 @@ describe('CommentRepositoryMongo', () => {
       const commentRepositoryMongo = new CommentRepositoryMongo();
 
       const replies = await commentRepositoryMongo.getReplies(
-        commentId,
+        commentId.toString(),
         userId
       );
 
-      expect(replies[0].id).toEqual(replyId);
+      expect(replies[0].id).toEqual(replyId.toString());
       expect(replies[0].user).toEqual({
         id: userId,
         username: user.username,
@@ -167,7 +167,7 @@ describe('CommentRepositoryMongo', () => {
       expect(replies[0].content).toEqual('comment');
       expect(replies[0].postId.toString()).toEqual(postId);
       expect(replies[0].replyTo).toEqual({
-        id: commentId,
+        id: commentId.toString(),
         user: {
           id: userId,
           username: user.username,
@@ -193,7 +193,7 @@ describe('CommentRepositoryMongo', () => {
 
       const isLiked = await commentRepositoryMongo.isCommentLiked({
         userId,
-        commentId,
+        commentId: commentId.toString(),
       });
 
       expect(isLiked).toEqual(true);
@@ -213,7 +213,7 @@ describe('CommentRepositoryMongo', () => {
 
       const isLiked = await commentRepositoryMongo.isCommentLiked({
         userId,
-        commentId,
+        commentId: commentId.toString(),
       });
 
       expect(isLiked).toEqual(false);
@@ -233,12 +233,15 @@ describe('CommentRepositoryMongo', () => {
 
       const commentRepositoryMongo = new CommentRepositoryMongo();
 
-      await commentRepositoryMongo.likeComment({ userId, commentId });
+      await commentRepositoryMongo.likeComment({
+        userId,
+        commentId: commentId.toString(),
+      });
 
       const commentUpdated = await CommentModel.findOne({ _id: commentId });
 
-      expect(commentUpdated.likes).toHaveLength(1);
-      expect(commentUpdated.likes[0].toString()).toEqual(userId);
+      expect(commentUpdated?.likes).toHaveLength(1);
+      expect(commentUpdated?.likes[0].toString()).toEqual(userId);
     });
   });
 
@@ -256,11 +259,14 @@ describe('CommentRepositoryMongo', () => {
 
       const commentRepositoryMongo = new CommentRepositoryMongo();
 
-      await commentRepositoryMongo.unlikeComment({ userId, commentId });
+      await commentRepositoryMongo.unlikeComment({
+        userId,
+        commentId: commentId.toString(),
+      });
 
       const commentUpdated = await CommentModel.findOne({ _id: commentId });
 
-      expect(commentUpdated.likes).toHaveLength(0);
+      expect(commentUpdated?.likes).toHaveLength(0);
     });
   });
 });

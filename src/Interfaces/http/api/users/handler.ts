@@ -146,11 +146,13 @@ class UsersHandler extends BaseHandler {
   }
 
   async searchUsers(req: RequestAuth, res: Response): Promise<Response | void> {
+    /* istanbul ignore next */
+    const userId = req.auth?.id;
     const { text } = req.query;
 
     const searchUsers = this.container.getInstance(SearchUsers.name);
 
-    const users = await searchUsers.execute(text);
+    const users = await searchUsers.execute(text, userId);
 
     return res.status(200).json({
       status: 'success',

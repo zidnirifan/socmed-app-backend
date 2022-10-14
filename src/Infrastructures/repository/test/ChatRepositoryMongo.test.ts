@@ -32,10 +32,10 @@ describe('ChatRepositoryMongo', () => {
 
       const chatSaved = await ChatModel.findById(chatId);
 
-      expect(chatSaved._id.toString()).toEqual(chatId);
-      expect(chatSaved.from.toString()).toEqual(chat.from);
-      expect(chatSaved.to.toString()).toEqual(chat.to);
-      expect(chatSaved.chat).toEqual(chat.chat);
+      expect(chatSaved?._id.toString()).toEqual(chatId);
+      expect(chatSaved?.from.toString()).toEqual(chat.from);
+      expect(chatSaved?.to.toString()).toEqual(chat.to);
+      expect(chatSaved?.chat).toEqual(chat.chat);
     });
   });
 
@@ -158,8 +158,8 @@ describe('ChatRepositoryMongo', () => {
       const chat1Updated = await ChatModel.findById(chatId);
       const chat2Updated = await ChatModel.findById(chatId2);
 
-      expect(chat1Updated.isRead).toEqual(false);
-      expect(chat2Updated.isRead).toEqual(true);
+      expect(chat1Updated?.isRead).toEqual(false);
+      expect(chat2Updated?.isRead).toEqual(true);
     });
   });
 });

@@ -6,6 +6,7 @@ describe('SearchUsers use case', () => {
   it('should orchestrating search users action correctly', async () => {
     // Arrange
     const id = 'user-123';
+    const ownUserId = 'user-33';
 
     const userFromRepo = {
       id,
@@ -30,11 +31,11 @@ describe('SearchUsers use case', () => {
     });
 
     // Action
-    const users = await searchUsers.execute(text);
+    const users = await searchUsers.execute(text, ownUserId);
 
     // Assert
     expect(users[0]).toBeInstanceOf(UserGet);
     expect(users).toHaveLength(1);
-    expect(mockUserRepository.searchUsers).toBeCalledWith(text);
+    expect(mockUserRepository.searchUsers).toBeCalledWith(text, ownUserId);
   });
 });

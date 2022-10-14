@@ -9,7 +9,7 @@ import PostRepository, {
 } from '../../Domains/posts/PostRepository';
 import CommentModel from '../model/Comment';
 import PostModel from '../model/Post';
-import UserModel from '../model/User';
+import UserModel, { IUserModel } from '../model/User';
 
 class PostRepositoryMongo extends PostRepository {
   private Model;
@@ -42,16 +42,13 @@ class PostRepositoryMongo extends PostRepository {
   }
 
   async getPostById(id: string, userId: string): Promise<PayloadPostGet> {
-    const {
-      _id,
-      caption,
-      media,
-      createdAt,
-      userId: user,
-      likes,
-    } = await this.Model.findById(id)
+    const post = await this.Model.findById(id)
       .select('_id caption media createdAt likes')
-      .populate('userId', 'username profilePhoto _id');
+      .populate<{ userId: IUserModel }>('userId', 'username profilePhoto _id');
+
+    if (!post) throw new NotFoundError('post not found');
+
+    const { _id, userId: user, caption, media, createdAt, likes } = post;
 
     const commentsCount = await this.CommentModel.countDocuments({
       postId: id,
@@ -68,9 +65,7 @@ class PostRepositoryMongo extends PostRepository {
       media,
       createdAt,
       likesCount: likes.length,
-      isLiked:
-        likes.filter((like: Types.ObjectId) => like.toString() === userId)
-          .length > 0,
+      isLiked: likes.filter((like) => like.toString() === userId).length > 0,
       commentsCount,
     };
   }
@@ -269,7 +264,12 @@ class PostRepositoryMongo extends PostRepository {
   }
 
   async getUserIdPost(id: string): Promise<string> {
-    const result = await this.Model.findById(id).populate('userId', '_id');
+    const result = await this.Model.findById(id).populate<{
+      userId: IUserModel;
+    }>('userId', '_id');
+
+    if (!result) throw new NotFoundError('user not found');
+
     return result.userId._id.toString();
   }
 }
