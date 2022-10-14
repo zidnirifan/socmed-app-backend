@@ -1,4 +1,4 @@
-type ITypeNotif = 'follow' | 'like' | 'comment';
+import { ITypeNotif } from './Notif';
 
 interface UserNotif {
   id: string;

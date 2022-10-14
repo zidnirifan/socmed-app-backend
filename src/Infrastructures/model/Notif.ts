@@ -1,6 +1,19 @@
-import { model, Schema, Types } from 'mongoose';
+import { model, ObjectId, Schema, Types } from 'mongoose';
+import { ITypeNotif } from '../../Domains/notif/entities/Notif';
 
-const notifSchema = new Schema(
+export interface INotifModel {
+  userId: ObjectId;
+  to: ObjectId;
+  text: string;
+  type: ITypeNotif;
+  postId: ObjectId;
+  commentId: ObjectId;
+  isRead: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const notifSchema = new Schema<INotifModel>(
   {
     userId: { type: Types.ObjectId, ref: 'User' },
     to: { type: Types.ObjectId, ref: 'User' },
@@ -22,6 +35,6 @@ const notifSchema = new Schema(
   { timestamps: true }
 );
 
-const NotifModel = model('Notif', notifSchema);
+const NotifModel = model<INotifModel>('Notif', notifSchema);
 
 export default NotifModel;
