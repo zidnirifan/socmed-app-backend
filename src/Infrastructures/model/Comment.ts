@@ -1,6 +1,17 @@
-import { model, Schema, Types } from 'mongoose';
+import { model, ObjectId, Schema, Types } from 'mongoose';
 
-const commentSchema = new Schema(
+export interface ICommentModel {
+  userId: ObjectId;
+  content: string;
+  postId: ObjectId;
+  replyTo?: ObjectId;
+  parentComment?: ObjectId;
+  likes: ObjectId[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const commentSchema = new Schema<ICommentModel>(
   {
     userId: {
       type: Types.ObjectId,
@@ -29,6 +40,6 @@ const commentSchema = new Schema(
   { timestamps: true }
 );
 
-const CommentModel = model('Comment', commentSchema);
+const CommentModel = model<ICommentModel>('Comment', commentSchema);
 
 export default CommentModel;

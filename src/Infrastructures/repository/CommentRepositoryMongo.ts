@@ -1,4 +1,4 @@
-import { Types } from 'mongoose';
+import { ObjectId, Types } from 'mongoose';
 import NotFoundError from '../../Commons/exceptions/NotFoundError';
 import CommentRepository, {
   LikeCommentPayload,
@@ -8,7 +8,8 @@ import CommentGet, {
   ICommentGet,
   PayloadCommentGet,
 } from '../../Domains/comments/entities/CommentGet';
-import CommentModel from '../model/Comment';
+import CommentModel, { ICommentModel } from '../model/Comment';
+import { IUserModel } from '../model/User';
 
 class CommentRepositoryMongo extends CommentRepository {
   private Model;
@@ -43,11 +44,11 @@ class CommentRepositoryMongo extends CommentRepository {
     const comments = await this.Model.find(
       { postId, parentComment: undefined },
       '-updatedAt'
-    ).populate('userId', 'username profilePhoto');
+    ).populate<{ userId: IUserModel }>('userId', 'username profilePhoto');
 
     return comments.map(
       ({
-        _id: id,
+        _id,
         userId: user,
         content,
         // eslint-disable-next-line no-shadow
@@ -55,19 +56,17 @@ class CommentRepositoryMongo extends CommentRepository {
         createdAt,
         likes,
       }) => ({
-        id,
+        id: _id.toString(),
         user: {
           id: user._id,
           username: user.username,
           profilePhoto: user.profilePhoto,
         },
         content,
-        postId,
+        postId: postId.toString(),
         createdAt,
         likesCount: likes.length,
-        isLiked:
-          likes.filter((like: Types.ObjectId) => like.toString() === userId)
-            .length > 0,
+        isLiked: likes.filter((like) => like.toString() === userId).length > 0,
       })
     );
   }
@@ -76,9 +75,14 @@ class CommentRepositoryMongo extends CommentRepository {
     parentComment: string,
     userId: string
   ): Promise<ICommentGet[]> {
+    type ReplyTo = ICommentModel & {
+      _id: ObjectId;
+      userId: IUserModel;
+    };
+
     const comments = await this.Model.find({ parentComment }, '-updatedAt')
-      .populate('userId', 'username profilePhoto')
-      .populate({
+      .populate<{ userId: IUserModel }>('userId', 'username profilePhoto')
+      .populate<{ replyTo: ReplyTo }>({
         path: 'replyTo',
         model: 'Comment',
         select: 'userId',
@@ -90,18 +94,18 @@ class CommentRepositoryMongo extends CommentRepository {
       });
 
     return comments.map(
-      ({ _id: id, userId: user, content, postId, createdAt, replyTo, likes }) =>
+      ({ _id, userId: user, content, postId, createdAt, replyTo, likes }) =>
         new CommentGet({
-          id,
+          id: _id.toString(),
           user: {
             id: user._id,
             username: user.username,
             profilePhoto: user.profilePhoto,
           },
           content,
-          postId,
+          postId: postId.toString(),
           replyTo: {
-            id: replyTo._id,
+            id: replyTo._id.toString(),
             user: {
               id: replyTo.userId._id,
               username: replyTo.userId.username,
@@ -110,8 +114,7 @@ class CommentRepositoryMongo extends CommentRepository {
           createdAt,
           likesCount: likes.length,
           isLiked:
-            likes.filter((like: Types.ObjectId) => like.toString() === userId)
-              .length > 0,
+            likes.filter((like) => like.toString() === userId).length > 0,
         })
     );
   }
@@ -139,7 +142,12 @@ class CommentRepositoryMongo extends CommentRepository {
   }
 
   async getUserIdComment(id: string): Promise<string> {
-    const result = await this.Model.findById(id).populate('userId', '_id');
+    const result = await this.Model.findById(id).populate<{
+      userId: IUserModel;
+    }>('userId', '_id');
+
+    if (!result) throw new NotFoundError('comment not found');
+
     return result.userId._id.toString();
   }
 }
