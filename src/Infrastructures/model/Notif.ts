@@ -6,8 +6,8 @@ export interface INotifModel extends Document {
   to: ObjectId;
   text: string;
   type: ITypeNotif;
-  postId: ObjectId;
-  commentId: ObjectId;
+  postId?: ObjectId;
+  commentId?: ObjectId;
   isRead: boolean;
   createdAt: Date;
   updatedAt: Date;
