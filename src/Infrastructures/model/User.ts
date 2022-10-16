@@ -26,9 +26,11 @@ const userSchema = new Schema<IUserModel>({
   },
   profilePhoto: {
     type: String,
+    default: '',
   },
   bio: {
     type: String,
+    default: '',
   },
   followers: [{ type: Types.ObjectId, ref: 'User' }],
 });
