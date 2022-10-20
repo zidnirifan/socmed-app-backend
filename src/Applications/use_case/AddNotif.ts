@@ -49,7 +49,7 @@ class AddNotif {
     if (type === 'follow') {
       const notif = new Notif({
         userId,
-        to: to || '',
+        to,
         type,
       });
       this.notifRepository.addNotif(notif);

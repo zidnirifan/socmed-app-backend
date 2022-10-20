@@ -7,7 +7,7 @@ export type ITypeNotif =
 
 export interface PayloadNotif {
   userId: string;
-  to?: string;
+  to: string;
   type: ITypeNotif;
   postId?: string;
   commentId?: string;
@@ -33,7 +33,7 @@ class Notif implements INotif {
 
   constructor(payload: PayloadNotif) {
     this.userId = payload.userId;
-    this.to = payload.to || '';
+    this.to = payload.to;
     this.text = this.translateText(payload.type, payload.comment || '');
     this.type = payload.type;
     this.postId = payload.postId;
@@ -46,7 +46,7 @@ class Notif implements INotif {
     if (type === 'comment') return `commented: ${comment}`;
     if (type === 'like-comment') return 'liked your comment';
     if (type === 'reply-comment') return `replied your comment: ${comment}`;
-    return '';
+    throw new Error('Type is not match');
   }
 }
 
