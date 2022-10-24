@@ -63,18 +63,26 @@ class PostsHandler extends BaseHandler {
     }
   }
 
-  async GetFollowingPosts(req: RequestAuth, res: Response): Promise<Response> {
-    /* istanbul ignore next */
-    const userId = req.auth?.id;
-    const getFollowingPosts = this.container.getInstance(
-      GetFollowingPosts.name
-    );
-    const posts = await getFollowingPosts.execute(userId);
+  async GetFollowingPosts(
+    req: RequestAuth,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      /* istanbul ignore next */
+      const userId = req.auth?.id;
+      const getFollowingPosts = this.container.getInstance(
+        GetFollowingPosts.name
+      );
+      const posts = await getFollowingPosts.execute(userId);
 
-    return res.status(200).json({
-      status: 'success',
-      data: { posts },
-    });
+      return res.status(200).json({
+        status: 'success',
+        data: { posts },
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 
   async toggleLike(
@@ -99,33 +107,46 @@ class PostsHandler extends BaseHandler {
     }
   }
 
-  async getExplorePosts(req: RequestAuth, res: Response): Promise<Response> {
-    /* istanbul ignore next */
-    const userId = req.auth?.id;
-    const { exceptPosts } = req.body;
-    const getExplorePosts = this.container.getInstance(GetExplorePosts.name);
-    const posts = await getExplorePosts.execute(userId, exceptPosts || []);
+  async getExplorePosts(
+    req: RequestAuth,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      /* istanbul ignore next */
+      const userId = req.auth?.id;
+      const { exceptPosts } = req.body;
+      const getExplorePosts = this.container.getInstance(GetExplorePosts.name);
+      const posts = await getExplorePosts.execute(userId, exceptPosts || []);
 
-    return res.status(200).json({
-      status: 'success',
-      data: { posts },
-    });
+      return res.status(200).json({
+        status: 'success',
+        data: { posts },
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 
   async getExplorePostsMedia(
     req: RequestAuth,
-    res: Response
-  ): Promise<Response> {
-    const { exceptPosts } = req.body;
-    const getExplorePostsMedia = this.container.getInstance(
-      GetExplorePostsMedia.name
-    );
-    const posts = await getExplorePostsMedia.execute(exceptPosts || []);
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      const { exceptPosts } = req.body;
+      const getExplorePostsMedia = this.container.getInstance(
+        GetExplorePostsMedia.name
+      );
+      const posts = await getExplorePostsMedia.execute(exceptPosts || []);
 
-    return res.status(200).json({
-      status: 'success',
-      data: { posts },
-    });
+      return res.status(200).json({
+        status: 'success',
+        data: { posts },
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 }
 

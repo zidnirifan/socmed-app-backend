@@ -145,21 +145,29 @@ class UsersHandler extends BaseHandler {
     }
   }
 
-  async searchUsers(req: RequestAuth, res: Response): Promise<Response | void> {
-    /* istanbul ignore next */
-    const userId = req.auth?.id;
-    const { text } = req.query;
+  async searchUsers(
+    req: RequestAuth,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      /* istanbul ignore next */
+      const userId = req.auth?.id;
+      const { text } = req.query;
 
-    const searchUsers = this.container.getInstance(SearchUsers.name);
+      const searchUsers = this.container.getInstance(SearchUsers.name);
 
-    const users = await searchUsers.execute(text, userId);
+      const users = await searchUsers.execute(text, userId);
 
-    return res.status(200).json({
-      status: 'success',
-      data: {
-        users,
-      },
-    });
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          users,
+        },
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 
   async getFollowers(
@@ -210,21 +218,26 @@ class UsersHandler extends BaseHandler {
 
   async getSuggested(
     req: RequestAuth,
-    res: Response
+    res: Response,
+    next: NextFunction
   ): Promise<Response | void> {
-    const userId = req.auth?.id;
+    try {
+      const userId = req.auth?.id;
 
-    const getSuggestedUsers = this.container.getInstance(
-      GetSuggestedUsers.name
-    );
-    const users = await getSuggestedUsers.execute(userId);
+      const getSuggestedUsers = this.container.getInstance(
+        GetSuggestedUsers.name
+      );
+      const users = await getSuggestedUsers.execute(userId);
 
-    return res.status(200).json({
-      status: 'success',
-      data: {
-        users,
-      },
-    });
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          users,
+        },
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 
   async getUserById(
